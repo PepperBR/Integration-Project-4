@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package meter.v1;
+
+import "google/protobuf/empty.proto";
+
+message Meter {
+    string id = 1;
+    string is_template = 2;
+    string name_line = 3;
+    string name_model = 4;
+}
+
+message Line {
+    string name = 1;
+    repeated Meter meters = 2;
+}
+
+message AddMeterRequest {
+    string model_id = 1;
+}
+
+message AddMeterResponse {
+    string result = 1;
+}
+
+message ListMetersRequest {
+    string id_line = 1;
+}
+
+message ListMetersResponse {
+    repeated Meter meters = 1;
+}
+
+message ListLinesResponse {
+    repeated string lines = 1;
+}
+
+message RemoveMeterRequest {
+    string id_model = 1;
+}
+
+message RemoveMeterResponse {
+    string result = 1;
+}
+
+message ListAllMetersResponse {
+    repeated Line line_meters = 1;
+}
+
+message GetMeasurementsPhasesRequest {
+    string id = 1;
+}
+
+message GetMeasurementsPhasesResponse {
+    repeated string values = 1;
+}
+
+service MeterService {
+    rpc AddMeter (AddMeterRequest) returns (AddMeterResponse);
+    rpc ListMeters (ListMetersRequest) returns (ListMetersResponse);
+    rpc ListLines (google.protobuf.Empty) returns (ListLinesResponse);
+    rpc RemoveMeter (RemoveMeterRequest) returns (RemoveMeterResponse);
+    rpc ListAllMeters (google.protobuf.Empty) returns (ListAllMetersResponse);
+    rpc GetMeasurementsPhases (GetMeasurementsPhasesRequest) returns (GetMeasurementsPhasesResponse);
+}
