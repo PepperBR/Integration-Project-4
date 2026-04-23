@@ -39,5 +39,4 @@ public:
     void CatalogToProto (std::shared_ptr<Meter> meter, os::Meter* proto_meter);
 private:
     Catalog catalog;
-    int id_counter = 17;
 }; 

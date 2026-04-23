@@ -9,24 +9,27 @@
 
 using LineList = std::set<std::string>;
 using MetersList = std::list<std::shared_ptr<Meter>>;
-using MeterAttributes = std::vector<std::tuple<int, std::string, bool>>;
 
 class Catalog          
 {
 private:
     MetersList meter_list;
     std::shared_ptr<Meter> Catalog::factoryMeter(const int & ID_template); 
-    void sortList();                         
+    void sortList();
+    int number_of_meters;                      
     
 public:
-    void addNewModel (const int & ID_template); 
+    const std::shared_ptr<Meter> addNewModel (const int & ID_template); 
     bool removeModel (const int ID); 
     std::vector<double> & getMeasurementsPhases(const int ID); 
     
     LineList getLines () const; 
-    MeterAttributes getLineModels(const std::string & line_name);    
-    const std::shared_ptr<Meter> & getMeterByID(const int id) const;
-    const std::shared_ptr<Meter> & getTemplateByID(const int id) const;
+    MetersList getLineModelsAvailable(const std::string & line_name);
+    MetersList getLineModelsTemplate(const std::string & line_name);    
+    std::shared_ptr<Meter> getMeterByID(const int id) const;
+
+    MetersList getAllMeters ();
+    const int & getNumberOfMeters ();
     Catalog();
 };
 

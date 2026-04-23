@@ -20,7 +20,7 @@ public:
         grpc::Status status = stub_->AddMeter(&context, request, &response);
 
         if (status.ok()) {
-            std::cout << ">>> Medidor criado com sucesso!" << std::endl;
+            std::cout << "--- Medidor criado com sucesso ---" << std::endl;
             std::cout << "ID: " << response.meter_created().id() << std::endl;
             std::cout << "Modelo: " << response.meter_created().name_model() << std::endl;
         } else {
@@ -36,7 +36,7 @@ public:
         grpc::Status status = stub_->ListAllMeters(&context, request, &response);
 
         if (status.ok()) {
-            std::cout << "--- LISTA DE TODOS OS MEDIDORES POR LINHA ---" << std::endl;
+            std::cout << "--- Lista de todos os medidores por Linha ---" << std::endl;
             for (const auto& line : response.line_meters()) {
                 std::cout << "\nLinha: " << line.name() << std::endl;
                 for (const auto& m : line.meters()) {
@@ -49,11 +49,34 @@ public:
         }
     }
 
+    void GetMeasuaments(const std::string& model_id) {
+        grpc::ClientContext contex;
+        meter::v1::GetMeasurementsPhasesRequest request;
+        request.set_id(model_id);
+
+        meter::v1::GetMeasurementsPhasesResponse response;
+
+        grpc::Status status = stub_->GetMeasurementsPhases(&contex, request, &response);
+        if (status.ok()){
+            std::cout << "--- Lista com as medições das fases do medidor ---" << std::endl;
+            int cont = 0;
+            for (const auto& valores : response.values()) {
+                ++cont;
+                std::cout << "Valor da " << cont << "º fase = " << valores << std::endl;
+            }
+        } else {
+            std::cout << "Falha em encontrar as medições: " << status.error_message() << std::endl;
+        }
+    }
+
+    
 private:
     std::unique_ptr<meter::v1::MeterService::Stub> stub_;
 };
 
 int main() {
+
+    SetConsoleOutputCP(CP_UTF8);
     std::string target_address = "127.0.0.1:50055"; 
 
     auto channel = grpc::CreateChannel(target_address, grpc::InsecureChannelCredentials());
@@ -73,6 +96,12 @@ int main() {
         std::cout << "\nTentando adicionar um medidor (ID de template 1)..." << std::endl;
         client.AddMeter("1");
 
+        std::cout << "\nTentando listar as medições das fases de um medidor (ID 18)..." << std::endl;
+        client.GetMeasuaments("18");
+
+        std::cout << "\nTentando listar as medições das fases de um medidor (ID 19)..." << std::endl;
+        client.GetMeasuaments("19");
+        
         std::cout << "\nBuscando todos os medidores registrados..." << std::endl;
         client.ListAll();
     }

@@ -39,13 +39,16 @@ Catalog::Catalog()
     meter_list.emplace_back(std::make_unique<Ares7031>());
     meter_list.emplace_back(std::make_unique<Ares8023_15>());
     meter_list.emplace_back(std::make_unique<Ares8023_200>());
+
+    number_of_meters = int(meter_list.size());
 };
 
-void Catalog::addNewModel (const int & ID_template)
+const std::shared_ptr<Meter> Catalog::addNewModel (const int & ID_template)
 {   
     auto model = factoryMeter(ID_template);
-    meter_list.push_back(std::move(model));
+    meter_list.push_back(model);
     sortList();
+    return model;
 };
 
 bool Catalog::removeModel (const int ID)
@@ -89,6 +92,7 @@ std::shared_ptr<Meter> Catalog::factoryMeter(const int & ID_template)
 {
     for (const auto& meter_template : meter_list) {
         if (meter_template->getID() == ID_template && meter_template->getIsTemplate()) {
+            this->number_of_meters++;
             return meter_template->cloneMeter();
         }
     }
@@ -107,21 +111,37 @@ LineList Catalog::getLines() const
     return lines;
 }
 
-
-MeterAttributes Catalog::getLineModels(const std::string & name_line) 
+MetersList Catalog::getLineModelsAvailable(const std::string & name_line) 
 {
-    MeterAttributes list;
+    MetersList list;
 
     for (auto & model : meter_list) {
-        if (model->getFullName().find(name_line) != std::string::npos) {
-            list.push_back({model->getID(), model->getFullName(), model->getIsTemplate()});
+        if (!model->getIsTemplate()) {
+            if (model->getFullName().find(name_line) != std::string::npos) {
+                list.push_back(model);
+            }
         }
     }
     
     return list; 
 }
 
-const std::shared_ptr<Meter> & Catalog::getMeterByID(const int id) const
+MetersList Catalog::getLineModelsTemplate(const std::string & name_line) 
+{
+    MetersList list;
+
+    for (auto & model : meter_list) {
+        if (!model->getIsTemplate()) {
+            if (model->getFullName().find(name_line) != std::string::npos) {
+                list.push_back(model);
+            }
+        }
+    }
+    
+    return list; 
+}
+
+std::shared_ptr<Meter> Catalog::getMeterByID(const int id) const
 {
     for (const auto & meter : meter_list)
     {
@@ -133,15 +153,18 @@ const std::shared_ptr<Meter> & Catalog::getMeterByID(const int id) const
     return nullptr;
 }
 
-const std::shared_ptr<Meter> & Catalog::getTemplateByID(const int id) const
+
+MetersList Catalog::getAllMeters ()
 {
-    for (const auto & meter : meter_list)
+    MetersList available_meters;
+
+    auto linhas = getLines();
+    for (const auto & linha : linhas)
     {
-        if(meter->getID() == id && meter->getIsTemplate())
-        {
-            return meter;
-        }
+        MetersList models = getLineModelsAvailable(linha);
+        
+        available_meters.splice(available_meters.end(), models);
     }
-    return nullptr;
+    return available_meters; 
 }
 

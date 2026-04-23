@@ -2,14 +2,10 @@
 
 Status MeterService::AddMeter(ServerContext* context, const os::AddMeterRequest* request, os::AddMeterResponse* response) {
     try {
-        int model_id = std::stoi(request->model_id());
-        this->catalog.addNewModel(model_id);
-        
-        id_counter++; 
-        
-        auto new_meter = catalog.getMeterByID(id_counter);
+        auto new_meter = this->catalog.addNewModel(std::stoi(request->model_id()));
         if (new_meter) {
             CatalogToProto(new_meter, response->mutable_meter_created());
+
             return Status::OK;
         }
         return Status(grpc::StatusCode::INTERNAL, "Escolhas um ID correto");
@@ -19,14 +15,11 @@ Status MeterService::AddMeter(ServerContext* context, const os::AddMeterRequest*
 }
 
 Status MeterService::ListMeters(ServerContext* context, const os::ListMetersRequest* request, os::ListMetersResponse* response) {
-    auto line_meters = this->catalog.getLineModels(request->id_line());
+    auto line_meters_available = this->catalog.getLineModelsAvailable(request->id_line());
 
-    for (const auto& models : line_meters)
+    for (const auto & models : line_meters_available)
     {
-        if (!std::get<2>(models))
-        {
-            CatalogToProto(this->catalog.getMeterByID(std::get<0>(models)), response->add_meters());
-        }
+        CatalogToProto(models, response->add_meters());
     }
     return Status::OK;
 }
@@ -34,7 +27,7 @@ Status MeterService::ListMeters(ServerContext* context, const os::ListMetersRequ
 Status MeterService::ListLines(ServerContext* context, const google::protobuf::Empty* request, os::ListLinesResponse* response) {
     auto lines = this->catalog.getLines();
 
-    for (const auto &line : lines)
+    for (const auto & line : lines)
     {
         response->add_lines(line);
     }
@@ -50,34 +43,25 @@ Status MeterService::RemoveMeter(ServerContext* context, const os::RemoveMeterRe
 
 Status MeterService::ListAllMeters(ServerContext* context, const google::protobuf::Empty* request, os::ListAllMetersResponse* response) {
     try {
-        auto lines = this->catalog.getLines();
+        auto available_meters = this->catalog.getAllMeters();
         
-        for (const auto& line_name : lines) {
-            auto models = this->catalog.getLineModels(line_name);
+        std::string previous_line;
+        os::Line* current_group = nullptr;
 
-            bool has_real_meters = false;
-            os::Line* proto_line = nullptr;
+        for (const auto & meter : available_meters)
+        {
+            std::string current_line_name = meter->getNameLine();
 
-            for (const auto& m_attr : models) {
-                int id = std::get<0>(m_attr);
-                bool is_template = std::get<2>(m_attr);
-
-                if (!is_template) {
-                    if (!has_real_meters) {
-                        proto_line = response->add_line_meters();
-                        proto_line->set_name(line_name);
-                        has_real_meters = true;
-                    }
-
-                    auto meter_ptr = this->catalog.getMeterByID(id);
-                    if (meter_ptr) {
-                        CatalogToProto(meter_ptr, proto_line->add_meters());
-                    }
-                }
+            if (current_line_name != previous_line || current_group == nullptr)
+            {
+                current_group = response->add_line_meters();
+                current_group->set_name(current_line_name);
+                previous_line = current_line_name;
             }
+            
+            CatalogToProto(meter, current_group->add_meters());
         }
         return Status::OK;
-
     } catch (const std::bad_alloc& e) {
         return Status(grpc::StatusCode::INTERNAL, e.what());
     }
@@ -92,8 +76,8 @@ Status MeterService::GetMeasurementsPhases(ServerContext* context, const os::Get
             response->add_values(std::to_string(value));
         }
         return Status::OK;
-    } catch (const std::exception& e){
-        return Status(grpc::StatusCode::NOT_FOUND, e.what());
+    } catch (...){
+        return Status(grpc::StatusCode::INVALID_ARGUMENT, "ID de modelo inválido");
     }
 }
 
