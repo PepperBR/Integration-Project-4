@@ -221,33 +221,6 @@ struct GetMeasurementsPhasesRequestDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 GetMeasurementsPhasesRequestDefaultTypeInternal _GetMeasurementsPhasesRequest_default_instance_;
 
-inline constexpr AddMeterResponse::Impl_::Impl_(
-    ::_pbi::ConstantInitialized) noexcept
-      : _cached_size_{0},
-        result_(
-            &::google::protobuf::internal::fixed_address_empty_string,
-            ::_pbi::ConstantInitialized()) {}
-
-template <typename>
-PROTOBUF_CONSTEXPR AddMeterResponse::AddMeterResponse(::_pbi::ConstantInitialized)
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-    : ::google::protobuf::Message(AddMeterResponse_class_data_.base()),
-#else   // PROTOBUF_CUSTOM_VTABLE
-    : ::google::protobuf::Message(),
-#endif  // PROTOBUF_CUSTOM_VTABLE
-      _impl_(::_pbi::ConstantInitialized()) {
-}
-struct AddMeterResponseDefaultTypeInternal {
-  PROTOBUF_CONSTEXPR AddMeterResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
-  ~AddMeterResponseDefaultTypeInternal() {}
-  union {
-    AddMeterResponse _instance;
-  };
-};
-
-PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
-    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AddMeterResponseDefaultTypeInternal _AddMeterResponse_default_instance_;
-
 inline constexpr AddMeterRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -328,6 +301,31 @@ struct LineDefaultTypeInternal {
 PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
     PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 LineDefaultTypeInternal _Line_default_instance_;
 
+inline constexpr AddMeterResponse::Impl_::Impl_(
+    ::_pbi::ConstantInitialized) noexcept
+      : _cached_size_{0},
+        meter_created_{nullptr} {}
+
+template <typename>
+PROTOBUF_CONSTEXPR AddMeterResponse::AddMeterResponse(::_pbi::ConstantInitialized)
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+    : ::google::protobuf::Message(AddMeterResponse_class_data_.base()),
+#else   // PROTOBUF_CUSTOM_VTABLE
+    : ::google::protobuf::Message(),
+#endif  // PROTOBUF_CUSTOM_VTABLE
+      _impl_(::_pbi::ConstantInitialized()) {
+}
+struct AddMeterResponseDefaultTypeInternal {
+  PROTOBUF_CONSTEXPR AddMeterResponseDefaultTypeInternal() : _instance(::_pbi::ConstantInitialized{}) {}
+  ~AddMeterResponseDefaultTypeInternal() {}
+  union {
+    AddMeterResponse _instance;
+  };
+};
+
+PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
+    PROTOBUF_ATTRIBUTE_INIT_PRIORITY1 AddMeterResponseDefaultTypeInternal _AddMeterResponse_default_instance_;
+
 inline constexpr ListAllMetersResponse::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
@@ -387,7 +385,7 @@ const ::uint32_t
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::meter::v1::AddMeterResponse, _impl_._has_bits_),
         4, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::meter::v1::AddMeterResponse, _impl_.result_),
+        PROTOBUF_FIELD_OFFSET(::meter::v1::AddMeterResponse, _impl_.meter_created_),
         0,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::meter::v1::ListMetersRequest, _impl_._has_bits_),
@@ -467,29 +465,30 @@ const char descriptor_table_protodef_meter_2eproto[] ABSL_ATTRIBUTE_SECTION_VARI
     "template\030\002 \001(\t\022\021\n\tname_line\030\003 \001(\t\022\022\n\nnam"
     "e_model\030\004 \001(\t\"5\n\004Line\022\014\n\004name\030\001 \001(\t\022\037\n\006m"
     "eters\030\002 \003(\0132\017.meter.v1.Meter\"#\n\017AddMeter"
-    "Request\022\020\n\010model_id\030\001 \001(\t\"\"\n\020AddMeterRes"
-    "ponse\022\016\n\006result\030\001 \001(\t\"$\n\021ListMetersReque"
-    "st\022\017\n\007id_line\030\001 \001(\t\"5\n\022ListMetersRespons"
-    "e\022\037\n\006meters\030\001 \003(\0132\017.meter.v1.Meter\"\"\n\021Li"
-    "stLinesResponse\022\r\n\005lines\030\001 \003(\t\"&\n\022Remove"
-    "MeterRequest\022\020\n\010id_model\030\001 \001(\t\"%\n\023Remove"
-    "MeterResponse\022\016\n\006result\030\001 \001(\t\"<\n\025ListAll"
-    "MetersResponse\022#\n\013line_meters\030\001 \003(\0132\016.me"
-    "ter.v1.Line\"*\n\034GetMeasurementsPhasesRequ"
-    "est\022\n\n\002id\030\001 \001(\t\"/\n\035GetMeasurementsPhases"
-    "Response\022\016\n\006values\030\001 \003(\t2\334\003\n\014MeterServic"
-    "e\022A\n\010AddMeter\022\031.meter.v1.AddMeterRequest"
-    "\032\032.meter.v1.AddMeterResponse\022G\n\nListMete"
-    "rs\022\033.meter.v1.ListMetersRequest\032\034.meter."
-    "v1.ListMetersResponse\022@\n\tListLines\022\026.goo"
-    "gle.protobuf.Empty\032\033.meter.v1.ListLinesR"
-    "esponse\022J\n\013RemoveMeter\022\034.meter.v1.Remove"
-    "MeterRequest\032\035.meter.v1.RemoveMeterRespo"
-    "nse\022H\n\rListAllMeters\022\026.google.protobuf.E"
-    "mpty\032\037.meter.v1.ListAllMetersResponse\022h\n"
-    "\025GetMeasurementsPhases\022&.meter.v1.GetMea"
-    "surementsPhasesRequest\032\'.meter.v1.GetMea"
-    "surementsPhasesResponseb\006proto3"
+    "Request\022\020\n\010model_id\030\001 \001(\t\":\n\020AddMeterRes"
+    "ponse\022&\n\rmeter_created\030\001 \001(\0132\017.meter.v1."
+    "Meter\"$\n\021ListMetersRequest\022\017\n\007id_line\030\001 "
+    "\001(\t\"5\n\022ListMetersResponse\022\037\n\006meters\030\001 \003("
+    "\0132\017.meter.v1.Meter\"\"\n\021ListLinesResponse\022"
+    "\r\n\005lines\030\001 \003(\t\"&\n\022RemoveMeterRequest\022\020\n\010"
+    "id_model\030\001 \001(\t\"%\n\023RemoveMeterResponse\022\016\n"
+    "\006result\030\001 \001(\t\"<\n\025ListAllMetersResponse\022#"
+    "\n\013line_meters\030\001 \003(\0132\016.meter.v1.Line\"*\n\034G"
+    "etMeasurementsPhasesRequest\022\n\n\002id\030\001 \001(\t\""
+    "/\n\035GetMeasurementsPhasesResponse\022\016\n\006valu"
+    "es\030\001 \003(\t2\334\003\n\014MeterService\022A\n\010AddMeter\022\031."
+    "meter.v1.AddMeterRequest\032\032.meter.v1.AddM"
+    "eterResponse\022G\n\nListMeters\022\033.meter.v1.Li"
+    "stMetersRequest\032\034.meter.v1.ListMetersRes"
+    "ponse\022@\n\tListLines\022\026.google.protobuf.Emp"
+    "ty\032\033.meter.v1.ListLinesResponse\022J\n\013Remov"
+    "eMeter\022\034.meter.v1.RemoveMeterRequest\032\035.m"
+    "eter.v1.RemoveMeterResponse\022H\n\rListAllMe"
+    "ters\022\026.google.protobuf.Empty\032\037.meter.v1."
+    "ListAllMetersResponse\022h\n\025GetMeasurements"
+    "Phases\022&.meter.v1.GetMeasurementsPhasesR"
+    "equest\032\'.meter.v1.GetMeasurementsPhasesR"
+    "esponseb\006proto3"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_meter_2eproto_deps[1] = {
@@ -499,7 +498,7 @@ static ::absl::once_flag descriptor_table_meter_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_meter_2eproto = {
     false,
     false,
-    1111,
+    1135,
     descriptor_table_protodef_meter_2eproto,
     "meter.proto",
     &descriptor_table_meter_2eproto_once,
@@ -1545,8 +1544,7 @@ PROTOBUF_NDEBUG_INLINE AddMeterResponse::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
     [[maybe_unused]] const ::meter::v1::AddMeterResponse& from_msg)
       : _has_bits_{from._has_bits_},
-        _cached_size_{0},
-        result_(arena, from.result_) {}
+        _cached_size_{0} {}
 
 AddMeterResponse::AddMeterResponse(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
@@ -1561,17 +1559,21 @@ AddMeterResponse::AddMeterResponse(
   _internal_metadata_.MergeFrom<::google::protobuf::UnknownFieldSet>(
       from._internal_metadata_);
   new (&_impl_) Impl_(internal_visibility(), arena, from._impl_, from);
+  ::uint32_t cached_has_bits = _impl_._has_bits_[0];
+  _impl_.meter_created_ = (CheckHasBit(cached_has_bits, 0x00000001U))
+                ? ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.meter_created_)
+                : nullptr;
 
   // @@protoc_insertion_point(copy_constructor:meter.v1.AddMeterResponse)
 }
 PROTOBUF_NDEBUG_INLINE AddMeterResponse::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
-      : _cached_size_{0},
-        result_(arena) {}
+      : _cached_size_{0} {}
 
 inline void AddMeterResponse::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
+  _impl_.meter_created_ = {};
 }
 AddMeterResponse::~AddMeterResponse() {
   // @@protoc_insertion_point(destructor:meter.v1.AddMeterResponse)
@@ -1584,7 +1586,7 @@ inline void AddMeterResponse::SharedDtor(MessageLite& self) {
   }
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.result_.Destroy();
+  delete this_._impl_.meter_created_;
   this_._impl_.~Impl_();
 }
 
@@ -1594,7 +1596,7 @@ inline void* PROTOBUF_NONNULL AddMeterResponse::PlacementNew_(
   return ::new (mem) AddMeterResponse(arena);
 }
 constexpr auto AddMeterResponse::InternalNewImpl_() {
-  return ::google::protobuf::internal::MessageCreator::CopyInit(sizeof(AddMeterResponse),
+  return ::google::protobuf::internal::MessageCreator::ZeroInit(sizeof(AddMeterResponse),
                                             alignof(AddMeterResponse));
 }
 constexpr auto AddMeterResponse::InternalGenerateClassData_() {
@@ -1631,7 +1633,7 @@ AddMeterResponse::GetClassData() const {
   return AddMeterResponse_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 40, 2>
+const ::_pbi::TcParseTable<0, 1, 1, 0, 2>
 AddMeterResponse::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(AddMeterResponse, _impl_._has_bits_),
@@ -1641,8 +1643,8 @@ AddMeterResponse::_table_ = {
     4294967294,  // skipmap
     offsetof(decltype(_table_), field_entries),
     1,  // num_field_entries
-    0,  // num_aux_entries
-    offsetof(decltype(_table_), field_names),  // no aux_entries
+    1,  // num_aux_entries
+    offsetof(decltype(_table_), aux_entries),
     AddMeterResponse_class_data_.base(),
     nullptr,  // post_loop_handler
     ::_pbi::TcParser::GenericFallback,  // fallback
@@ -1650,21 +1652,20 @@ AddMeterResponse::_table_ = {
     ::_pbi::TcParser::GetTable<::meter::v1::AddMeterResponse>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // string result = 1;
-    {::_pbi::TcParser::FastUS1,
+    // .meter.v1.Meter meter_created = 1;
+    {::_pbi::TcParser::FastMtS1,
      {10, 0, 0,
-      PROTOBUF_FIELD_OFFSET(AddMeterResponse, _impl_.result_)}},
+      PROTOBUF_FIELD_OFFSET(AddMeterResponse, _impl_.meter_created_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string result = 1;
-    {PROTOBUF_FIELD_OFFSET(AddMeterResponse, _impl_.result_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // .meter.v1.Meter meter_created = 1;
+    {PROTOBUF_FIELD_OFFSET(AddMeterResponse, _impl_.meter_created_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kMessage | ::_fl::kTvTable)},
   }},
-  // no aux_entries
   {{
-    "\31\6\0\0\0\0\0\0"
-    "meter.v1.AddMeterResponse"
-    "result"
+      {::_pbi::TcParser::GetTable<::meter::v1::Meter>()},
+  }},
+  {{
   }},
 };
 PROTOBUF_NOINLINE void AddMeterResponse::Clear() {
@@ -1676,7 +1677,8 @@ PROTOBUF_NOINLINE void AddMeterResponse::Clear() {
 
   cached_has_bits = _impl_._has_bits_[0];
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    _impl_.result_.ClearNonDefaultToEmpty();
+    ABSL_DCHECK(_impl_.meter_created_ != nullptr);
+    _impl_.meter_created_->Clear();
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -1701,14 +1703,11 @@ PROTOBUF_NOINLINE void AddMeterResponse::Clear() {
   (void)cached_has_bits;
 
   cached_has_bits = this_._impl_._has_bits_[0];
-  // string result = 1;
+  // .meter.v1.Meter meter_created = 1;
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!this_._internal_result().empty()) {
-      const ::std::string& _s = this_._internal_result();
-      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "meter.v1.AddMeterResponse.result");
-      target = stream->WriteStringMaybeAliased(1, _s, target);
-    }
+    target = ::google::protobuf::internal::WireFormatLite::InternalWriteMessage(
+        1, *this_._impl_.meter_created_, this_._impl_.meter_created_->GetCachedSize(), target,
+        stream);
   }
 
   if (ABSL_PREDICT_FALSE(this_._internal_metadata_.have_unknown_fields())) {
@@ -1735,13 +1734,11 @@ PROTOBUF_NOINLINE void AddMeterResponse::Clear() {
   (void)cached_has_bits;
 
    {
-    // string result = 1;
+    // .meter.v1.Meter meter_created = 1;
     cached_has_bits = this_._impl_._has_bits_[0];
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      if (!this_._internal_result().empty()) {
-        total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                        this_._internal_result());
-      }
+      total_size += 1 +
+                    ::google::protobuf::internal::WireFormatLite::MessageSize(*this_._impl_.meter_created_);
     }
   }
   return this_.MaybeComputeUnknownFieldsSize(total_size,
@@ -1756,6 +1753,7 @@ void AddMeterResponse::MergeImpl(::google::protobuf::MessageLite& to_msg,
   if constexpr (::_pbi::DebugHardenCheckHasBitConsistency()) {
     from.CheckHasBitConsistency();
   }
+  ::google::protobuf::Arena* arena = _this->GetArena();
   // @@protoc_insertion_point(class_specific_merge_from_start:meter.v1.AddMeterResponse)
   ABSL_DCHECK_NE(&from, _this);
   ::uint32_t cached_has_bits = 0;
@@ -1763,12 +1761,11 @@ void AddMeterResponse::MergeImpl(::google::protobuf::MessageLite& to_msg,
 
   cached_has_bits = from._impl_._has_bits_[0];
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!from._internal_result().empty()) {
-      _this->_internal_set_result(from._internal_result());
+    ABSL_DCHECK(from._impl_.meter_created_ != nullptr);
+    if (_this->_impl_.meter_created_ == nullptr) {
+      _this->_impl_.meter_created_ = ::google::protobuf::Message::CopyConstruct(arena, *from._impl_.meter_created_);
     } else {
-      if (_this->_impl_.result_.IsDefault()) {
-        _this->_internal_set_result("");
-      }
+      _this->_impl_.meter_created_->MergeFrom(*from._impl_.meter_created_);
     }
   }
   _this->_impl_._has_bits_[0] |= cached_has_bits;
@@ -1786,11 +1783,9 @@ void AddMeterResponse::CopyFrom(const AddMeterResponse& from) {
 
 void AddMeterResponse::InternalSwap(AddMeterResponse* PROTOBUF_RESTRICT PROTOBUF_NONNULL other) {
   using ::std::swap;
-  auto* arena = GetArena();
-  ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.result_, &other->_impl_.result_, arena);
+  swap(_impl_.meter_created_, other->_impl_.meter_created_);
 }
 
 ::google::protobuf::Metadata AddMeterResponse::GetMetadata() const {

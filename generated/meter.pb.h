@@ -1548,201 +1548,6 @@ class GetMeasurementsPhasesRequest final : public ::google::protobuf::Message
 extern const ::google::protobuf::internal::ClassDataFull GetMeasurementsPhasesRequest_class_data_;
 // -------------------------------------------------------------------
 
-class AddMeterResponse final : public ::google::protobuf::Message
-/* @@protoc_insertion_point(class_definition:meter.v1.AddMeterResponse) */ {
- public:
-  inline AddMeterResponse() : AddMeterResponse(nullptr) {}
-  ~AddMeterResponse() PROTOBUF_FINAL;
-
-#if defined(PROTOBUF_CUSTOM_VTABLE)
-  void operator delete(AddMeterResponse* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
-    SharedDtor(*msg);
-    ::google::protobuf::internal::SizedDelete(msg, sizeof(AddMeterResponse));
-  }
-#endif
-
-  template <typename = void>
-  explicit PROTOBUF_CONSTEXPR AddMeterResponse(::google::protobuf::internal::ConstantInitialized);
-
-  inline AddMeterResponse(const AddMeterResponse& from) : AddMeterResponse(nullptr, from) {}
-  inline AddMeterResponse(AddMeterResponse&& from) noexcept
-      : AddMeterResponse(nullptr, ::std::move(from)) {}
-  inline AddMeterResponse& operator=(const AddMeterResponse& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  inline AddMeterResponse& operator=(AddMeterResponse&& from) noexcept {
-    if (this == &from) return *this;
-    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
-      InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
-  }
-  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
-      ABSL_ATTRIBUTE_LIFETIME_BOUND {
-    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
-  }
-
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
-    return GetDescriptor();
-  }
-  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
-    return default_instance().GetMetadata().descriptor;
-  }
-  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
-    return default_instance().GetMetadata().reflection;
-  }
-  static const AddMeterResponse& default_instance() {
-    return *reinterpret_cast<const AddMeterResponse*>(
-        &_AddMeterResponse_default_instance_);
-  }
-  static constexpr int kIndexInFileMessages = 3;
-  friend void swap(AddMeterResponse& a, AddMeterResponse& b) { a.Swap(&b); }
-  inline void Swap(AddMeterResponse* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
-      InternalSwap(other);
-    } else {
-      ::google::protobuf::internal::GenericSwap(this, other);
-    }
-  }
-  void UnsafeArenaSwap(AddMeterResponse* PROTOBUF_NONNULL other) {
-    if (other == this) return;
-    ABSL_DCHECK(GetArena() == other->GetArena());
-    InternalSwap(other);
-  }
-
-  // implements Message ----------------------------------------------
-
-  AddMeterResponse* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
-    return ::google::protobuf::Message::DefaultConstruct<AddMeterResponse>(arena);
-  }
-  using ::google::protobuf::Message::CopyFrom;
-  void CopyFrom(const AddMeterResponse& from);
-  using ::google::protobuf::Message::MergeFrom;
-  void MergeFrom(const AddMeterResponse& from) { AddMeterResponse::MergeImpl(*this, from); }
-
-  private:
-  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
-                        const ::google::protobuf::MessageLite& from_msg);
-
-  public:
-  bool IsInitialized() const {
-    return true;
-  }
-  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
-  #if defined(PROTOBUF_CUSTOM_VTABLE)
-  private:
-  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
-  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
-
-  public:
-  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
-    return _InternalSerialize(*this, target, stream);
-  }
-  #else   // PROTOBUF_CUSTOM_VTABLE
-  ::size_t ByteSizeLong() const final;
-  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
-      ::uint8_t* PROTOBUF_NONNULL target,
-      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
-  #endif  // PROTOBUF_CUSTOM_VTABLE
-  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
-
-  private:
-  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static void SharedDtor(MessageLite& self);
-  void InternalSwap(AddMeterResponse* PROTOBUF_NONNULL other);
- private:
-  template <typename T>
-  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
-  static ::absl::string_view FullMessageName() { return "meter.v1.AddMeterResponse"; }
-
-  explicit AddMeterResponse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  AddMeterResponse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const AddMeterResponse& from);
-  AddMeterResponse(
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, AddMeterResponse&& from) noexcept
-      : AddMeterResponse(arena) {
-    *this = ::std::move(from);
-  }
-  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
-  static void* PROTOBUF_NONNULL PlacementNew_(
-      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
-      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-  static constexpr auto InternalNewImpl_();
-
- public:
-  static constexpr auto InternalGenerateClassData_();
-
-  ::google::protobuf::Metadata GetMetadata() const;
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-  enum : int {
-    kResultFieldNumber = 1,
-  };
-  // string result = 1;
-  void clear_result() ;
-  const ::std::string& result() const;
-  template <typename Arg_ = const ::std::string&, typename... Args_>
-  void set_result(Arg_&& arg, Args_... args);
-  ::std::string* PROTOBUF_NONNULL mutable_result();
-  [[nodiscard]] ::std::string* PROTOBUF_NULLABLE release_result();
-  void set_allocated_result(::std::string* PROTOBUF_NULLABLE value);
-
-  private:
-  const ::std::string& _internal_result() const;
-  PROTOBUF_ALWAYS_INLINE void _internal_set_result(const ::std::string& value);
-  ::std::string* PROTOBUF_NONNULL _internal_mutable_result();
-
-  public:
-  // @@protoc_insertion_point(class_scope:meter.v1.AddMeterResponse)
- private:
-  class _Internal;
-  friend class ::google::protobuf::internal::TcParser;
-  static const ::google::protobuf::internal::TcParseTable<0, 1,
-                                   0, 40,
-                                   2>
-      _table_;
-
-  friend class ::google::protobuf::MessageLite;
-  friend class ::google::protobuf::Arena;
-  template <typename T>
-  friend class ::google::protobuf::Arena::InternalHelper;
-  using InternalArenaConstructable_ = void;
-  using DestructorSkippable_ = void;
-  struct Impl_ {
-    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
-    inline explicit Impl_(
-        ::google::protobuf::internal::InternalVisibility visibility,
-        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
-        const AddMeterResponse& from_msg);
-    ::google::protobuf::internal::HasBits<1> _has_bits_;
-    ::google::protobuf::internal::CachedSize _cached_size_;
-    ::google::protobuf::internal::ArenaStringPtr result_;
-    PROTOBUF_TSAN_DECLARE_MEMBER
-  };
-  union { Impl_ _impl_; };
-  friend struct ::TableStruct_meter_2eproto;
-};
-
-extern const ::google::protobuf::internal::ClassDataFull AddMeterResponse_class_data_;
-// -------------------------------------------------------------------
-
 class AddMeterRequest final : public ::google::protobuf::Message
 /* @@protoc_insertion_point(class_definition:meter.v1.AddMeterRequest) */ {
  public:
@@ -2347,6 +2152,201 @@ class Line final : public ::google::protobuf::Message
 };
 
 extern const ::google::protobuf::internal::ClassDataFull Line_class_data_;
+// -------------------------------------------------------------------
+
+class AddMeterResponse final : public ::google::protobuf::Message
+/* @@protoc_insertion_point(class_definition:meter.v1.AddMeterResponse) */ {
+ public:
+  inline AddMeterResponse() : AddMeterResponse(nullptr) {}
+  ~AddMeterResponse() PROTOBUF_FINAL;
+
+#if defined(PROTOBUF_CUSTOM_VTABLE)
+  void operator delete(AddMeterResponse* PROTOBUF_NONNULL msg, ::std::destroying_delete_t) {
+    SharedDtor(*msg);
+    ::google::protobuf::internal::SizedDelete(msg, sizeof(AddMeterResponse));
+  }
+#endif
+
+  template <typename = void>
+  explicit PROTOBUF_CONSTEXPR AddMeterResponse(::google::protobuf::internal::ConstantInitialized);
+
+  inline AddMeterResponse(const AddMeterResponse& from) : AddMeterResponse(nullptr, from) {}
+  inline AddMeterResponse(AddMeterResponse&& from) noexcept
+      : AddMeterResponse(nullptr, ::std::move(from)) {}
+  inline AddMeterResponse& operator=(const AddMeterResponse& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline AddMeterResponse& operator=(AddMeterResponse&& from) noexcept {
+    if (this == &from) return *this;
+    if (::google::protobuf::internal::CanMoveWithInternalSwap(GetArena(), from.GetArena())) {
+      InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.unknown_fields<::google::protobuf::UnknownFieldSet>(::google::protobuf::UnknownFieldSet::default_instance);
+  }
+  inline ::google::protobuf::UnknownFieldSet* PROTOBUF_NONNULL mutable_unknown_fields()
+      ABSL_ATTRIBUTE_LIFETIME_BOUND {
+    return _internal_metadata_.mutable_unknown_fields<::google::protobuf::UnknownFieldSet>();
+  }
+
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL descriptor() {
+    return GetDescriptor();
+  }
+  static const ::google::protobuf::Descriptor* PROTOBUF_NONNULL GetDescriptor() {
+    return default_instance().GetMetadata().descriptor;
+  }
+  static const ::google::protobuf::Reflection* PROTOBUF_NONNULL GetReflection() {
+    return default_instance().GetMetadata().reflection;
+  }
+  static const AddMeterResponse& default_instance() {
+    return *reinterpret_cast<const AddMeterResponse*>(
+        &_AddMeterResponse_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages = 3;
+  friend void swap(AddMeterResponse& a, AddMeterResponse& b) { a.Swap(&b); }
+  inline void Swap(AddMeterResponse* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    if (::google::protobuf::internal::CanUseInternalSwap(GetArena(), other->GetArena())) {
+      InternalSwap(other);
+    } else {
+      ::google::protobuf::internal::GenericSwap(this, other);
+    }
+  }
+  void UnsafeArenaSwap(AddMeterResponse* PROTOBUF_NONNULL other) {
+    if (other == this) return;
+    ABSL_DCHECK(GetArena() == other->GetArena());
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  AddMeterResponse* PROTOBUF_NONNULL New(::google::protobuf::Arena* PROTOBUF_NULLABLE arena = nullptr) const {
+    return ::google::protobuf::Message::DefaultConstruct<AddMeterResponse>(arena);
+  }
+  using ::google::protobuf::Message::CopyFrom;
+  void CopyFrom(const AddMeterResponse& from);
+  using ::google::protobuf::Message::MergeFrom;
+  void MergeFrom(const AddMeterResponse& from) { AddMeterResponse::MergeImpl(*this, from); }
+
+  private:
+  static void MergeImpl(::google::protobuf::MessageLite& to_msg,
+                        const ::google::protobuf::MessageLite& from_msg);
+
+  public:
+  bool IsInitialized() const {
+    return true;
+  }
+  ABSL_ATTRIBUTE_REINITIALIZES void Clear() PROTOBUF_FINAL;
+  #if defined(PROTOBUF_CUSTOM_VTABLE)
+  private:
+  static ::size_t ByteSizeLong(const ::google::protobuf::MessageLite& msg);
+  static ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      const ::google::protobuf::MessageLite& msg, ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream);
+
+  public:
+  ::size_t ByteSizeLong() const { return ByteSizeLong(*this); }
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const {
+    return _InternalSerialize(*this, target, stream);
+  }
+  #else   // PROTOBUF_CUSTOM_VTABLE
+  ::size_t ByteSizeLong() const final;
+  ::uint8_t* PROTOBUF_NONNULL _InternalSerialize(
+      ::uint8_t* PROTOBUF_NONNULL target,
+      ::google::protobuf::io::EpsCopyOutputStream* PROTOBUF_NONNULL stream) const final;
+  #endif  // PROTOBUF_CUSTOM_VTABLE
+  int GetCachedSize() const { return _impl_._cached_size_.Get(); }
+
+  private:
+  void SharedCtor(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static void SharedDtor(MessageLite& self);
+  void InternalSwap(AddMeterResponse* PROTOBUF_NONNULL other);
+ private:
+  template <typename T>
+  friend ::absl::string_view(::google::protobuf::internal::GetAnyMessageName)();
+  static ::absl::string_view FullMessageName() { return "meter.v1.AddMeterResponse"; }
+
+  explicit AddMeterResponse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  AddMeterResponse(::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const AddMeterResponse& from);
+  AddMeterResponse(
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, AddMeterResponse&& from) noexcept
+      : AddMeterResponse(arena) {
+    *this = ::std::move(from);
+  }
+  const ::google::protobuf::internal::ClassData* PROTOBUF_NONNULL GetClassData() const PROTOBUF_FINAL;
+  static void* PROTOBUF_NONNULL PlacementNew_(
+      const void* PROTOBUF_NONNULL, void* PROTOBUF_NONNULL mem,
+      ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+  static constexpr auto InternalNewImpl_();
+
+ public:
+  static constexpr auto InternalGenerateClassData_();
+
+  ::google::protobuf::Metadata GetMetadata() const;
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+  enum : int {
+    kMeterCreatedFieldNumber = 1,
+  };
+  // .meter.v1.Meter meter_created = 1;
+  bool has_meter_created() const;
+  void clear_meter_created() ;
+  const ::meter::v1::Meter& meter_created() const;
+  [[nodiscard]] ::meter::v1::Meter* PROTOBUF_NULLABLE release_meter_created();
+  ::meter::v1::Meter* PROTOBUF_NONNULL mutable_meter_created();
+  void set_allocated_meter_created(::meter::v1::Meter* PROTOBUF_NULLABLE value);
+  void unsafe_arena_set_allocated_meter_created(::meter::v1::Meter* PROTOBUF_NULLABLE value);
+  ::meter::v1::Meter* PROTOBUF_NULLABLE unsafe_arena_release_meter_created();
+
+  private:
+  const ::meter::v1::Meter& _internal_meter_created() const;
+  ::meter::v1::Meter* PROTOBUF_NONNULL _internal_mutable_meter_created();
+
+  public:
+  // @@protoc_insertion_point(class_scope:meter.v1.AddMeterResponse)
+ private:
+  class _Internal;
+  friend class ::google::protobuf::internal::TcParser;
+  static const ::google::protobuf::internal::TcParseTable<0, 1,
+                                   1, 0,
+                                   2>
+      _table_;
+
+  friend class ::google::protobuf::MessageLite;
+  friend class ::google::protobuf::Arena;
+  template <typename T>
+  friend class ::google::protobuf::Arena::InternalHelper;
+  using InternalArenaConstructable_ = void;
+  using DestructorSkippable_ = void;
+  struct Impl_ {
+    inline explicit constexpr Impl_(::google::protobuf::internal::ConstantInitialized) noexcept;
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena);
+    inline explicit Impl_(
+        ::google::protobuf::internal::InternalVisibility visibility,
+        ::google::protobuf::Arena* PROTOBUF_NULLABLE arena, const Impl_& from,
+        const AddMeterResponse& from_msg);
+    ::google::protobuf::internal::HasBits<1> _has_bits_;
+    ::google::protobuf::internal::CachedSize _cached_size_;
+    ::meter::v1::Meter* PROTOBUF_NULLABLE meter_created_;
+    PROTOBUF_TSAN_DECLARE_MEMBER
+  };
+  union { Impl_ _impl_; };
+  friend struct ::TableStruct_meter_2eproto;
+};
+
+extern const ::google::protobuf::internal::ClassDataFull AddMeterResponse_class_data_;
 // -------------------------------------------------------------------
 
 class ListAllMetersResponse final : public ::google::protobuf::Message
@@ -3019,69 +3019,103 @@ inline void AddMeterRequest::set_allocated_model_id(::std::string* PROTOBUF_NULL
 
 // AddMeterResponse
 
-// string result = 1;
-inline void AddMeterResponse::clear_result() {
+// .meter.v1.Meter meter_created = 1;
+inline bool AddMeterResponse::has_meter_created() const {
+  bool value = CheckHasBit(_impl_._has_bits_[0], 0x00000001U);
+  PROTOBUF_ASSUME(!value || _impl_.meter_created_ != nullptr);
+  return value;
+}
+inline void AddMeterResponse::clear_meter_created() {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.result_.ClearToEmpty();
+  if (_impl_.meter_created_ != nullptr) _impl_.meter_created_->Clear();
   ClearHasBit(_impl_._has_bits_[0],
                   0x00000001U);
 }
-inline const ::std::string& AddMeterResponse::result() const
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  // @@protoc_insertion_point(field_get:meter.v1.AddMeterResponse.result)
-  return _internal_result();
-}
-template <typename Arg_, typename... Args_>
-PROTOBUF_ALWAYS_INLINE void AddMeterResponse::set_result(Arg_&& arg, Args_... args) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  _impl_.result_.Set(static_cast<Arg_&&>(arg), args..., GetArena());
-  // @@protoc_insertion_point(field_set:meter.v1.AddMeterResponse.result)
-}
-inline ::std::string* PROTOBUF_NONNULL AddMeterResponse::mutable_result()
-    ABSL_ATTRIBUTE_LIFETIME_BOUND {
-  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
-  ::std::string* _s = _internal_mutable_result();
-  // @@protoc_insertion_point(field_mutable:meter.v1.AddMeterResponse.result)
-  return _s;
-}
-inline const ::std::string& AddMeterResponse::_internal_result() const {
+inline const ::meter::v1::Meter& AddMeterResponse::_internal_meter_created() const {
   ::google::protobuf::internal::TSanRead(&_impl_);
-  return _impl_.result_.Get();
+  const ::meter::v1::Meter* p = _impl_.meter_created_;
+  return p != nullptr ? *p : reinterpret_cast<const ::meter::v1::Meter&>(::meter::v1::_Meter_default_instance_);
 }
-inline void AddMeterResponse::_internal_set_result(const ::std::string& value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  _impl_.result_.Set(value, GetArena());
+inline const ::meter::v1::Meter& AddMeterResponse::meter_created() const ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  // @@protoc_insertion_point(field_get:meter.v1.AddMeterResponse.meter_created)
+  return _internal_meter_created();
 }
-inline ::std::string* PROTOBUF_NONNULL AddMeterResponse::_internal_mutable_result() {
+inline void AddMeterResponse::unsafe_arena_set_allocated_meter_created(
+    ::meter::v1::Meter* PROTOBUF_NULLABLE value) {
   ::google::protobuf::internal::TSanWrite(&_impl_);
-  return _impl_.result_.Mutable( GetArena());
-}
-inline ::std::string* PROTOBUF_NULLABLE AddMeterResponse::release_result() {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
-  // @@protoc_insertion_point(field_release:meter.v1.AddMeterResponse.result)
-  if (!CheckHasBit(_impl_._has_bits_[0], 0x00000001U)) {
-    return nullptr;
+  if (GetArena() == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.meter_created_);
   }
-  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
-  auto* released = _impl_.result_.Release();
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString()) {
-    _impl_.result_.Set("", GetArena());
-  }
-  return released;
-}
-inline void AddMeterResponse::set_allocated_result(::std::string* PROTOBUF_NULLABLE value) {
-  ::google::protobuf::internal::TSanWrite(&_impl_);
+  _impl_.meter_created_ = reinterpret_cast<::meter::v1::Meter*>(value);
   if (value != nullptr) {
     SetHasBit(_impl_._has_bits_[0], 0x00000001U);
   } else {
     ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
   }
-  _impl_.result_.SetAllocated(value, GetArena());
-  if (::google::protobuf::internal::DebugHardenForceCopyDefaultString() && _impl_.result_.IsDefault()) {
-    _impl_.result_.Set("", GetArena());
+  // @@protoc_insertion_point(field_unsafe_arena_set_allocated:meter.v1.AddMeterResponse.meter_created)
+}
+inline ::meter::v1::Meter* PROTOBUF_NULLABLE AddMeterResponse::release_meter_created() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::meter::v1::Meter* released = _impl_.meter_created_;
+  _impl_.meter_created_ = nullptr;
+  if (::google::protobuf::internal::DebugHardenForceCopyInRelease()) {
+    auto* old = reinterpret_cast<::google::protobuf::MessageLite*>(released);
+    released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    if (GetArena() == nullptr) {
+      delete old;
+    }
+  } else {
+    if (GetArena() != nullptr) {
+      released = ::google::protobuf::internal::DuplicateIfNonNull(released);
+    }
   }
-  // @@protoc_insertion_point(field_set_allocated:meter.v1.AddMeterResponse.result)
+  return released;
+}
+inline ::meter::v1::Meter* PROTOBUF_NULLABLE AddMeterResponse::unsafe_arena_release_meter_created() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  // @@protoc_insertion_point(field_release:meter.v1.AddMeterResponse.meter_created)
+
+  ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::meter::v1::Meter* temp = _impl_.meter_created_;
+  _impl_.meter_created_ = nullptr;
+  return temp;
+}
+inline ::meter::v1::Meter* PROTOBUF_NONNULL AddMeterResponse::_internal_mutable_meter_created() {
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (_impl_.meter_created_ == nullptr) {
+    auto* p = ::google::protobuf::Message::DefaultConstruct<::meter::v1::Meter>(GetArena());
+    _impl_.meter_created_ = reinterpret_cast<::meter::v1::Meter*>(p);
+  }
+  return _impl_.meter_created_;
+}
+inline ::meter::v1::Meter* PROTOBUF_NONNULL AddMeterResponse::mutable_meter_created()
+    ABSL_ATTRIBUTE_LIFETIME_BOUND {
+  SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  ::meter::v1::Meter* _msg = _internal_mutable_meter_created();
+  // @@protoc_insertion_point(field_mutable:meter.v1.AddMeterResponse.meter_created)
+  return _msg;
+}
+inline void AddMeterResponse::set_allocated_meter_created(::meter::v1::Meter* PROTOBUF_NULLABLE value) {
+  ::google::protobuf::Arena* message_arena = GetArena();
+  ::google::protobuf::internal::TSanWrite(&_impl_);
+  if (message_arena == nullptr) {
+    delete reinterpret_cast<::google::protobuf::MessageLite*>(_impl_.meter_created_);
+  }
+
+  if (value != nullptr) {
+    ::google::protobuf::Arena* submessage_arena = value->GetArena();
+    if (message_arena != submessage_arena) {
+      value = ::google::protobuf::internal::GetOwnedMessage(message_arena, value, submessage_arena);
+    }
+    SetHasBit(_impl_._has_bits_[0], 0x00000001U);
+  } else {
+    ClearHasBit(_impl_._has_bits_[0], 0x00000001U);
+  }
+
+  _impl_.meter_created_ = reinterpret_cast<::meter::v1::Meter*>(value);
+  // @@protoc_insertion_point(field_set_allocated:meter.v1.AddMeterResponse.meter_created)
 }
 
 // -------------------------------------------------------------------

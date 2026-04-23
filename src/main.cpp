@@ -1,11 +1,60 @@
-#include "ui/Ui.h"
-#include <windows.h>
+#include <iostream>
+#include <csignal>
+#include <condition_variable>
+
+#include "config/config.hpp"
+#include "service/meter_service.hpp"
+#include "server/server.hpp"
+
+std::unique_ptr<Server> g_server = nullptr;
+bool shutdown_requested = false;
+std::mutex shutdown_mutex;
+std::condition_variable shutdown_cv;
+
+void signal_handler(int signal)
+{
+    std::cout << "Received signal " << signal << std::endl;
+    shutdown_requested = true;
+    shutdown_cv.notify_one();
+}
 
 int main()
 {
-    SetConsoleOutputCP(CP_UTF8);
+    try
+    {
+        std::signal(SIGINT, signal_handler);
+        std::signal(SIGTERM, signal_handler);
 
-    Ui ui;
-    ui.run();
+        Config config = Config::New();
+        auto oService = std::make_shared<MeterService>();
+        
+        g_server = std::make_unique<Server>(
+            config.host + ":" + config.port, 
+            oService, 
+            os::MeterService::service_full_name()
+        );
+
+        g_server->Start();
+
+        std::cout << "Server is running. Press Ctrl+C to stop." << std::endl;
+        
+        {
+            std::unique_lock<std::mutex> lock(shutdown_mutex);
+            shutdown_cv.wait(lock, [] { return shutdown_requested; });
+        }
+
+        std::cout << "\nSignal received, initiating graceful shutdown..." << std::endl;
+        
+        if (g_server) {
+            g_server->Stop();
+        }
+    }
+    catch (const std::exception &e)
+    {
+        std::cerr << "Fatal Error: " << e.what() << std::endl;
+        return 1;
+    }
+
+    std::cout << "Exiting program." << std::endl;
     return 0;
 }

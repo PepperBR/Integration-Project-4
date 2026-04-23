@@ -8,14 +8,14 @@
 #include <tuple>
 
 using LineList = std::set<std::string>;
-using MetersList = std::list<std::unique_ptr<Meter>>;
+using MetersList = std::list<std::shared_ptr<Meter>>;
 using MeterAttributes = std::vector<std::tuple<int, std::string, bool>>;
 
 class Catalog          
 {
 private:
     MetersList meter_list;
-    std::unique_ptr<Meter> Catalog::factoryMeter(const int & ID_template); 
+    std::shared_ptr<Meter> Catalog::factoryMeter(const int & ID_template); 
     void sortList();                         
     
 public:
@@ -25,8 +25,8 @@ public:
     
     LineList getLines () const; 
     MeterAttributes getLineModels(const std::string & line_name);    
-    const std::unique_ptr<Meter> & getMeterByID(const int id) const;
-    const std::unique_ptr<Meter> & getTemplateByID(const int id) const;
+    const std::shared_ptr<Meter> & getMeterByID(const int id) const;
+    const std::shared_ptr<Meter> & getTemplateByID(const int id) const;
     Catalog();
 };
 

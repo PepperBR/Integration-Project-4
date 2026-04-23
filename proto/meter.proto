@@ -21,7 +21,7 @@ message AddMeterRequest {
 }
 
 message AddMeterResponse {
-    string result = 1;
+    Meter meter_created = 1;
 }
 
 message ListMetersRequest {

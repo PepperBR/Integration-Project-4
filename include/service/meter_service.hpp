@@ -1,0 +1,43 @@
+#pragma once
+
+#include <unordered_map>
+#include <vector>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <chrono>
+#include <random>
+#include <time.h>
+
+#include "grpcpp/grpcpp.h"
+#include "grpcpp/server_context.h"
+#include "grpcpp/support/status.h"
+#include "google/protobuf/map.h"
+
+#include "meter.grpc.pb.h"
+#include "meter.pb.h"
+#include "core/Catalog.h"
+#include "core/GlobalID.h"
+#include "meters/Meter.h"
+
+namespace os = meter::v1;
+
+using grpc::Status;
+using grpc::ServerContext;
+using grpc::ServerWriter;
+
+class MeterService final : public os::MeterService::Service
+{
+public:
+    grpc::Status AddMeter (grpc::ServerContext* context, const os::AddMeterRequest* request, os::AddMeterResponse* response) override;
+    grpc::Status ListMeters (grpc::ServerContext* context, const os::ListMetersRequest* request, os::ListMetersResponse* response) override;
+    grpc::Status ListLines (grpc::ServerContext* context, const google::protobuf::Empty* request, os::ListLinesResponse* response) override;
+    grpc::Status RemoveMeter (grpc::ServerContext* context, const os::RemoveMeterRequest* request, os::RemoveMeterResponse* response) override;
+    grpc::Status ListAllMeters (grpc::ServerContext* context, const google::protobuf::Empty* request, os::ListAllMetersResponse* response) override;
+    grpc::Status GetMeasurementsPhases (grpc::ServerContext* context, const os::GetMeasurementsPhasesRequest* request, os::GetMeasurementsPhasesResponse* response) override;
+
+    void CatalogToProto (std::shared_ptr<Meter> meter, os::Meter* proto_meter);
+private:
+    Catalog catalog;
+    int id_counter = 17;
+}; 

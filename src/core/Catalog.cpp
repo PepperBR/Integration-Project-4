@@ -51,7 +51,7 @@ void Catalog::addNewModel (const int & ID_template)
 bool Catalog::removeModel (const int ID)
 {
     bool result = false;
-    meter_list.remove_if([ID, &result](std::unique_ptr<Meter> & meter_list) {
+    meter_list.remove_if([ID, &result](std::shared_ptr<Meter> & meter_list) {
         if(meter_list->getID() == ID && !meter_list->getIsTemplate())
         {
             result = true;
@@ -78,14 +78,14 @@ std::vector<double> & Catalog::getMeasurementsPhases(const int ID)
 void Catalog::sortList()
 {
     meter_list.sort(
-        [](const std::unique_ptr<Meter>& meter_a,
-            const std::unique_ptr<Meter>& meter_b)
+        [](const std::shared_ptr<Meter>& meter_a,
+            const std::shared_ptr<Meter>& meter_b)
         {
             return meter_a->getFullName() < meter_b->getFullName();
         });
 };
 
-std::unique_ptr<Meter> Catalog::factoryMeter(const int & ID_template)
+std::shared_ptr<Meter> Catalog::factoryMeter(const int & ID_template)
 {
     for (const auto& meter_template : meter_list) {
         if (meter_template->getID() == ID_template && meter_template->getIsTemplate()) {
@@ -99,7 +99,7 @@ LineList Catalog::getLines() const
 {
     std::set<std::string> lines;
     
-    for (const auto & meter  : meter_list)
+    for (const auto & meter : meter_list)
     {
         lines.insert(meter->getNameLine());
     }   
@@ -121,7 +121,7 @@ MeterAttributes Catalog::getLineModels(const std::string & name_line)
     return list; 
 }
 
-const std::unique_ptr<Meter> & Catalog::getMeterByID(const int id) const
+const std::shared_ptr<Meter> & Catalog::getMeterByID(const int id) const
 {
     for (const auto & meter : meter_list)
     {
@@ -133,7 +133,7 @@ const std::unique_ptr<Meter> & Catalog::getMeterByID(const int id) const
     return nullptr;
 }
 
-const std::unique_ptr<Meter> & Catalog::getTemplateByID(const int id) const
+const std::shared_ptr<Meter> & Catalog::getTemplateByID(const int id) const
 {
     for (const auto & meter : meter_list)
     {
