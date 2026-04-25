@@ -19,6 +19,7 @@
 #include "core/Catalog.h"
 #include "core/GlobalID.h"
 #include "meters/Meter.h"
+#include "core/CatalogControler.h"
 
 namespace os = meter::v1;
 
@@ -39,4 +40,5 @@ public:
     void CatalogToProto (std::shared_ptr<Meter> meter, os::Meter* proto_meter);
 private:
     Catalog catalog;
+    CatalogControler controler;
 }; 
