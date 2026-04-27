@@ -1,6 +1,5 @@
 #include "client/client.h"
 
-
 MeterClient::MeterClient(std::shared_ptr<grpc::Channel> channel)
     : stub_(meter::v1::MeterService::NewStub(channel)) 
 {}
@@ -66,24 +65,27 @@ void MeterClient::ListAllAvailableMeters()
     }
 }
 
-void MeterClient::ListLines()
+std::vector<std::string> MeterClient::ListLines()
 {
     google::protobuf::Empty request;
     meter::v1::ListLinesResponse response;
     grpc::ClientContext context;
 
+    std::vector<std::string> lines;
+    
     grpc::Status status = stub_->ListLines(&context, request, &response);
     if (status.ok())
     {
-        std::cout << "--- Lista de linhas disponíveis ---" << std::endl;
         for (const auto& line : response.lines())
         {
-            std::cout << "\nLinha: " << line << std::endl;
+            lines.push_back(line);
         }
     } else {
         std::cout << "Falha ao listar: " << status.error_message() << std::endl;
     }
+    return lines;
 }
+
 void MeterClient::GetMeasurements(const std::string& meter_id)
 {
     grpc::ClientContext contex;
@@ -127,25 +129,33 @@ void MeterClient::ListCreatedMeters(const std::string& line_name)
 }
 
 
-void MeterClient::ListAvailableMeters(const std::string& line_name)
+std::vector<std::vector<std::string>> MeterClient::ListAvailableMeters(const std::string& line_name)
 {
     meter::v1::ListAvailableMetersRequest request;
     meter::v1::ListAvailableMetersResponse response;
     grpc::ClientContext context;
+
+    std::vector<std::vector<std::string>> list_meters_availabe;
 
     request.set_line_name(line_name);
 
     grpc::Status status = stub_->ListAvailableMeters(&context, request, &response);
     if (status.ok())
     {
-        std::cout << "--- Aqui estão a lista de medidores disponíveis da linha " << line_name << " ---" << std::endl;
         for (const auto& meters_created : response.meters())
         {
-             std::cout << "  [ID: " << meters_created.id() << "] Modelo: " << meters_created.model_name() << std::endl;
+            std::vector<std::string> meter;
+
+            meter.push_back(meters_created.id());
+            meter.push_back(meters_created.line_name());
+            meter.push_back(meters_created.model_name());
+
+            list_meters_availabe.push_back(meter);
         }
     } else {
         std::cout << "Falha em listar os medidores criados da linha  " << line_name << " : " << status.error_message() << std::endl;
     }
+    return list_meters_availabe;
 }
 
 void MeterClient::RemoveMeter(const std::string& meter_id)
