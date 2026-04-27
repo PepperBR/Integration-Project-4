@@ -20,8 +20,8 @@ int main() {
     
     try 
     {
-        std::cout << "\nBuscando todos os medidores registrados..." << std::endl;
-        client.ListCreatedMeters();
+        std::cout << "\nBuscando todos os medidores disponíveis..." << std::endl;
+        client.ListAllAvailableMeters();
 
         std::cout << "\nTentando adicionar um medidor (ID de template 6)..." << std::endl;
         client.AddMeter("6");
@@ -31,12 +31,11 @@ int main() {
 
         std::cout << "\nTentando listar as medições das fases de um medidor (ID 18)..." << std::endl;
         client.GetMeasurements("18");
-
+        
         std::cout << "\nTentando listar as medições das fases de um medidor (ID 19)..." << std::endl;
         client.GetMeasurements("19");
         
-        std::cout << "\nBuscando todos os medidores registrados..." << std::endl;
-        client.ListCreatedMeters();
+        client.ListAllCreatedMeters();
     }
     catch (const std::exception& e) {
         std::cerr << "Erro fatal: " << e.what() << std::endl;

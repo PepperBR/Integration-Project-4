@@ -169,7 +169,7 @@ PROTOBUF_ATTRIBUTE_NO_DESTROY PROTOBUF_CONSTINIT
 inline constexpr ListAvailableMetersRequest::Impl_::Impl_(
     ::_pbi::ConstantInitialized) noexcept
       : _cached_size_{0},
-        line_id_(
+        line_name_(
             &::google::protobuf::internal::fixed_address_empty_string,
             ::_pbi::ConstantInitialized()) {}
 
@@ -462,7 +462,7 @@ const ::uint32_t
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::meter::v1::ListAvailableMetersRequest, _impl_._has_bits_),
         4, // hasbit index offset
-        PROTOBUF_FIELD_OFFSET(::meter::v1::ListAvailableMetersRequest, _impl_.line_id_),
+        PROTOBUF_FIELD_OFFSET(::meter::v1::ListAvailableMetersRequest, _impl_.line_name_),
         0,
         0x081, // bitmap
         PROTOBUF_FIELD_OFFSET(::meter::v1::ListAvailableMetersResponse, _impl_._has_bits_),
@@ -559,39 +559,40 @@ const char descriptor_table_protodef_meter_2eproto[] ABSL_ATTRIBUTE_SECTION_VARI
     "\022\014\n\004name\030\001 \001(\t\022\037\n\006meters\030\002 \003(\0132\017.meter.v"
     "1.Meter\"#\n\017AddMeterRequest\022\020\n\010meter_id\030\001"
     " \001(\t\"5\n\020AddMeterResponse\022!\n\010meter_id\030\001 \001"
-    "(\0132\017.meter.v1.Meter\"-\n\032ListAvailableMete"
-    "rsRequest\022\017\n\007line_id\030\001 \001(\t\">\n\033ListAvaila"
-    "bleMetersResponse\022\037\n\006meters\030\001 \003(\0132\017.mete"
-    "r.v1.Meter\"E\n\036ListAllAvailableMetersResp"
-    "onse\022#\n\013line_meters\030\001 \003(\0132\016.meter.v1.Lin"
-    "e\"-\n\030ListCreatedMetersRequest\022\021\n\tline_na"
-    "me\030\001 \001(\t\"<\n\031ListCreatedMetersResponse\022\037\n"
-    "\006meters\030\001 \003(\0132\017.meter.v1.Meter\"\"\n\021ListLi"
-    "nesResponse\022\r\n\005lines\030\001 \003(\t\"&\n\022RemoveMete"
-    "rRequest\022\020\n\010meter_id\030\001 \001(\t\"%\n\023RemoveMete"
-    "rResponse\022\016\n\006result\030\001 \001(\t\"C\n\034ListAllCrea"
-    "tedMetersResponse\022#\n\013line_meters\030\001 \003(\0132\016"
-    ".meter.v1.Line\"0\n\034GetMeasurementsPhasesR"
-    "equest\022\020\n\010meter_id\030\001 \001(\t\"<\n\035GetMeasureme"
-    "ntsPhasesResponse\022\033\n\023measurements_values"
-    "\030\001 \003(\t2\277\005\n\014MeterService\022A\n\010AddMeter\022\031.me"
-    "ter.v1.AddMeterRequest\032\032.meter.v1.AddMet"
-    "erResponse\022b\n\023ListAvailableMeters\022$.mete"
-    "r.v1.ListAvailableMetersRequest\032%.meter."
-    "v1.ListAvailableMetersResponse\022Z\n\026ListAl"
-    "lAvailableMeters\022\026.google.protobuf.Empty"
-    "\032(.meter.v1.ListAllAvailableMetersRespon"
-    "se\022\\\n\021ListCreatedMeters\022\".meter.v1.ListC"
-    "reatedMetersRequest\032#.meter.v1.ListCreat"
-    "edMetersResponse\022@\n\tListLines\022\026.google.p"
-    "rotobuf.Empty\032\033.meter.v1.ListLinesRespon"
-    "se\022J\n\013RemoveMeter\022\034.meter.v1.RemoveMeter"
-    "Request\032\035.meter.v1.RemoveMeterResponse\022V"
-    "\n\024ListAllCreatedMeters\022\026.google.protobuf"
-    ".Empty\032&.meter.v1.ListAllCreatedMetersRe"
-    "sponse\022h\n\025GetMeasurementsPhases\022&.meter."
-    "v1.GetMeasurementsPhasesRequest\032\'.meter."
-    "v1.GetMeasurementsPhasesResponseb\006proto3"
+    "(\0132\017.meter.v1.Meter\"/\n\032ListAvailableMete"
+    "rsRequest\022\021\n\tline_name\030\001 \001(\t\">\n\033ListAvai"
+    "lableMetersResponse\022\037\n\006meters\030\001 \003(\0132\017.me"
+    "ter.v1.Meter\"E\n\036ListAllAvailableMetersRe"
+    "sponse\022#\n\013line_meters\030\001 \003(\0132\016.meter.v1.L"
+    "ine\"-\n\030ListCreatedMetersRequest\022\021\n\tline_"
+    "name\030\001 \001(\t\"<\n\031ListCreatedMetersResponse\022"
+    "\037\n\006meters\030\001 \003(\0132\017.meter.v1.Meter\"\"\n\021List"
+    "LinesResponse\022\r\n\005lines\030\001 \003(\t\"&\n\022RemoveMe"
+    "terRequest\022\020\n\010meter_id\030\001 \001(\t\"%\n\023RemoveMe"
+    "terResponse\022\016\n\006result\030\001 \001(\t\"C\n\034ListAllCr"
+    "eatedMetersResponse\022#\n\013line_meters\030\001 \003(\013"
+    "2\016.meter.v1.Line\"0\n\034GetMeasurementsPhase"
+    "sRequest\022\020\n\010meter_id\030\001 \001(\t\"<\n\035GetMeasure"
+    "mentsPhasesResponse\022\033\n\023measurements_valu"
+    "es\030\001 \003(\t2\277\005\n\014MeterService\022A\n\010AddMeter\022\031."
+    "meter.v1.AddMeterRequest\032\032.meter.v1.AddM"
+    "eterResponse\022b\n\023ListAvailableMeters\022$.me"
+    "ter.v1.ListAvailableMetersRequest\032%.mete"
+    "r.v1.ListAvailableMetersResponse\022Z\n\026List"
+    "AllAvailableMeters\022\026.google.protobuf.Emp"
+    "ty\032(.meter.v1.ListAllAvailableMetersResp"
+    "onse\022\\\n\021ListCreatedMeters\022\".meter.v1.Lis"
+    "tCreatedMetersRequest\032#.meter.v1.ListCre"
+    "atedMetersResponse\022@\n\tListLines\022\026.google"
+    ".protobuf.Empty\032\033.meter.v1.ListLinesResp"
+    "onse\022J\n\013RemoveMeter\022\034.meter.v1.RemoveMet"
+    "erRequest\032\035.meter.v1.RemoveMeterResponse"
+    "\022V\n\024ListAllCreatedMeters\022\026.google.protob"
+    "uf.Empty\032&.meter.v1.ListAllCreatedMeters"
+    "Response\022h\n\025GetMeasurementsPhases\022&.mete"
+    "r.v1.GetMeasurementsPhasesRequest\032\'.mete"
+    "r.v1.GetMeasurementsPhasesResponseb\006prot"
+    "o3"
 };
 static const ::_pbi::DescriptorTable* PROTOBUF_NONNULL const
     descriptor_table_meter_2eproto_deps[1] = {
@@ -601,7 +602,7 @@ static ::absl::once_flag descriptor_table_meter_2eproto_once;
 PROTOBUF_CONSTINIT const ::_pbi::DescriptorTable descriptor_table_meter_2eproto = {
     false,
     false,
-    1560,
+    1562,
     descriptor_table_protodef_meter_2eproto,
     "meter.proto",
     &descriptor_table_meter_2eproto_once,
@@ -1880,7 +1881,7 @@ PROTOBUF_NDEBUG_INLINE ListAvailableMetersRequest::Impl_::Impl_(
     [[maybe_unused]] const ::meter::v1::ListAvailableMetersRequest& from_msg)
       : _has_bits_{from._has_bits_},
         _cached_size_{0},
-        line_id_(arena, from.line_id_) {}
+        line_name_(arena, from.line_name_) {}
 
 ListAvailableMetersRequest::ListAvailableMetersRequest(
     ::google::protobuf::Arena* PROTOBUF_NULLABLE arena,
@@ -1902,7 +1903,7 @@ PROTOBUF_NDEBUG_INLINE ListAvailableMetersRequest::Impl_::Impl_(
     [[maybe_unused]] ::google::protobuf::internal::InternalVisibility visibility,
     [[maybe_unused]] ::google::protobuf::Arena* PROTOBUF_NULLABLE arena)
       : _cached_size_{0},
-        line_id_(arena) {}
+        line_name_(arena) {}
 
 inline void ListAvailableMetersRequest::SharedCtor(::_pb::Arena* PROTOBUF_NULLABLE arena) {
   new (&_impl_) Impl_(internal_visibility(), arena);
@@ -1918,7 +1919,7 @@ inline void ListAvailableMetersRequest::SharedDtor(MessageLite& self) {
   }
   this_._internal_metadata_.Delete<::google::protobuf::UnknownFieldSet>();
   ABSL_DCHECK(this_.GetArena() == nullptr);
-  this_._impl_.line_id_.Destroy();
+  this_._impl_.line_name_.Destroy();
   this_._impl_.~Impl_();
 }
 
@@ -1965,7 +1966,7 @@ ListAvailableMetersRequest::GetClassData() const {
   return ListAvailableMetersRequest_class_data_.base();
 }
 PROTOBUF_CONSTINIT PROTOBUF_ATTRIBUTE_INIT_PRIORITY1
-const ::_pbi::TcParseTable<0, 1, 0, 51, 2>
+const ::_pbi::TcParseTable<0, 1, 0, 53, 2>
 ListAvailableMetersRequest::_table_ = {
   {
     PROTOBUF_FIELD_OFFSET(ListAvailableMetersRequest, _impl_._has_bits_),
@@ -1984,21 +1985,21 @@ ListAvailableMetersRequest::_table_ = {
     ::_pbi::TcParser::GetTable<::meter::v1::ListAvailableMetersRequest>(),  // to_prefetch
     #endif  // PROTOBUF_PREFETCH_PARSE_TABLE
   }, {{
-    // string line_id = 1;
+    // string line_name = 1;
     {::_pbi::TcParser::FastUS1,
      {10, 0, 0,
-      PROTOBUF_FIELD_OFFSET(ListAvailableMetersRequest, _impl_.line_id_)}},
+      PROTOBUF_FIELD_OFFSET(ListAvailableMetersRequest, _impl_.line_name_)}},
   }}, {{
     65535, 65535
   }}, {{
-    // string line_id = 1;
-    {PROTOBUF_FIELD_OFFSET(ListAvailableMetersRequest, _impl_.line_id_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
+    // string line_name = 1;
+    {PROTOBUF_FIELD_OFFSET(ListAvailableMetersRequest, _impl_.line_name_), _Internal::kHasBitsOffset + 0, 0, (0 | ::_fl::kFcOptional | ::_fl::kUtf8String | ::_fl::kRepAString)},
   }},
   // no aux_entries
   {{
-    "\43\7\0\0\0\0\0\0"
+    "\43\11\0\0\0\0\0\0"
     "meter.v1.ListAvailableMetersRequest"
-    "line_id"
+    "line_name"
   }},
 };
 PROTOBUF_NOINLINE void ListAvailableMetersRequest::Clear() {
@@ -2010,7 +2011,7 @@ PROTOBUF_NOINLINE void ListAvailableMetersRequest::Clear() {
 
   cached_has_bits = _impl_._has_bits_[0];
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    _impl_.line_id_.ClearNonDefaultToEmpty();
+    _impl_.line_name_.ClearNonDefaultToEmpty();
   }
   _impl_._has_bits_.Clear();
   _internal_metadata_.Clear<::google::protobuf::UnknownFieldSet>();
@@ -2035,12 +2036,12 @@ PROTOBUF_NOINLINE void ListAvailableMetersRequest::Clear() {
   (void)cached_has_bits;
 
   cached_has_bits = this_._impl_._has_bits_[0];
-  // string line_id = 1;
+  // string line_name = 1;
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!this_._internal_line_id().empty()) {
-      const ::std::string& _s = this_._internal_line_id();
+    if (!this_._internal_line_name().empty()) {
+      const ::std::string& _s = this_._internal_line_name();
       ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "meter.v1.ListAvailableMetersRequest.line_id");
+          _s.data(), static_cast<int>(_s.length()), ::google::protobuf::internal::WireFormatLite::SERIALIZE, "meter.v1.ListAvailableMetersRequest.line_name");
       target = stream->WriteStringMaybeAliased(1, _s, target);
     }
   }
@@ -2069,12 +2070,12 @@ PROTOBUF_NOINLINE void ListAvailableMetersRequest::Clear() {
   (void)cached_has_bits;
 
    {
-    // string line_id = 1;
+    // string line_name = 1;
     cached_has_bits = this_._impl_._has_bits_[0];
     if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-      if (!this_._internal_line_id().empty()) {
+      if (!this_._internal_line_name().empty()) {
         total_size += 1 + ::google::protobuf::internal::WireFormatLite::StringSize(
-                                        this_._internal_line_id());
+                                        this_._internal_line_name());
       }
     }
   }
@@ -2097,11 +2098,11 @@ void ListAvailableMetersRequest::MergeImpl(::google::protobuf::MessageLite& to_m
 
   cached_has_bits = from._impl_._has_bits_[0];
   if (CheckHasBit(cached_has_bits, 0x00000001U)) {
-    if (!from._internal_line_id().empty()) {
-      _this->_internal_set_line_id(from._internal_line_id());
+    if (!from._internal_line_name().empty()) {
+      _this->_internal_set_line_name(from._internal_line_name());
     } else {
-      if (_this->_impl_.line_id_.IsDefault()) {
-        _this->_internal_set_line_id("");
+      if (_this->_impl_.line_name_.IsDefault()) {
+        _this->_internal_set_line_name("");
       }
     }
   }
@@ -2124,7 +2125,7 @@ void ListAvailableMetersRequest::InternalSwap(ListAvailableMetersRequest* PROTOB
   ABSL_DCHECK_EQ(arena, other->GetArena());
   _internal_metadata_.InternalSwap(&other->_internal_metadata_);
   swap(_impl_._has_bits_[0], other->_impl_._has_bits_[0]);
-  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.line_id_, &other->_impl_.line_id_, arena);
+  ::_pbi::ArenaStringPtr::InternalSwap(&_impl_.line_name_, &other->_impl_.line_name_, arena);
 }
 
 ::google::protobuf::Metadata ListAvailableMetersRequest::GetMetadata() const {

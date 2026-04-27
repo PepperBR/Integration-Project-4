@@ -24,7 +24,7 @@ message AddMeterResponse {
 }
 
 message ListAvailableMetersRequest {
-    string line_id = 1;
+    string line_name = 1;
 }
 
 message ListAvailableMetersResponse {

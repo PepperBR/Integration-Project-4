@@ -8,14 +8,14 @@ Status CatalogControler::handleAddMeter(const os::AddMeterRequest* request, os::
 
             return Status::OK;
         }
-        return Status(StatusCode::INTERNAL, "Escolhas um ID correto");
+        return Status(StatusCode::INTERNAL, "Escolha um ID correto");
     } catch (...) {
         return Status(StatusCode::INVALID_ARGUMENT, "ID de modelo inválido");
     }
 }
 
 Status CatalogControler::handleListAvailableMeters(const os::ListAvailableMetersRequest* request, os::ListAvailableMetersResponse* response, Catalog* catalog) {
-    auto line_meters_available = catalog->getLineModelsTemplate(request->line_id());
+    auto line_meters_available = catalog->getLineModelsTemplate(request->line_name());
 
     for (const auto & models : line_meters_available)
     {
@@ -45,11 +45,18 @@ Status CatalogControler::handleListLines(const google::protobuf::Empty* request,
 }
 
 Status CatalogControler::handleRemoveMeter(const os::RemoveMeterRequest* request, os::RemoveMeterResponse* response, Catalog* catalog) {
-    auto removed = catalog->removeModel(std::stoi(request->meter_id()));
-    response->set_result(removed ? "Removed" : "Not Removed");
-    return Status::OK;
+    try{
+        auto removed = catalog->removeModel(std::stoi(request->meter_id()));
+        response->set_result(removed ? "removed" : "not removed");
+        if (removed)
+        {
+            return Status::OK;
+        }
+        return Status(StatusCode::INTERNAL, "Escolha um ID correto");  
+    } catch (...) {
+        return Status(StatusCode::INVALID_ARGUMENT, "ID de modelo inválido");
+    }
 }
-
 Status CatalogControler::handleListAllCreatedMeters(const google::protobuf::Empty* request, os::ListAllCreatedMetersResponse* response, Catalog* catalog) {
     try {
         auto available_meters = catalog->getAllCreatedMeters();
