@@ -2,9 +2,9 @@
 
 Status CatalogControler::handleAddMeter(const os::AddMeterRequest* request, os::AddMeterResponse* response, Catalog* catalog) {
     try {
-        auto new_meter = catalog->addNewModel(std::stoi(request->model_id()));
+        auto new_meter = catalog->addNewModel(std::stoi(request->meter_id()));
         if (new_meter) {
-            handleCatalogToProto(new_meter, response->mutable_meter_created());
+            handleCatalogToProto(new_meter, response->mutable_meter_id());
 
             return Status::OK;
         }
@@ -14,8 +14,18 @@ Status CatalogControler::handleAddMeter(const os::AddMeterRequest* request, os::
     }
 }
 
-Status CatalogControler::handleListMeters(const os::ListMetersRequest* request, os::ListMetersResponse* response, Catalog* catalog) {
-    auto line_meters_available = catalog->getLineModelsAvailable(request->id_line());
+Status CatalogControler::handleListAvailableMeters(const os::ListAvailableMetersRequest* request, os::ListAvailableMetersResponse* response, Catalog* catalog) {
+    auto line_meters_available = catalog->getLineModelsTemplate(request->line_id());
+
+    for (const auto & models : line_meters_available)
+    {
+        handleCatalogToProto(models, response->add_meters());
+    }
+    return Status::OK;
+}
+
+Status CatalogControler::handleListCreatedMeters(const os::ListCreatedMetersRequest* request, os::ListCreatedMetersResponse* response, Catalog* catalog) {
+    auto line_meters_available = catalog->getLineModelsCreated(request->line_name());
 
     for (const auto & models : line_meters_available)
     {
@@ -35,14 +45,40 @@ Status CatalogControler::handleListLines(const google::protobuf::Empty* request,
 }
 
 Status CatalogControler::handleRemoveMeter(const os::RemoveMeterRequest* request, os::RemoveMeterResponse* response, Catalog* catalog) {
-    auto removed = catalog->removeModel(std::stoi(request->id_model()));
+    auto removed = catalog->removeModel(std::stoi(request->meter_id()));
     response->set_result(removed ? "Removed" : "Not Removed");
     return Status::OK;
 }
 
-Status CatalogControler::handleListAllMeters(const google::protobuf::Empty* request, os::ListAllMetersResponse* response, Catalog* catalog) {
+Status CatalogControler::handleListAllCreatedMeters(const google::protobuf::Empty* request, os::ListAllCreatedMetersResponse* response, Catalog* catalog) {
     try {
-        auto available_meters = catalog->getAllMeters();
+        auto available_meters = catalog->getAllCreatedMeters();
+        
+        std::string previous_line;
+        os::Line* current_group = nullptr;
+
+        for (const auto & meter : available_meters)
+        {
+            std::string current_line_name = meter->getNameLine();
+
+            if (current_line_name != previous_line || current_group == nullptr)
+            {
+                current_group = response->add_line_meters();
+                current_group->set_name(current_line_name);
+                previous_line = current_line_name;
+            }
+            
+            handleCatalogToProto(meter, current_group->add_meters());
+        }
+        return Status::OK;
+    } catch (const std::bad_alloc& e) {
+        return Status(StatusCode::INTERNAL, e.what());
+    }
+}
+
+Status CatalogControler::handleListAllAvailableMeters(const google::protobuf::Empty* request, os::ListAllAvailableMetersResponse* response, Catalog* catalog) {
+    try {
+        auto available_meters = catalog->getAllTemplateMeters();
         
         std::string previous_line;
         os::Line* current_group = nullptr;
@@ -68,11 +104,11 @@ Status CatalogControler::handleListAllMeters(const google::protobuf::Empty* requ
 
 Status CatalogControler::handleGetMeasurementsPhases(const os::GetMeasurementsPhasesRequest* request, os::GetMeasurementsPhasesResponse* response, Catalog* catalog) {
     try{
-        auto phases = catalog->getMeasurementsPhases(std::stoi(request->id()));
+        auto phases = catalog->getMeasurementsPhases(std::stoi(request->meter_id()));
     
         for(auto const &value : phases)
         {
-            response->add_values(std::to_string(value));
+            response->add_measurements_values(std::to_string(value));
         }
         return Status::OK;
     } catch (...){
@@ -83,7 +119,6 @@ Status CatalogControler::handleGetMeasurementsPhases(const os::GetMeasurementsPh
 void CatalogControler::handleCatalogToProto (std::shared_ptr<Meter> meter, os::Meter* proto_meter)
 {
     proto_meter->set_id(std::to_string(meter->getID()));
-    proto_meter->set_is_template(std::to_string(meter->getIsTemplate()));
-    proto_meter->set_name_line(meter->getNameLine());
-    proto_meter->set_name_model(meter->getNameModel());
+    proto_meter->set_line_name(meter->getNameLine());
+    proto_meter->set_model_name(meter->getNameModel());
 }

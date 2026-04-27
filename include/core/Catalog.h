@@ -24,11 +24,12 @@ public:
     std::vector<double> & getMeasurementsPhases(const int ID); 
     
     LineList getLines () const; 
-    MetersList getLineModelsAvailable(const std::string & line_name);
+    MetersList getLineModelsCreated(const std::string & line_name);
     MetersList getLineModelsTemplate(const std::string & line_name);    
     std::shared_ptr<Meter> getMeterByID(const int id) const;
 
-    MetersList getAllMeters ();
+    MetersList getAllTemplateMeters ();
+    MetersList getAllCreatedMeters ();
     const int & getNumberOfMeters ();
     Catalog();
 };

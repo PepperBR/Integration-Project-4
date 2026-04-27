@@ -111,7 +111,7 @@ LineList Catalog::getLines() const
     return lines;
 }
 
-MetersList Catalog::getLineModelsAvailable(const std::string & name_line) 
+MetersList Catalog::getLineModelsCreated(const std::string & name_line) 
 {
     MetersList list;
 
@@ -131,7 +131,7 @@ MetersList Catalog::getLineModelsTemplate(const std::string & name_line)
     MetersList list;
 
     for (auto & model : meter_list) {
-        if (!model->getIsTemplate()) {
+        if (model->getIsTemplate()) {
             if (model->getFullName().find(name_line) != std::string::npos) {
                 list.push_back(model);
             }
@@ -154,17 +154,30 @@ std::shared_ptr<Meter> Catalog::getMeterByID(const int id) const
 }
 
 
-MetersList Catalog::getAllMeters ()
+MetersList Catalog::getAllTemplateMeters ()
 {
     MetersList available_meters;
 
     auto linhas = getLines();
     for (const auto & linha : linhas)
     {
-        MetersList models = getLineModelsAvailable(linha);
+        MetersList models = getLineModelsTemplate(linha);
         
         available_meters.splice(available_meters.end(), models);
     }
     return available_meters; 
 }
 
+MetersList Catalog::getAllCreatedMeters()
+{
+    MetersList available_meters;
+
+    auto linhas = getLines();
+    for (const auto & linha : linhas)
+    {
+        MetersList models = getLineModelsCreated(linha);
+        
+        available_meters.splice(available_meters.end(), models);
+    }
+    return available_meters; 
+}

@@ -31,10 +31,12 @@ class MeterService final : public os::MeterService::Service
 {
 public:
     grpc::Status AddMeter (grpc::ServerContext* context, const os::AddMeterRequest* request, os::AddMeterResponse* response) override;
-    grpc::Status ListMeters (grpc::ServerContext* context, const os::ListMetersRequest* request, os::ListMetersResponse* response) override;
+    grpc::Status ListAvailableMeters (grpc::ServerContext* context, const os::ListAvailableMetersRequest* request, os::ListAvailableMetersResponse* response) override;
+    grpc::Status ListCreatedMeters (grpc::ServerContext* context, const os::ListCreatedMetersRequest* request, os::ListCreatedMetersResponse* response) override;
     grpc::Status ListLines (grpc::ServerContext* context, const google::protobuf::Empty* request, os::ListLinesResponse* response) override;
     grpc::Status RemoveMeter (grpc::ServerContext* context, const os::RemoveMeterRequest* request, os::RemoveMeterResponse* response) override;
-    grpc::Status ListAllMeters (grpc::ServerContext* context, const google::protobuf::Empty* request, os::ListAllMetersResponse* response) override;
+    grpc::Status ListAllCreatedMeters (grpc::ServerContext* context, const google::protobuf::Empty* request, os::ListAllCreatedMetersResponse* response) override;
+    grpc::Status ListAllAvailableMeters (grpc::ServerContext* context, const google::protobuf::Empty* request, os::ListAllAvailableMetersResponse* response) override;
     grpc::Status GetMeasurementsPhases (grpc::ServerContext* context, const os::GetMeasurementsPhasesRequest* request, os::GetMeasurementsPhasesResponse* response) override;
 
     void CatalogToProto (std::shared_ptr<Meter> meter, os::Meter* proto_meter);

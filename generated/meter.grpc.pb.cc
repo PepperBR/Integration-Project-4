@@ -25,10 +25,12 @@ namespace v1 {
 
 static const char* MeterService_method_names[] = {
   "/meter.v1.MeterService/AddMeter",
-  "/meter.v1.MeterService/ListMeters",
+  "/meter.v1.MeterService/ListAvailableMeters",
+  "/meter.v1.MeterService/ListAllAvailableMeters",
+  "/meter.v1.MeterService/ListCreatedMeters",
   "/meter.v1.MeterService/ListLines",
   "/meter.v1.MeterService/RemoveMeter",
-  "/meter.v1.MeterService/ListAllMeters",
+  "/meter.v1.MeterService/ListAllCreatedMeters",
   "/meter.v1.MeterService/GetMeasurementsPhases",
 };
 
@@ -40,11 +42,13 @@ std::unique_ptr< MeterService::Stub> MeterService::NewStub(const std::shared_ptr
 
 MeterService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_AddMeter_(MeterService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListMeters_(MeterService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListLines_(MeterService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_RemoveMeter_(MeterService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_ListAllMeters_(MeterService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
-  , rpcmethod_GetMeasurementsPhases_(MeterService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListAvailableMeters_(MeterService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListAllAvailableMeters_(MeterService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListCreatedMeters_(MeterService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListLines_(MeterService_method_names[4], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_RemoveMeter_(MeterService_method_names[5], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_ListAllCreatedMeters_(MeterService_method_names[6], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_GetMeasurementsPhases_(MeterService_method_names[7], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status MeterService::Stub::AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::meter::v1::AddMeterResponse* response) {
@@ -70,25 +74,71 @@ void MeterService::Stub::async::AddMeter(::grpc::ClientContext* context, const :
   return result;
 }
 
-::grpc::Status MeterService::Stub::ListMeters(::grpc::ClientContext* context, const ::meter::v1::ListMetersRequest& request, ::meter::v1::ListMetersResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::meter::v1::ListMetersRequest, ::meter::v1::ListMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ListMeters_, context, request, response);
+::grpc::Status MeterService::Stub::ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::meter::v1::ListAvailableMetersResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ListAvailableMeters_, context, request, response);
 }
 
-void MeterService::Stub::async::ListMeters(::grpc::ClientContext* context, const ::meter::v1::ListMetersRequest* request, ::meter::v1::ListMetersResponse* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::meter::v1::ListMetersRequest, ::meter::v1::ListMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListMeters_, context, request, response, std::move(f));
+void MeterService::Stub::async::ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAvailableMeters_, context, request, response, std::move(f));
 }
 
-void MeterService::Stub::async::ListMeters(::grpc::ClientContext* context, const ::meter::v1::ListMetersRequest* request, ::meter::v1::ListMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
-  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListMeters_, context, request, response, reactor);
+void MeterService::Stub::async::ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAvailableMeters_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::meter::v1::ListMetersResponse>* MeterService::Stub::PrepareAsyncListMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListMetersRequest& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::meter::v1::ListMetersResponse, ::meter::v1::ListMetersRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ListMeters_, context, request);
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>* MeterService::Stub::PrepareAsyncListAvailableMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::meter::v1::ListAvailableMetersResponse, ::meter::v1::ListAvailableMetersRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ListAvailableMeters_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::meter::v1::ListMetersResponse>* MeterService::Stub::AsyncListMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListMetersRequest& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>* MeterService::Stub::AsyncListAvailableMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) {
   auto* result =
-    this->PrepareAsyncListMetersRaw(context, request, cq);
+    this->PrepareAsyncListAvailableMetersRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status MeterService::Stub::ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllAvailableMetersResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ListAllAvailableMeters_, context, request, response);
+}
+
+void MeterService::Stub::async::ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAllAvailableMeters_, context, request, response, std::move(f));
+}
+
+void MeterService::Stub::async::ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAllAvailableMeters_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>* MeterService::Stub::PrepareAsyncListAllAvailableMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::meter::v1::ListAllAvailableMetersResponse, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ListAllAvailableMeters_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>* MeterService::Stub::AsyncListAllAvailableMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncListAllAvailableMetersRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status MeterService::Stub::ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::meter::v1::ListCreatedMetersResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ListCreatedMeters_, context, request, response);
+}
+
+void MeterService::Stub::async::ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListCreatedMeters_, context, request, response, std::move(f));
+}
+
+void MeterService::Stub::async::ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListCreatedMeters_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>* MeterService::Stub::PrepareAsyncListCreatedMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::meter::v1::ListCreatedMetersResponse, ::meter::v1::ListCreatedMetersRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ListCreatedMeters_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>* MeterService::Stub::AsyncListCreatedMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncListCreatedMetersRaw(context, request, cq);
   result->StartCall();
   return result;
 }
@@ -139,25 +189,25 @@ void MeterService::Stub::async::RemoveMeter(::grpc::ClientContext* context, cons
   return result;
 }
 
-::grpc::Status MeterService::Stub::ListAllMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllMetersResponse* response) {
-  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Empty, ::meter::v1::ListAllMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ListAllMeters_, context, request, response);
+::grpc::Status MeterService::Stub::ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllCreatedMetersResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_ListAllCreatedMeters_, context, request, response);
 }
 
-void MeterService::Stub::async::ListAllMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllMetersResponse* response, std::function<void(::grpc::Status)> f) {
-  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Empty, ::meter::v1::ListAllMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAllMeters_, context, request, response, std::move(f));
+void MeterService::Stub::async::ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAllCreatedMeters_, context, request, response, std::move(f));
 }
 
-void MeterService::Stub::async::ListAllMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
-  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAllMeters_, context, request, response, reactor);
+void MeterService::Stub::async::ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_ListAllCreatedMeters_, context, request, response, reactor);
 }
 
-::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllMetersResponse>* MeterService::Stub::PrepareAsyncListAllMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
-  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::meter::v1::ListAllMetersResponse, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ListAllMeters_, context, request);
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>* MeterService::Stub::PrepareAsyncListAllCreatedMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::meter::v1::ListAllCreatedMetersResponse, ::google::protobuf::Empty, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_ListAllCreatedMeters_, context, request);
 }
 
-::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllMetersResponse>* MeterService::Stub::AsyncListAllMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>* MeterService::Stub::AsyncListAllCreatedMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
   auto* result =
-    this->PrepareAsyncListAllMetersRaw(context, request, cq);
+    this->PrepareAsyncListAllCreatedMetersRaw(context, request, cq);
   result->StartCall();
   return result;
 }
@@ -199,15 +249,35 @@ MeterService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MeterService_method_names[1],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::meter::v1::ListMetersRequest, ::meter::v1::ListMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MeterService::Service* service,
              ::grpc::ServerContext* ctx,
-             const ::meter::v1::ListMetersRequest* req,
-             ::meter::v1::ListMetersResponse* resp) {
-               return service->ListMeters(ctx, req, resp);
+             const ::meter::v1::ListAvailableMetersRequest* req,
+             ::meter::v1::ListAvailableMetersResponse* resp) {
+               return service->ListAvailableMeters(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       MeterService_method_names[2],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](MeterService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::google::protobuf::Empty* req,
+             ::meter::v1::ListAllAvailableMetersResponse* resp) {
+               return service->ListAllAvailableMeters(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      MeterService_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](MeterService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::meter::v1::ListCreatedMetersRequest* req,
+             ::meter::v1::ListCreatedMetersResponse* resp) {
+               return service->ListCreatedMeters(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      MeterService_method_names[4],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::google::protobuf::Empty, ::meter::v1::ListLinesResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MeterService::Service* service,
@@ -217,7 +287,7 @@ MeterService::Service::Service() {
                return service->ListLines(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MeterService_method_names[3],
+      MeterService_method_names[5],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MeterService::Service* service,
@@ -227,17 +297,17 @@ MeterService::Service::Service() {
                return service->RemoveMeter(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MeterService_method_names[4],
+      MeterService_method_names[6],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
-      new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::google::protobuf::Empty, ::meter::v1::ListAllMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+      new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MeterService::Service* service,
              ::grpc::ServerContext* ctx,
              const ::google::protobuf::Empty* req,
-             ::meter::v1::ListAllMetersResponse* resp) {
-               return service->ListAllMeters(ctx, req, resp);
+             ::meter::v1::ListAllCreatedMetersResponse* resp) {
+               return service->ListAllCreatedMeters(ctx, req, resp);
              }, this)));
   AddMethod(new ::grpc::internal::RpcServiceMethod(
-      MeterService_method_names[5],
+      MeterService_method_names[7],
       ::grpc::internal::RpcMethod::NORMAL_RPC,
       new ::grpc::internal::RpcMethodHandler< MeterService::Service, ::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
           [](MeterService::Service* service,
@@ -258,7 +328,21 @@ MeterService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MeterService::Service::ListMeters(::grpc::ServerContext* context, const ::meter::v1::ListMetersRequest* request, ::meter::v1::ListMetersResponse* response) {
+::grpc::Status MeterService::Service::ListAvailableMeters(::grpc::ServerContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status MeterService::Service::ListAllAvailableMeters(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status MeterService::Service::ListCreatedMeters(::grpc::ServerContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response) {
   (void) context;
   (void) request;
   (void) response;
@@ -279,7 +363,7 @@ MeterService::Service::~Service() {
   return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
 }
 
-::grpc::Status MeterService::Service::ListAllMeters(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllMetersResponse* response) {
+::grpc::Status MeterService::Service::ListAllCreatedMeters(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response) {
   (void) context;
   (void) request;
   (void) response;

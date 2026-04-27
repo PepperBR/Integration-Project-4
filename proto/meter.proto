@@ -6,9 +6,8 @@ import "google/protobuf/empty.proto";
 
 message Meter {
     string id = 1;
-    string is_template = 2;
-    string name_line = 3;
-    string name_model = 4;
+    string line_name = 2;
+    string model_name = 3;
 }
 
 message Line {
@@ -17,50 +16,66 @@ message Line {
 }
 
 message AddMeterRequest {
-    string model_id = 1;
+    string meter_id = 1;
 }
 
 message AddMeterResponse {
-    Meter meter_created = 1;
+    Meter meter_id = 1;
 }
 
-message ListMetersRequest {
-    string id_line = 1;
+message ListAvailableMetersRequest {
+    string line_id = 1;
 }
 
-message ListMetersResponse {
+message ListAvailableMetersResponse {
     repeated Meter meters = 1;
 }
+
+message ListAllAvailableMetersResponse {
+    repeated Line line_meters = 1;
+}
+
+message ListCreatedMetersRequest {
+    string line_name = 1;
+}
+
+message ListCreatedMetersResponse {
+    repeated Meter meters = 1;
+}
+
 
 message ListLinesResponse {
     repeated string lines = 1;
 }
 
 message RemoveMeterRequest {
-    string id_model = 1;
+    string meter_id = 1;
 }
 
 message RemoveMeterResponse {
     string result = 1;
 }
 
-message ListAllMetersResponse {
+message ListAllCreatedMetersResponse {
     repeated Line line_meters = 1;
 }
 
 message GetMeasurementsPhasesRequest {
-    string id = 1;
+    string meter_id = 1;
 }
 
 message GetMeasurementsPhasesResponse {
-    repeated string values = 1;
+    repeated string measurements_values = 1;
 }
+
 
 service MeterService {
     rpc AddMeter (AddMeterRequest) returns (AddMeterResponse);
-    rpc ListMeters (ListMetersRequest) returns (ListMetersResponse);
+    rpc ListAvailableMeters (ListAvailableMetersRequest) returns (ListAvailableMetersResponse); 
+    rpc ListAllAvailableMeters (google.protobuf.Empty) returns (ListAllAvailableMetersResponse); 
+    rpc ListCreatedMeters (ListCreatedMetersRequest) returns (ListCreatedMetersResponse); 
     rpc ListLines (google.protobuf.Empty) returns (ListLinesResponse);
     rpc RemoveMeter (RemoveMeterRequest) returns (RemoveMeterResponse);
-    rpc ListAllMeters (google.protobuf.Empty) returns (ListAllMetersResponse);
+    rpc ListAllCreatedMeters (google.protobuf.Empty) returns (ListAllCreatedMetersResponse);
     rpc GetMeasurementsPhases (GetMeasurementsPhasesRequest) returns (GetMeasurementsPhasesResponse);
 }
