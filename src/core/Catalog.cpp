@@ -46,6 +46,11 @@ Catalog::Catalog()
 const std::shared_ptr<Meter> Catalog::addNewModel (const int & ID_template)
 {   
     auto model = factoryMeter(ID_template);
+
+    if (model == nullptr) {
+        return nullptr;
+    }
+
     meter_list.push_back(model);
     sortList();
     return model;
@@ -80,13 +85,13 @@ std::vector<double> & Catalog::getMeasurementsPhases(const int ID)
 
 void Catalog::sortList()
 {
-    meter_list.sort(
-        [](const std::shared_ptr<Meter>& meter_a,
-            const std::shared_ptr<Meter>& meter_b)
-        {
-            return meter_a->getFullName() < meter_b->getFullName();
-        });
-};
+    meter_list.sort([](const std::shared_ptr<Meter>& a, const std::shared_ptr<Meter>& b) {
+        if (a->getIsTemplate() != b->getIsTemplate()) {
+            return a->getIsTemplate() > b->getIsTemplate(); 
+        }
+        return a->getFullName() < b->getFullName();
+    });
+}
 
 std::shared_ptr<Meter> Catalog::factoryMeter(const int & ID_template)
 {
@@ -170,14 +175,14 @@ MetersList Catalog::getAllTemplateMeters ()
 
 MetersList Catalog::getAllCreatedMeters()
 {
-    MetersList available_meters;
+    MetersList created_meters;
 
     auto linhas = getLines();
     for (const auto & linha : linhas)
     {
         MetersList models = getLineModelsCreated(linha);
         
-        available_meters.splice(available_meters.end(), models);
+        created_meters.splice(created_meters.end(), models);
     }
-    return available_meters; 
+    return created_meters; 
 }

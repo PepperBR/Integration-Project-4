@@ -8,7 +8,7 @@ Status CatalogControler::handleAddMeter(const os::AddMeterRequest* request, os::
 
             return Status::OK;
         }
-        return Status(StatusCode::INTERNAL, "Escolha um ID correto");
+        return Status(StatusCode::NOT_FOUND, "Escolha um ID correto");
     } catch (...) {
         return Status(StatusCode::INVALID_ARGUMENT, "ID de modelo inválido");
     }
@@ -25,9 +25,9 @@ Status CatalogControler::handleListAvailableMeters(const os::ListAvailableMeters
 }
 
 Status CatalogControler::handleListCreatedMeters(const os::ListCreatedMetersRequest* request, os::ListCreatedMetersResponse* response, Catalog* catalog) {
-    auto line_meters_available = catalog->getLineModelsCreated(request->line_name());
+    auto line_created_meters = catalog->getLineModelsCreated(request->line_name());
 
-    for (const auto & models : line_meters_available)
+    for (const auto & models : line_created_meters)
     {
         handleCatalogToProto(models, response->add_meters());
     }
@@ -48,11 +48,7 @@ Status CatalogControler::handleRemoveMeter(const os::RemoveMeterRequest* request
     try{
         auto removed = catalog->removeModel(std::stoi(request->meter_id()));
         response->set_result(removed ? "removed" : "not removed");
-        if (removed)
-        {
-            return Status::OK;
-        }
-        return Status(StatusCode::INTERNAL, "Escolha um ID correto");  
+        return Status::OK;
     } catch (...) {
         return Status(StatusCode::INVALID_ARGUMENT, "ID de modelo inválido");
     }
