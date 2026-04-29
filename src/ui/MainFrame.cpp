@@ -14,7 +14,11 @@ enum IDs {
 MainFrame::MainFrame(const wxString& title)
     : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(1008, 567),
               wxDEFAULT_FRAME_STYLE & ~wxRESIZE_BORDER) 
-{
+{ 
+    auto channel = grpc::CreateChannel("localhost:50055", grpc::InsecureChannelCredentials());
+
+    m_client = std::make_unique<MeterClient>(channel);
+
     wxBoxSizer* mainSizer = new wxBoxSizer(wxHORIZONTAL);
 
     panelEsquerda = new wxPanel(this, wxID_ANY);
@@ -68,97 +72,93 @@ void MainFrame::OnButtonClicked(wxCommandEvent& event)
     int id = event.GetId();
     m_listaDados->Clear(); 
 
-    switch (id) {
-        case 1:
-        {
-            m_listaDados->Append("--- LISTA DE LINHAS ---");
-            m_listaDados->Append("Ares");
-            m_listaDados->Append("Apolo");
-            m_listaDados->Append("Zeus");
-            m_listaDados->Append("Cronos");
-            break;
+    if (!m_client) {
+        wxMessageBox("Erro: Cliente gRPC não foi inicializado!", "Erro Crítico", wxOK | wxICON_ERROR);
+        return;
+    }
+    try{
+        switch (id) {
+            case 1:
+            {
+                m_listaDados->Append("--- LISTA DE LINHAS ---");
+                Response linhas = m_client->ListLines(); 
+                for (const auto& linha : linhas) {
+                    m_listaDados->Append(linha);
+                }
+                break;
+            }
+            case 2:
+            {
+                m_listaDados->Append("--- Todos os Modelos Disponíveis ---");
+                    ResponseList lista = m_client->ListAllAvailableMeters();
+                    for (const auto& medidorInfo : lista) {
+                        m_listaDados->Append("[" + medidorInfo[0] + "] " + medidorInfo[1] + " " + medidorInfo[2]);
+                    }
+                break;
+            }
+            case 3:
+            {   
+                m_listaDados->Append("--- Medidores Disponíveis da Linha Ares  ---");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                break;
+            }
+            case 4:
+            {
+                m_listaDados->Append("--- Todos os Medidores Criados ---");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                break;
+            }
+            case 5:
+            {
+                m_listaDados->Append("--- Medidores Criados da Linha Apolo ---");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                break;
+            }
+            case 6:
+            {
+                m_listaDados->Append("--- Novo Medidor Adicionado ---");
+                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
+                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                break;
+            }
+            case 7:
+            {
+                m_listaDados->Append("--- Medidor Removido ---");
+                m_listaDados->Append("Sucesso");
+                break;
+            }
+            case 8:
+            {
+                m_listaDados->Append("--- ESTRUTURA: MEDIÇÕES EM TEMPO REAL ---");
+                m_listaDados->Append("Phase_A: 220.5 V | 10.2 A");
+                m_listaDados->Append("Phase_B: 110.1 V | 05.4 A");
+                break;
+            }
+            default:
+                m_listaDados->Append(wxString::Format("Dados para o botão %d ainda não implementados.", id));
+                break;
         }
-        case 2:
-        {
-            m_listaDados->Append("--- Todos os Modelos Disponíveis ---");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            break;
-        }
-        case 3:
-        {
-            m_listaDados->Append("--- Medidores Disponíveis da Linha Ares  ---");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            break;
-        }
-        case 4:
-        {
-            m_listaDados->Append("--- Todos os Medidores Criados ---");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            break;
-        }
-        case 5:
-        {
-            m_listaDados->Append("--- Medidores Criados da Linha Apolo ---");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            break;
-        }
-        case 6:
-        {
-            m_listaDados->Append("--- Novo Medidor Adicionado ---");
-            m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-            m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-            m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-            break;
-        }
-        case 7:
-        {
-            m_listaDados->Append("--- Medidor Removido ---");
-            m_listaDados->Append("Sucesso");
-            break;
-        }
-        case 8:
-        {
-            m_listaDados->Append("--- ESTRUTURA: MEDIÇÕES EM TEMPO REAL ---");
-            m_listaDados->Append("Phase_A: 220.5 V | 10.2 A");
-            m_listaDados->Append("Phase_B: 110.1 V | 05.4 A");
-            break;
-        }
-        default:
-            m_listaDados->Append(wxString::Format("Dados para o botão %d ainda não implementados.", id));
-            break;
+    } catch (const std::exception& e)
+    {
+        m_listaDados->Append("Erro na conexão gRPC: ");
+        m_listaDados->Append(e.what());
     }
 
-    wxLogStatus("Dados carregados no display esquerdo.");
+    wxLogStatus("Ação gRPC executada para o botão ID %d", id);
 }

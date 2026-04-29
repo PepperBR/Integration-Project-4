@@ -1,5 +1,6 @@
 #pragma once
 #include <wx/wx.h>
+#include "client/client.h"
 
 class MainFrame : public wxFrame
 {
@@ -9,4 +10,6 @@ public:
 private:
     wxPanel* panelEsquerda;
     wxListBox* m_listaDados;
+
+    std::unique_ptr<MeterClient> m_client;
 };

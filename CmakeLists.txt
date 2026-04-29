@@ -19,6 +19,8 @@ target_include_directories(${PROJECT_NAME}_lib
 
 target_sources(${PROJECT_NAME}_lib 
     PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated/meter.pb.cc
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated/meter.grpc.pb.cc
         ${CMAKE_CURRENT_SOURCE_DIR}/src/core/GlobalID.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/meters/Meter.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/meters/Phase/ThreePhaseMeter.cpp
@@ -80,3 +82,4 @@ target_link_libraries(client
 ]]
 
 add_subdirectory(tests)
+add_subdirectory(src/ui)
