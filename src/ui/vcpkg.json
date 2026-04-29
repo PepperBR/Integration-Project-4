@@ -1,7 +1,5 @@
 {
     "dependencies": [
-        "grpc",
-        "catch2",
         "wxwidgets"
     ]
 }
