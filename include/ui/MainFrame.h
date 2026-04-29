@@ -11,5 +11,6 @@ private:
     wxPanel* panelEsquerda;
     wxListBox* m_listaDados;
 
+    wxChoice* choice;
     std::unique_ptr<MeterClient> m_client;
 };

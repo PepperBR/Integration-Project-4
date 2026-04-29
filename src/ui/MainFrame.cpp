@@ -3,13 +3,15 @@
 enum IDs {
     BUTTON_ID_1 = 1, 
     BUTTON_ID_2,
-    BUTTON_ID_3, 
+    CHOICE_ID_3, 
     BUTTON_ID_4,
     BUTTON_ID_5, 
     BUTTON_ID_6, 
     BUTTON_ID_7, 
     BUTTON_ID_8
 };
+
+wxChoice * pointer;
 
 MainFrame::MainFrame(const wxString& title)
     : wxFrame(nullptr, wxID_ANY, title, wxDefaultPosition, wxSize(1008, 567),
@@ -38,7 +40,14 @@ MainFrame::MainFrame(const wxString& title)
     wxPanel* panelDireita = new wxPanel(this, wxID_ANY);
     wxBoxSizer* vSizerDireita = new wxBoxSizer(wxVERTICAL);
     vSizerDireita->AddStretchSpacer();
-
+    
+    wxArrayString choicesListAvailableLines;
+    choicesListAvailableLines.Add("Medidores Disponíveis da Linha");
+    choicesListAvailableLines.Add("Medidores Disponíveis Apolo");
+    choicesListAvailableLines.Add("Medidores Disponíveis Ares");
+    choicesListAvailableLines.Add("Medidores Disponíveis Cronos");
+    choicesListAvailableLines.Add("Medidores Disponíveis Zeus");
+    
     wxArrayString nomes;
     nomes.Add("Listar linhas");
     nomes.Add("Listar todos os medidores disponíveis");
@@ -51,10 +60,21 @@ MainFrame::MainFrame(const wxString& title)
 
     for (size_t i = 0; i < nomes.GetCount(); ++i) {
         int currentID = BUTTON_ID_1 + i;
-        wxButton* btn = new wxButton(panelDireita, currentID, nomes[i]);
-        btn->SetMinSize(wxSize(-1, 35));
-        btn->Bind(wxEVT_BUTTON, &MainFrame::OnButtonClicked, this);
-        vSizerDireita->Add(btn, 0, wxCENTER | wxBOTTOM, 10);
+        if (i == 2)
+        {
+            choice = new wxChoice(panelDireita, currentID, wxDefaultPosition, wxDefaultSize, choicesListAvailableLines);
+            choice->Select(0);
+        
+            choice->SetMinSize(wxSize(-1, 35));
+            choice->Bind(wxEVT_CHOICE, &MainFrame::OnButtonClicked, this);
+            vSizerDireita->Add(choice, 0, wxCENTER | wxBOTTOM, 10);
+        } else{
+            wxButton* button = new wxButton(panelDireita, currentID, nomes[i]);
+    
+            button->SetMinSize(wxSize(-1, 35));
+            button->Bind(wxEVT_BUTTON, &MainFrame::OnButtonClicked, this);
+            vSizerDireita->Add(button, 0, wxCENTER | wxBOTTOM, 10);
+        }
     }
     vSizerDireita->AddStretchSpacer();
     panelDireita->SetSizer(vSizerDireita);
@@ -69,6 +89,7 @@ MainFrame::MainFrame(const wxString& title)
 
 void MainFrame::OnButtonClicked(wxCommandEvent& event)
 {
+    int selection_index = choice->GetSelection();
     int id = event.GetId();
     m_listaDados->Clear(); 
 
@@ -99,12 +120,7 @@ void MainFrame::OnButtonClicked(wxCommandEvent& event)
             case 3:
             {   
                 m_listaDados->Append("--- Medidores Disponíveis da Linha Ares  ---");
-                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
-                m_listaDados->Append("ID: 001 -> esdrcftvgbyhnujmk,l");
-                m_listaDados->Append("ID: 002 -> esdrcftvgbyhnujmk,l ");
-                m_listaDados->Append("ID: 003 -> esdrcftvgbyhnujmk,l ");
+                m_listaDados->Append(std::to_string(selection_index));
                 break;
             }
             case 4:
