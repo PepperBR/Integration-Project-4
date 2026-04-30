@@ -1,7 +1,8 @@
 {
-    "dependencies": [
-        "grpc",
-        "catch2",
-        "wxwidgets"
-    ]
+  "dependencies": [
+    "grpc",
+    "protobuf",
+    "catch2",
+    "wxwidgets"
+  ]
 }

@@ -70,16 +70,5 @@ target_link_libraries(${PROJECT_NAME}
         ${PROJECT_NAME}_lib
 )
 
-#[[
-add_executable(client)
-
-target_sources(client PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/client/main.cpp)
-
-target_link_libraries(client
-    PRIVATE
-        ${PROJECT_NAME}_lib
-)
-]]
-
 add_subdirectory(tests)
 add_subdirectory(src/ui)
