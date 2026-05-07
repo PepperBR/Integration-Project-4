@@ -2,11 +2,11 @@
 
 #include "meters/Meter.h"
 
-//Abstract Class
+// Abstract Class
 class Zeus : public Meter
 {
 public:
-    Zeus(const Zeus& other, int new_id);
+    Zeus(const Zeus &other, int new_id);
     ~Zeus() override;
     Zeus(int id, std::string model);
 };

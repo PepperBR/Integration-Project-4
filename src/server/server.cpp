@@ -1,9 +1,9 @@
-#include "server/server.hpp"
+#include "server/server.h"
 
 Server::Server(std::string server_address, std::shared_ptr<grpc::Service> service, std::string service_name)
-    : server_address_(server_address),
-      service_(service),
-      service_name_(service_name)
+    : server_address_(server_address)
+    , service_(service)
+    , service_name_(service_name)
 {
 }
 
@@ -14,7 +14,7 @@ void Server::Start()
     builder.AddListeningPort(this->server_address_, grpc::InsecureServerCredentials());
 
     builder.RegisterService(this->service_.get());
-        
+
     builder.experimental().SetInterceptorCreators(std::move(this->interceptor_creators_));
 
     this->server_ = builder.BuildAndStart();
@@ -24,7 +24,7 @@ void Server::Start()
 
 void Server::Wait()
 {
-    if(this->server_)
+    if (this->server_)
     {
         this->server_->Wait();
     }

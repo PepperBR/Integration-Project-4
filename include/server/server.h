@@ -1,15 +1,15 @@
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <grpcpp/grpcpp.h>
-#include <grpcpp/support/interceptor.h>
-#include <grpcpp/support/server_interceptor.h>
-#include <grpcpp/server_builder.h>
 #include <grpcpp/impl/service_type.h>
 #include <grpcpp/security/server_credentials.h>
+#include <grpcpp/server_builder.h>
+#include <grpcpp/support/interceptor.h>
+#include <grpcpp/support/server_interceptor.h>
 
 class Server
 {

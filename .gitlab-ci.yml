@@ -1,0 +1,69 @@
+# Pipeline Stages
+stages:
+  - Code Lint
+  - build
+  - unit-test
+  - coverage
+  - deploy
+
+# Jobs Configuration
+default:
+  tags:
+    - windows 
+# o stage deve verificar se o código está formatado adequadamente, caso contrário quebre () e informar onde foi
+# Stage : Code Lint
+code-lint-job:
+  stage: Code Lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script: 
+    - $files = Get-ChildItem -Path "$CI_PROJECT_DIR/src","$CI_PROJECT_DIR/include" -Recurse | Where-Object { $_.Extension -match '\.(h|cpp)$' } | Select-Object -ExpandProperty FullName
+    - if (!$files) { Write-Error "Nenhum arquivo encontrado para formatar."; exit 1 }
+    - clang-format --dry-run -Werror $files
+
+# Stage: Build
+build-job:
+  stage: build
+  script:
+    - cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$VCPKG_FOLDER/scripts/buildsystems/vcpkg.cmake"
+    - cmake --build build --config Release
+  artifacts:
+    name: "build-binaries-$CI_COMMIT_REF_SLUG"
+    paths:
+      - build/Release/client_test.exe
+    expire_in: 1 day
+ 
+# Stage: Test
+unit-test-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - ./build/Release/client_test.exe
+
+coverage-job:
+  stage: test
+  dependencies:
+    - build-job
+  script:
+    - OpenCppCoverage --sources ./src --export_type html:./coverage --minimum_coverage 70 -- ./build/Release/client_test.exe
+  artifacts:
+    name: "coverage-report"
+    paths:
+      - coverage/
+    expire_in: 7 days
+
+# Stage: Deploy 
+deploy-job:
+  stage: deploy
+  environment: production
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
+  artifacts:
+    name: "Release-Package-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - build/Release/*.exe
+      - build/Release/*.dll
+    expire_in: 30 days

@@ -1,6 +1,6 @@
 #include "meters/Phase/SinglePhaseMeter.h"
 
-std::vector<double> & SinglePhaseMeter::getPhaseValues()
+std::vector<double> &SinglePhaseMeter::getPhaseValues()
 {
     std::random_device rd;
     std::mt19937 gen(rd());

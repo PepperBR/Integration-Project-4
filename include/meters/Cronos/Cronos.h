@@ -2,11 +2,11 @@
 
 #include "meters/Meter.h"
 
-//Abstract Class
+// Abstract Class
 class Cronos : public Meter
 {
 public:
-    Cronos(const Cronos& other, int new_id);
+    Cronos(const Cronos &other, int new_id);
     ~Cronos() override;
     Cronos(int id, std::string model);
 };

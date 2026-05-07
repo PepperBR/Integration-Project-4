@@ -1,18 +1,19 @@
-#include <catch2/catch_test_macros.hpp>
 #include "client/client.h"
+#include <catch2/catch_test_macros.hpp>
 #include <grpcpp/grpcpp.h>
 
-MeterClient GetTestClient() {
+MeterClient GetTestClient()
+{
     auto channel = grpc::CreateChannel("127.0.0.1:50055", grpc::InsecureChannelCredentials());
     return MeterClient(channel);
 }
 
 TEST_CASE("Métodos do Client")
 {
-    SECTION("List Created Meters Before Adding") 
+    SECTION("List Created Meters Before Adding")
     {
         auto client = GetTestClient();
-        
+
         auto list_created_meters_Apolo = client.ListCreatedMeters("Apolo");
         REQUIRE(list_created_meters_Apolo.empty());
 
@@ -26,12 +27,12 @@ TEST_CASE("Métodos do Client")
         REQUIRE(list_created_meters_Cronos.empty());
     }
 
-    SECTION("List Lines") 
+    SECTION("List Lines")
     {
         auto client = GetTestClient();
         auto lines = client.ListLines();
         REQUIRE_FALSE(lines.empty());
-        
+
         REQUIRE(lines.size() == 4);
         REQUIRE(lines[0] == "Apolo");
         REQUIRE(lines[1] == "Ares");
@@ -39,7 +40,7 @@ TEST_CASE("Métodos do Client")
         REQUIRE(lines[3] == "Zeus");
     }
 
-    SECTION("List Available Meters") 
+    SECTION("List Available Meters")
     {
         auto client = GetTestClient();
 
@@ -57,37 +58,37 @@ TEST_CASE("Métodos do Client")
         REQUIRE(available_meters_Ares.size() > 0);
         REQUIRE(available_meters_Ares.size() == 6);
 
-        REQUIRE(available_meters_Ares[0][1] + ' ' + available_meters_Ares[0][2] == "Ares 7021");   
-        REQUIRE(available_meters_Ares[1][1] + ' ' + available_meters_Ares[1][2] == "Ares 8023");    
-        REQUIRE(available_meters_Ares[2][1] + ' ' + available_meters_Ares[2][2] == "Ares 7023");    
-        REQUIRE(available_meters_Ares[3][1] + ' ' + available_meters_Ares[3][2] == "Ares 7031");    
-        REQUIRE(available_meters_Ares[4][1] + ' ' + available_meters_Ares[4][2] == "Ares 8023 15");   
-        REQUIRE(available_meters_Ares[5][1] + ' ' + available_meters_Ares[5][2] == "Ares 8023 200");  
-        
+        REQUIRE(available_meters_Ares[0][1] + ' ' + available_meters_Ares[0][2] == "Ares 7021");
+        REQUIRE(available_meters_Ares[1][1] + ' ' + available_meters_Ares[1][2] == "Ares 8023");
+        REQUIRE(available_meters_Ares[2][1] + ' ' + available_meters_Ares[2][2] == "Ares 7023");
+        REQUIRE(available_meters_Ares[3][1] + ' ' + available_meters_Ares[3][2] == "Ares 7031");
+        REQUIRE(available_meters_Ares[4][1] + ' ' + available_meters_Ares[4][2] == "Ares 8023 15");
+        REQUIRE(available_meters_Ares[5][1] + ' ' + available_meters_Ares[5][2] == "Ares 8023 200");
+
         auto available_meters_Cronos = client.ListAvailableMeters("Cronos");
 
         REQUIRE(available_meters_Cronos.size() > 0);
         REQUIRE(available_meters_Cronos.size() == 7);
 
-        REQUIRE(available_meters_Cronos[0][1] + ' ' + available_meters_Cronos[0][2] == "Cronos 7023");  
-        REQUIRE(available_meters_Cronos[1][1] + ' ' + available_meters_Cronos[1][2] == "Cronos 7023 L");   
-        REQUIRE(available_meters_Cronos[2][1] + ' ' + available_meters_Cronos[2][2] == "Cronos 7023 2.5");    
-        REQUIRE(available_meters_Cronos[3][1] + ' ' + available_meters_Cronos[3][2] == "Cronos 6021 L");    
-        REQUIRE(available_meters_Cronos[4][1] + ' ' + available_meters_Cronos[4][2] == "Cronos 6021 A");    
-        REQUIRE(available_meters_Cronos[5][1] + ' ' + available_meters_Cronos[5][2] == "Cronos 6003");   
-        REQUIRE(available_meters_Cronos[6][1] + ' ' + available_meters_Cronos[6][2] == "Cronos 6001 A"); 
+        REQUIRE(available_meters_Cronos[0][1] + ' ' + available_meters_Cronos[0][2] == "Cronos 7023");
+        REQUIRE(available_meters_Cronos[1][1] + ' ' + available_meters_Cronos[1][2] == "Cronos 7023 L");
+        REQUIRE(available_meters_Cronos[2][1] + ' ' + available_meters_Cronos[2][2] == "Cronos 7023 2.5");
+        REQUIRE(available_meters_Cronos[3][1] + ' ' + available_meters_Cronos[3][2] == "Cronos 6021 L");
+        REQUIRE(available_meters_Cronos[4][1] + ' ' + available_meters_Cronos[4][2] == "Cronos 6021 A");
+        REQUIRE(available_meters_Cronos[5][1] + ' ' + available_meters_Cronos[5][2] == "Cronos 6003");
+        REQUIRE(available_meters_Cronos[6][1] + ' ' + available_meters_Cronos[6][2] == "Cronos 6001 A");
 
         auto available_meters_Zeus = client.ListAvailableMeters("Zeus");
 
         REQUIRE(available_meters_Zeus.size() > 0);
         REQUIRE(available_meters_Zeus.size() == 3);
 
-        REQUIRE(available_meters_Zeus[0][1] + ' ' + available_meters_Zeus[0][2] == "Zeus 8021");    
-        REQUIRE(available_meters_Zeus[1][1] + ' ' + available_meters_Zeus[1][2] == "Zeus 8023");    
-        REQUIRE(available_meters_Zeus[2][1] + ' ' + available_meters_Zeus[2][2] == "Zeus 8031"); 
+        REQUIRE(available_meters_Zeus[0][1] + ' ' + available_meters_Zeus[0][2] == "Zeus 8021");
+        REQUIRE(available_meters_Zeus[1][1] + ' ' + available_meters_Zeus[1][2] == "Zeus 8023");
+        REQUIRE(available_meters_Zeus[2][1] + ' ' + available_meters_Zeus[2][2] == "Zeus 8031");
     }
 
-    SECTION("List All Available Meters") 
+    SECTION("List All Available Meters")
     {
         auto client = GetTestClient();
 
@@ -98,27 +99,27 @@ TEST_CASE("Métodos do Client")
 
         REQUIRE(all_available_meters[0][1] + ' ' + all_available_meters[0][2] == "Apolo 6031");
 
-        REQUIRE(all_available_meters[1][1] + ' ' + all_available_meters[1][2] == "Ares 7021");   
-        REQUIRE(all_available_meters[2][1] + ' ' + all_available_meters[2][2] == "Ares 8023");    
-        REQUIRE(all_available_meters[3][1] + ' ' + all_available_meters[3][2] == "Ares 7023");    
-        REQUIRE(all_available_meters[4][1] + ' ' + all_available_meters[4][2] == "Ares 7031");    
-        REQUIRE(all_available_meters[5][1] + ' ' + all_available_meters[5][2] == "Ares 8023 15");   
-        REQUIRE(all_available_meters[6][1] + ' ' + all_available_meters[6][2] == "Ares 8023 200");  
-        
-        REQUIRE(all_available_meters[7][1] + ' ' + all_available_meters[7][2] == "Cronos 7023");  
-        REQUIRE(all_available_meters[8][1] + ' ' + all_available_meters[8][2] == "Cronos 7023 L");   
-        REQUIRE(all_available_meters[9][1] + ' ' + all_available_meters[9][2] == "Cronos 7023 2.5");    
-        REQUIRE(all_available_meters[10][1] + ' ' + all_available_meters[10][2] == "Cronos 6021 L");    
-        REQUIRE(all_available_meters[11][1] + ' ' + all_available_meters[11][2] == "Cronos 6021 A");    
-        REQUIRE(all_available_meters[12][1] + ' ' + all_available_meters[12][2] == "Cronos 6003");   
-        REQUIRE(all_available_meters[13][1] + ' ' + all_available_meters[13][2] == "Cronos 6001 A"); 
+        REQUIRE(all_available_meters[1][1] + ' ' + all_available_meters[1][2] == "Ares 7021");
+        REQUIRE(all_available_meters[2][1] + ' ' + all_available_meters[2][2] == "Ares 8023");
+        REQUIRE(all_available_meters[3][1] + ' ' + all_available_meters[3][2] == "Ares 7023");
+        REQUIRE(all_available_meters[4][1] + ' ' + all_available_meters[4][2] == "Ares 7031");
+        REQUIRE(all_available_meters[5][1] + ' ' + all_available_meters[5][2] == "Ares 8023 15");
+        REQUIRE(all_available_meters[6][1] + ' ' + all_available_meters[6][2] == "Ares 8023 200");
 
-        REQUIRE(all_available_meters[14][1] + ' ' + all_available_meters[14][2] == "Zeus 8021");    
-        REQUIRE(all_available_meters[15][1] + ' ' + all_available_meters[15][2] == "Zeus 8023");    
-        REQUIRE(all_available_meters[16][1] + ' ' + all_available_meters[16][2] == "Zeus 8031"); 
+        REQUIRE(all_available_meters[7][1] + ' ' + all_available_meters[7][2] == "Cronos 7023");
+        REQUIRE(all_available_meters[8][1] + ' ' + all_available_meters[8][2] == "Cronos 7023 L");
+        REQUIRE(all_available_meters[9][1] + ' ' + all_available_meters[9][2] == "Cronos 7023 2.5");
+        REQUIRE(all_available_meters[10][1] + ' ' + all_available_meters[10][2] == "Cronos 6021 L");
+        REQUIRE(all_available_meters[11][1] + ' ' + all_available_meters[11][2] == "Cronos 6021 A");
+        REQUIRE(all_available_meters[12][1] + ' ' + all_available_meters[12][2] == "Cronos 6003");
+        REQUIRE(all_available_meters[13][1] + ' ' + all_available_meters[13][2] == "Cronos 6001 A");
+
+        REQUIRE(all_available_meters[14][1] + ' ' + all_available_meters[14][2] == "Zeus 8021");
+        REQUIRE(all_available_meters[15][1] + ' ' + all_available_meters[15][2] == "Zeus 8023");
+        REQUIRE(all_available_meters[16][1] + ' ' + all_available_meters[16][2] == "Zeus 8031");
     }
 
-    SECTION("Add New Meter") 
+    SECTION("Add New Meter")
     {
         auto client = GetTestClient();
 
@@ -144,10 +145,10 @@ TEST_CASE("Métodos do Client")
         REQUIRE(new_meter_added_ID_2[2] == "8021");
     }
 
-    SECTION("List Created Meters After Adding") 
+    SECTION("List Created Meters After Adding")
     {
         auto client = GetTestClient();
-        
+
         auto new_meter_added_ID_2 = client.AddMeter("2");
         auto list_created_meters_Apolo = client.ListCreatedMeters("Apolo");
         REQUIRE(list_created_meters_Apolo.size() == 1);

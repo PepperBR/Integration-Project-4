@@ -1,13 +1,13 @@
 #pragma once
-#include <vector>
 #include <random>
+#include <vector>
 
 class TwoPhaseMeter
 {
 private:
     std::vector<double> phaseValues;
+
 public:
     virtual ~TwoPhaseMeter() = default;
-    virtual std::vector<double> & getPhaseValues();
+    virtual std::vector<double> &getPhaseValues();
 };
-

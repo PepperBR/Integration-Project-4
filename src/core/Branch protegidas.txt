@@ -1,0 +1,12 @@
+Branch protegidas
+
+main
+dev
+
+Para essas, Ci deve funcionar completamente
+
+Demais branchs
+
+feature/....
+
+Deve funcionar APENAS a etada do clang

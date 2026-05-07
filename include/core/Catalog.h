@@ -2,35 +2,34 @@
 
 #include <list>
 #include <memory>
-#include <string>
 #include <meters/Meter.h>
 #include <set>
+#include <string>
 #include <tuple>
 
 using LineList = std::set<std::string>;
 using MetersList = std::list<std::shared_ptr<Meter>>;
 
-class Catalog          
+class Catalog
 {
 private:
     MetersList meter_list;
-    std::shared_ptr<Meter> Catalog::factoryMeter(const int & ID_template); 
+    std::shared_ptr<Meter> Catalog::factoryMeter(const int &ID_template);
+    int number_of_meters;
     void sortList();
-    int number_of_meters;                      
-    
-public:
-    const std::shared_ptr<Meter> addNewModel (const int & ID_template); 
-    bool removeModel (const int ID); 
-    std::vector<double> & getMeasurementsPhases(const int ID); 
-    
-    LineList getLines () const; 
-    MetersList getLineModelsCreated(const std::string & line_name);
-    MetersList getLineModelsTemplate(const std::string & line_name);    
-    std::shared_ptr<Meter> getMeterByID(const int id) const;
 
-    MetersList getAllTemplateMeters ();
-    MetersList getAllCreatedMeters ();
-    const int & getNumberOfMeters ();
+public:
+    auto addNewModel(const int &ID_template) -> const std::shared_ptr<Meter>;
+    bool removeModel(const int ID);
+    auto getMeasurementsPhases(const int ID) -> std::vector<double> &;
+
+    auto getLines() const -> LineList;
+    auto getLineModelsCreated(const std::string &line_name) -> MetersList;
+    auto getLineModelsTemplate(const std::string &line_name) -> MetersList;
+    auto getMeterByID(const int id) const -> std::shared_ptr<Meter>;
+
+    auto getAllTemplateMeters() -> MetersList;
+    auto getAllCreatedMeters() -> MetersList;
+    auto getNumberOfMeters() -> const int &;
     Catalog();
 };
-
