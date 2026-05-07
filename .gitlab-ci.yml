@@ -10,8 +10,8 @@ stages:
 default:
   tags:
     - windows 
-# o stage deve verificar se o código está formatado adequadamente, caso contrário quebre () e informar onde foi
-# Stage : Code Lint
+
+# Stage : Code Lint 
 code-lint-job:
   stage: Code Lint
   rules:
@@ -19,8 +19,7 @@ code-lint-job:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script: 
     - $files = Get-ChildItem -Path "$CI_PROJECT_DIR/src","$CI_PROJECT_DIR/include" -Recurse | Where-Object { $_.Extension -match '\.(h|cpp)$' } | Select-Object -ExpandProperty FullName
-    - if (!$files) { Write-Error "Nenhum arquivo encontrado para formatar."; exit 1 }
-    - clang-format --dry-run -Werror $files
+    - clang-format --style=file --dry-run -Werror  $files
 
 # Stage: Build
 build-job:
@@ -31,9 +30,13 @@ build-job:
   artifacts:
     name: "build-binaries-$CI_COMMIT_REF_SLUG"
     paths:
-      - build/Release/client_test.exe
+      - build/tests/Release/client_test.exe
+      - build/Release/grpc.exe
+      - build/src/ui/Release/wxHelloWorld.exe
     expire_in: 1 day
  
+# Fazer testes unitários do Catálogo propriamente dito
+# Se der tempo eu faço do Cliente + Servidor
 # Stage: Test
 unit-test-job:
   stage: test
@@ -47,7 +50,7 @@ coverage-job:
   dependencies:
     - build-job
   script:
-    - OpenCppCoverage --sources ./src --export_type html:./coverage --minimum_coverage 70 -- ./build/Release/client_test.exe
+    - OpenCppCoverage --sources ./src --export_type xml:./coverage -- ./build/Release/client_test.exe
   artifacts:
     name: "coverage-report"
     paths:

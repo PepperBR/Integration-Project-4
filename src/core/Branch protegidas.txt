@@ -10,3 +10,5 @@ Demais branchs
 feature/....
 
 Deve funcionar APENAS a etada do clang
+
+1- Fazer Quebrar quando o código não está formatado de acordo com o clang
