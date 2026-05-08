@@ -12,200 +12,233 @@
 #include "client/client.h"
 
 MeterClient::MeterClient(std::shared_ptr&lt;grpc::Channel&gt; channel)
-<span style = "background-color:#dfd">    : stub_(meter::v1::MeterService::NewStub(channel)) {}</span>
-
-<span style = "background-color:#dfd">Response MeterClient::AddMeter(const std::string &amp;meter_id) {
-  meter::v1::AddMeterRequest request;
-  request.set_meter_id(meter_id);</span>
-
-<span style = "background-color:#dfd">  meter::v1::AddMeterResponse response;
-  grpc::ClientContext context;</span>
-
-<span style = "background-color:#dfd">  Response new_meter_added;</span>
-
-<span style = "background-color:#dfd">  grpc::Status status = stub_-&gt;AddMeter(&amp;context, request, &amp;response);</span>
-
-<span style = "background-color:#dfd">  if (status.ok()) {
-    new_meter_added.push_back(response.meter_id().id());
-    new_meter_added.push_back(response.meter_id().line_name());
-    new_meter_added.push_back(response.meter_id().model_name());
-  } else {
-    std::cout &lt;&lt; "Erro gRPC (" &lt;&lt; status.error_code()</span>
-              &lt;&lt; "): " &lt;&lt; status.error_message() &lt;&lt; std::endl;
-  }
-<span style = "background-color:#dfd">  return new_meter_added;
+<span style = "background-color:#dfd">    : stub_(meter::v1::MeterService::NewStub(channel))
+{
 }</span>
 
-<span style = "background-color:#dfd">ResponseList MeterClient::ListAllCreatedMeters() {
-  google::protobuf::Empty request;
-  meter::v1::ListAllCreatedMetersResponse response;
-  grpc::ClientContext context;</span>
+Response MeterClient::AddMeter(const std::string &amp;meter_id)
+<span style = "background-color:#dfd">{
+    meter::v1::AddMeterRequest request;
+    request.set_meter_id(meter_id);</span>
 
-<span style = "background-color:#dfd">  ResponseList list_all_created_meters;</span>
+<span style = "background-color:#dfd">    meter::v1::AddMeterResponse response;
+    grpc::ClientContext context;</span>
 
-<span style = "background-color:#dfd">  grpc::Status status =</span>
-      stub_-&gt;ListAllCreatedMeters(&amp;context, request, &amp;response);
+<span style = "background-color:#dfd">    Response new_meter_added;</span>
 
-<span style = "background-color:#dfd">  if (status.ok()) {
-    for (const auto &amp;line : response.line_meters()) {
-      for (const auto &amp;meters_created : line.meters()) {
-        std::vector&lt;std::string&gt; meter;</span>
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;AddMeter(&amp;context, request, &amp;response);</span>
 
-<span style = "background-color:#dfd">        meter.push_back(meters_created.id());
-        meter.push_back(meters_created.line_name());
-        meter.push_back(meters_created.model_name());</span>
-
-<span style = "background-color:#dfd">        list_all_created_meters.push_back(meter);
-      }
+<span style = "background-color:#dfd">    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        new_meter_added.push_back(response.meter_id().id());
+        new_meter_added.push_back(response.meter_id().line_name());
+        new_meter_added.push_back(response.meter_id().model_name());
+    }</span>
+    else
+    {
+<span style = "background-color:#dfd">        std::cout &lt;&lt; "Erro gRPC (" &lt;&lt; status.error_code() &lt;&lt; "): " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
     }
-  } else {</span>
-<span style = "background-color:#fdd">    std::cout &lt;&lt; "Falha ao listar: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
-  }
-<span style = "background-color:#dfd">  return list_all_created_meters;
+<span style = "background-color:#dfd">    return new_meter_added;
 }</span>
 
-<span style = "background-color:#dfd">ResponseList MeterClient::ListAllAvailableMeters() {
-  google::protobuf::Empty request;
-  meter::v1::ListAllAvailableMetersResponse response;
-  grpc::ClientContext context;</span>
+ResponseList MeterClient::ListAllCreatedMeters()
+<span style = "background-color:#dfd">{
+    google::protobuf::Empty request;
+    meter::v1::ListAllCreatedMetersResponse response;
+    grpc::ClientContext context;</span>
 
-<span style = "background-color:#dfd">  ResponseList list_all_available_meters;</span>
+<span style = "background-color:#dfd">    ResponseList list_all_created_meters;</span>
 
-<span style = "background-color:#dfd">  grpc::Status status =</span>
-      stub_-&gt;ListAllAvailableMeters(&amp;context, request, &amp;response);
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;ListAllCreatedMeters(&amp;context, request, &amp;response);</span>
 
-<span style = "background-color:#dfd">  if (status.ok()) {
-    for (const auto &amp;line : response.line_meters()) {
-      for (const auto &amp;meters_available : line.meters()) {
-        std::vector&lt;std::string&gt; meter;</span>
+<span style = "background-color:#dfd">    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        for (const auto &amp;line : response.line_meters())</span>
+        {
+<span style = "background-color:#dfd">            for (const auto &amp;meters_created : line.meters())</span>
+            {
+<span style = "background-color:#dfd">                std::vector&lt;std::string&gt; meter;</span>
 
-<span style = "background-color:#dfd">        meter.push_back(meters_available.id());
-        meter.push_back(meters_available.line_name());
-        meter.push_back(meters_available.model_name());</span>
+<span style = "background-color:#dfd">                meter.push_back(meters_created.id());
+                meter.push_back(meters_created.line_name());
+                meter.push_back(meters_created.model_name());</span>
 
-<span style = "background-color:#dfd">        list_all_available_meters.push_back(meter);
-      }
+<span style = "background-color:#dfd">                list_all_created_meters.push_back(meter);
+            }
+        }
+    }</span>
+    else
+    {
+<span style = "background-color:#fdd">        std::cout &lt;&lt; "Falha ao listar: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
     }
-  } else {</span>
-<span style = "background-color:#fdd">    std::cout &lt;&lt; "Falha ao listar: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
-  }
-<span style = "background-color:#dfd">  return list_all_available_meters;
+<span style = "background-color:#dfd">    return list_all_created_meters;
 }</span>
 
-<span style = "background-color:#dfd">Response MeterClient::ListLines() {
-  google::protobuf::Empty request;
-  meter::v1::ListLinesResponse response;
-  grpc::ClientContext context;</span>
+ResponseList MeterClient::ListAllAvailableMeters()
+<span style = "background-color:#dfd">{
+    google::protobuf::Empty request;
+    meter::v1::ListAllAvailableMetersResponse response;
+    grpc::ClientContext context;</span>
 
-<span style = "background-color:#dfd">  Response lines;</span>
+<span style = "background-color:#dfd">    ResponseList list_all_available_meters;</span>
 
-<span style = "background-color:#dfd">  grpc::Status status = stub_-&gt;ListLines(&amp;context, request, &amp;response);
-  if (status.ok()) {
-    for (const auto &amp;line : response.lines()) {
-      lines.push_back(line);
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;ListAllAvailableMeters(&amp;context, request, &amp;response);</span>
+
+<span style = "background-color:#dfd">    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        for (const auto &amp;line : response.line_meters())</span>
+        {
+<span style = "background-color:#dfd">            for (const auto &amp;meters_available : line.meters())</span>
+            {
+<span style = "background-color:#dfd">                std::vector&lt;std::string&gt; meter;</span>
+
+<span style = "background-color:#dfd">                meter.push_back(meters_available.id());
+                meter.push_back(meters_available.line_name());
+                meter.push_back(meters_available.model_name());</span>
+
+<span style = "background-color:#dfd">                list_all_available_meters.push_back(meter);
+            }
+        }
+    }</span>
+    else
+    {
+<span style = "background-color:#fdd">        std::cout &lt;&lt; "Falha ao listar: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
     }
-  } else {</span>
-<span style = "background-color:#fdd">    std::cout &lt;&lt; "Falha ao listar: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
-  }
-<span style = "background-color:#dfd">  return lines;
+<span style = "background-color:#dfd">    return list_all_available_meters;
 }</span>
 
-<span style = "background-color:#dfd">Response MeterClient::GetMeasurements(const std::string &amp;meter_id) {
-  grpc::ClientContext contex;
-  meter::v1::GetMeasurementsPhasesRequest request;
-  request.set_meter_id(meter_id);</span>
+Response MeterClient::ListLines()
+<span style = "background-color:#dfd">{
+    google::protobuf::Empty request;
+    meter::v1::ListLinesResponse response;
+    grpc::ClientContext context;</span>
 
-<span style = "background-color:#dfd">  Response mesuarements_values;</span>
+<span style = "background-color:#dfd">    Response lines;</span>
 
-<span style = "background-color:#dfd">  meter::v1::GetMeasurementsPhasesResponse response;</span>
-
-<span style = "background-color:#dfd">  grpc::Status status =</span>
-      stub_-&gt;GetMeasurementsPhases(&amp;contex, request, &amp;response);
-<span style = "background-color:#dfd">  if (status.ok()) {
-    int cont = 0;
-    for (const auto &amp;valores : response.measurements_values()) {
-      mesuarements_values.push_back(valores);
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;ListLines(&amp;context, request, &amp;response);
+    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        for (const auto &amp;line : response.lines())</span>
+        {
+<span style = "background-color:#dfd">            lines.push_back(line);
+        }
+    }</span>
+    else
+    {
+<span style = "background-color:#fdd">        std::cout &lt;&lt; "Falha ao listar: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
     }
-  } else {
-    std::cout &lt;&lt; "Falha em encontrar as mediÃ§Ãµes: " &lt;&lt; status.error_message()</span>
-              &lt;&lt; std::endl;
-  }
-<span style = "background-color:#dfd">  return mesuarements_values;
+<span style = "background-color:#dfd">    return lines;
 }</span>
 
-<span style = "background-color:#dfd">ResponseList MeterClient::ListCreatedMeters(const std::string &amp;line_name) {
-  meter::v1::ListCreatedMetersRequest request;
-  meter::v1::ListCreatedMetersResponse response;
-  grpc::ClientContext context;</span>
+Response MeterClient::GetMeasurements(const std::string &amp;meter_id)
+<span style = "background-color:#dfd">{
+    grpc::ClientContext contex;
+    meter::v1::GetMeasurementsPhasesRequest request;
+    request.set_meter_id(meter_id);</span>
 
-<span style = "background-color:#dfd">  ResponseList list_meters_created;</span>
+<span style = "background-color:#dfd">    Response mesuarements_values;</span>
 
-<span style = "background-color:#dfd">  request.set_line_name(line_name);</span>
+<span style = "background-color:#dfd">    meter::v1::GetMeasurementsPhasesResponse response;</span>
 
-<span style = "background-color:#dfd">  grpc::Status status = stub_-&gt;ListCreatedMeters(&amp;context, request, &amp;response);
-  if (status.ok()) {
-    for (const auto &amp;meters_created : response.meters()) {
-      std::vector&lt;std::string&gt; meter;</span>
-
-<span style = "background-color:#dfd">      meter.push_back(meters_created.id());
-      meter.push_back(meters_created.line_name());
-      meter.push_back(meters_created.model_name());</span>
-
-<span style = "background-color:#dfd">      list_meters_created.push_back(meter);
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;GetMeasurementsPhases(&amp;contex, request, &amp;response);
+    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        int cont = 0;
+        for (const auto &amp;valores : response.measurements_values())</span>
+        {
+<span style = "background-color:#dfd">            mesuarements_values.push_back(valores);
+        }
+    }</span>
+    else
+    {
+<span style = "background-color:#dfd">        std::cout &lt;&lt; "Falha em encontrar as mediÃ§Ãµes: " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
     }
-  } else {</span>
-<span style = "background-color:#fdd">    std::cout &lt;&lt; "Falha em listar os medidores criados da linha  " &lt;&lt; line_name</span>
-              &lt;&lt; " : " &lt;&lt; status.error_message() &lt;&lt; std::endl;
-  }
-<span style = "background-color:#dfd">  return list_meters_created;
+<span style = "background-color:#dfd">    return mesuarements_values;
 }</span>
 
-<span style = "background-color:#dfd">ResponseList MeterClient::ListAvailableMeters(const std::string &amp;line_name) {
-  meter::v1::ListAvailableMetersRequest request;
-  meter::v1::ListAvailableMetersResponse response;
-  grpc::ClientContext context;</span>
+ResponseList MeterClient::ListCreatedMeters(const std::string &amp;line_name)
+<span style = "background-color:#dfd">{
+    meter::v1::ListCreatedMetersRequest request;
+    meter::v1::ListCreatedMetersResponse response;
+    grpc::ClientContext context;</span>
 
-<span style = "background-color:#dfd">  ResponseList list_meters_availabe;</span>
+<span style = "background-color:#dfd">    ResponseList list_meters_created;</span>
 
-<span style = "background-color:#dfd">  request.set_line_name(line_name);</span>
+<span style = "background-color:#dfd">    request.set_line_name(line_name);</span>
 
-<span style = "background-color:#dfd">  grpc::Status status =</span>
-      stub_-&gt;ListAvailableMeters(&amp;context, request, &amp;response);
-<span style = "background-color:#dfd">  if (status.ok()) {
-    for (const auto &amp;meters_created : response.meters()) {
-      std::vector&lt;std::string&gt; meter;</span>
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;ListCreatedMeters(&amp;context, request, &amp;response);
+    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        for (const auto &amp;meters_created : response.meters())</span>
+        {
+<span style = "background-color:#dfd">            std::vector&lt;std::string&gt; meter;</span>
 
-<span style = "background-color:#dfd">      meter.push_back(meters_created.id());
-      meter.push_back(meters_created.line_name());
-      meter.push_back(meters_created.model_name());</span>
+<span style = "background-color:#dfd">            meter.push_back(meters_created.id());
+            meter.push_back(meters_created.line_name());
+            meter.push_back(meters_created.model_name());</span>
 
-<span style = "background-color:#dfd">      list_meters_availabe.push_back(meter);
+<span style = "background-color:#dfd">            list_meters_created.push_back(meter);
+        }
+    }</span>
+    else
+    {
+<span style = "background-color:#fdd">        std::cout &lt;&lt; "Falha em listar os medidores criados da linha  " &lt;&lt; line_name &lt;&lt; " : " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
     }
-  } else {</span>
-<span style = "background-color:#fdd">    std::cout &lt;&lt; "Falha em listar os medidores criados da linha  " &lt;&lt; line_name</span>
-              &lt;&lt; " : " &lt;&lt; status.error_message() &lt;&lt; std::endl;
-  }
-<span style = "background-color:#dfd">  return list_meters_availabe;
+<span style = "background-color:#dfd">    return list_meters_created;
 }</span>
 
-<span style = "background-color:#dfd">std::string MeterClient::RemoveMeter(const std::string &amp;meter_id) {
-  meter::v1::RemoveMeterRequest request;
-  request.set_meter_id(meter_id);</span>
+ResponseList MeterClient::ListAvailableMeters(const std::string &amp;line_name)
+<span style = "background-color:#dfd">{
+    meter::v1::ListAvailableMetersRequest request;
+    meter::v1::ListAvailableMetersResponse response;
+    grpc::ClientContext context;</span>
 
-<span style = "background-color:#dfd">  meter::v1::RemoveMeterResponse response;
-  grpc::ClientContext context;</span>
+<span style = "background-color:#dfd">    ResponseList list_meters_availabe;</span>
 
-<span style = "background-color:#dfd">  std::string result;</span>
+<span style = "background-color:#dfd">    request.set_line_name(line_name);</span>
 
-<span style = "background-color:#dfd">  grpc::Status status = stub_-&gt;RemoveMeter(&amp;context, request, &amp;response);</span>
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;ListAvailableMeters(&amp;context, request, &amp;response);
+    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        for (const auto &amp;meters_created : response.meters())</span>
+        {
+<span style = "background-color:#dfd">            std::vector&lt;std::string&gt; meter;</span>
 
-<span style = "background-color:#dfd">  if (status.ok()) {
-    result = response.result();
-  } else {</span>
-<span style = "background-color:#fdd">    std::cout &lt;&lt; "Erro gRPC (" &lt;&lt; status.error_code()</span>
-              &lt;&lt; "): " &lt;&lt; status.error_message() &lt;&lt; std::endl;
-  }
-<span style = "background-color:#dfd">  return result;
+<span style = "background-color:#dfd">            meter.push_back(meters_created.id());
+            meter.push_back(meters_created.line_name());
+            meter.push_back(meters_created.model_name());</span>
+
+<span style = "background-color:#dfd">            list_meters_availabe.push_back(meter);
+        }
+    }</span>
+    else
+    {
+<span style = "background-color:#fdd">        std::cout &lt;&lt; "Falha em listar os medidores criados da linha  " &lt;&lt; line_name &lt;&lt; " : " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
+    }
+<span style = "background-color:#dfd">    return list_meters_availabe;
+}</span>
+
+std::string MeterClient::RemoveMeter(const std::string &amp;meter_id)
+<span style = "background-color:#dfd">{
+    meter::v1::RemoveMeterRequest request;
+    request.set_meter_id(meter_id);</span>
+
+<span style = "background-color:#dfd">    meter::v1::RemoveMeterResponse response;
+    grpc::ClientContext context;</span>
+
+<span style = "background-color:#dfd">    std::string result;</span>
+
+<span style = "background-color:#dfd">    grpc::Status status = stub_-&gt;RemoveMeter(&amp;context, request, &amp;response);</span>
+
+<span style = "background-color:#dfd">    if (status.ok())</span>
+    {
+<span style = "background-color:#dfd">        result = response.result();
+    }</span>
+    else
+    {
+<span style = "background-color:#fdd">        std::cout &lt;&lt; "Erro gRPC (" &lt;&lt; status.error_code() &lt;&lt; "): " &lt;&lt; status.error_message() &lt;&lt; std::endl;</span>
+    }
+<span style = "background-color:#dfd">    return result;
 }</span></pre>
         <hr />
         <table width="100%">

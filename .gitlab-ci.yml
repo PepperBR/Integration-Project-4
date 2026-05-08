@@ -1,6 +1,6 @@
 # Pipeline Stages
 stages:
-  - Code Lint
+  - Lint
   - build
   - unit-test
   - coverage
@@ -11,9 +11,16 @@ default:
   tags:
     - windows 
 
+# Cache Global
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+
+  paths:
+    - vcpkg_installed/
+
 # Stage : Code Lint 
 code-lint-job:
-  stage: Code Lint
+  stage: Lint
   rules:
     - if: $CI_PIPELINE_SOURCE == "push"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -34,28 +41,46 @@ build-job:
       - build/Release/grpc.exe
       - build/src/ui/Release/wxHelloWorld.exe
     expire_in: 1 day
- 
-# Fazer testes unitários do Catálogo propriamente dito
-# Se der tempo eu faço do Cliente + Servidor
+
 # Stage: Test
 unit-test-job:
-  stage: test
+  stage: unit-test
   dependencies:
     - build-job
   script:
-    - ./build/Release/client_test.exe
+    - $server = Join-Path $PWD "build/Release/grpc.exe"
+    
+    - $proc = Start-Process -FilePath $server -PassThru -WindowStyle Hidden
+    - Start-Sleep -Seconds 5
+
+    - echo "Executando testes..."
+
+    - build/tests/Release/client_test.exe
+
+    - |
+      if ($proc -and !$proc.HasExited) {
+        Stop-Process -Id $proc.Id -Force
+      }
 
 coverage-job:
-  stage: test
+  stage: coverage
   dependencies:
     - build-job
   script:
-    - OpenCppCoverage --sources ./src --export_type xml:./coverage -- ./build/Release/client_test.exe
-  artifacts:
-    name: "coverage-report"
-    paths:
-      - coverage/
-    expire_in: 7 days
+    - $server = Join-Path $PWD "build/Release/grpc.exe"
+    
+    - $proc = Start-Process -FilePath $server -PassThru -WindowStyle Hidden
+    - Start-Sleep -Seconds 5
+
+    - OpenCppCoverage --sources "$CI_PROJECT_DIR/src" `
+      --export_type cobertura:"$CI_PROJECT_DIR/coverage.xml" `
+      -- "$CI_PROJECT_DIR/build/tests/Debug/client_test.exe"
+    
+    - |
+      if ($proc -and !$proc.HasExited) {
+        Stop-Process -Id $proc.Id -Force
+      }
+    - python ./coverage/Coverage_Verifier.py
 
 # Stage: Deploy 
 deploy-job:
@@ -64,9 +89,14 @@ deploy-job:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
+  needs:
+    - build-job
   artifacts:
     name: "Release-Package-$CI_COMMIT_SHORT_SHA"
     paths:
-      - build/Release/*.exe
+      - build/Release/grpc.exe
       - build/Release/*.dll
+
+      - build/src/ui/Release/wxHelloWorld.exe
+      - build/src/ui/Release/*.dll
     expire_in: 30 days
