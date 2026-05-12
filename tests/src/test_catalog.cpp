@@ -14,7 +14,7 @@ TEST_CASE("Testing Catalog Functions")
         REQUIRE(new_meter_attempt_1->getID() == 18);
         REQUIRE(new_meter_attempt_1->getFullName() == "Apolo 6031");
 
-        auto new_meter_attempt_2 = catalog.addNewModel(96);
+        auto new_meter_attempt_2 = catalog.addNewModel(36);
         REQUIRE(new_meter_attempt_2 == nullptr);
 
         auto new_meter_attempt_3 = catalog.addNewModel(-1);
