@@ -6,17 +6,40 @@ stages:
   - coverage
   - deploy
 
+variables:
+  GIT_STRATEGY: fetch
+  GIT_CLEAN_FLAGS: -ffdx -e build/
+  
 # Jobs Configuration
 default:
   tags:
     - windows 
+
+  before_script:
+  - |
+    $proc = Get-Process grpc -ErrorAction SilentlyContinue
+
+    if ($proc) {
+      $proc | Stop-Process -Force
+    }
+
+  - |
+    $cov = Get-Process OpenCppCoverage -ErrorAction SilentlyContinue
+
+    if ($cov) {
+      $cov | Stop-Process -Force
+    }
+    
+  - $env:PATH += ";$CI_PROJECT_DIR/build/vcpkg_installed/x64-windows/bin"
+
+  - $ErrorActionPreference = "Stop"
 
 # Cache Global
 cache:
   key: "$CI_COMMIT_REF_SLUG"
 
   paths:
-    - vcpkg_installed/
+    - build/vcpkg_installed/
 
 # Stage : Code Lint 
 code-lint-job:
@@ -37,9 +60,11 @@ build-job:
   artifacts:
     name: "build-binaries-$CI_COMMIT_REF_SLUG"
     paths:
-      - build/tests/Release/client_test.exe
-      - build/Release/grpc.exe
-      - build/src/ui/Release/wxHelloWorld.exe
+      - build/Release/
+      - build/tests/Release/
+      - build/src/ui/Release/
+
+      - build/vcpkg_installed/x64-windows/bin/
     expire_in: 1 day
 
 # Stage: Test
@@ -48,39 +73,16 @@ unit-test-job:
   dependencies:
     - build-job
   script:
-    - $server = Join-Path $PWD "build/Release/grpc.exe"
-    
-    - $proc = Start-Process -FilePath $server -PassThru -WindowStyle Hidden
-    - Start-Sleep -Seconds 5
-
-    - echo "Executando testes..."
-
     - build/tests/Release/client_test.exe
 
-    - |
-      if ($proc -and !$proc.HasExited) {
-        Stop-Process -Id $proc.Id -Force
-      }
+    
 
 coverage-job:
   stage: coverage
   dependencies:
     - build-job
   script:
-    - $server = Join-Path $PWD "build/Release/grpc.exe"
-    
-    - $proc = Start-Process -FilePath $server -PassThru -WindowStyle Hidden
-    - Start-Sleep -Seconds 5
-
-    - OpenCppCoverage --sources "$CI_PROJECT_DIR/src" `
-      --export_type cobertura:"$CI_PROJECT_DIR/coverage.xml" `
-      -- "$CI_PROJECT_DIR/build/tests/Debug/client_test.exe"
-    
-    - |
-      if ($proc -and !$proc.HasExited) {
-        Stop-Process -Id $proc.Id -Force
-      }
-    - python ./coverage/Coverage_Verifier.py
+    - python ./coverage/Coverage_Verifier.py # Ajustar o Path, o coverage_xml tá no ./coverage
 
 # Stage: Deploy 
 deploy-job:
@@ -89,8 +91,12 @@ deploy-job:
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
   script:
+    - echo "Preparando artefatos..."
+    - echo "Aplicação pronta para distribuição."
   needs:
     - build-job
+    - unit-test-job
+    - coverage-job
   artifacts:
     name: "Release-Package-$CI_COMMIT_SHORT_SHA"
     paths:

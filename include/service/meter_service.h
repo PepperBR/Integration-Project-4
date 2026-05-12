@@ -16,7 +16,6 @@
 
 #include "core/Catalog.h"
 #include "core/CatalogControler.h"
-#include "core/GlobalID.h"
 #include "meter.grpc.pb.h"
 #include "meter.pb.h"
 #include "meters/Meter.h"

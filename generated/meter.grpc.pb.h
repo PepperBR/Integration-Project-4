@@ -7,2094 +7,1337 @@
 #include "meter.pb.h"
 
 #include <functional>
-#include <grpcpp/client_context.h>
-#include <grpcpp/completion_queue.h>
 #include <grpcpp/generic/async_generic_service.h>
-#include <grpcpp/impl/proto_utils.h>
-#include <grpcpp/impl/rpc_method.h>
-#include <grpcpp/impl/server_callback_handlers.h>
-#include <grpcpp/impl/service_type.h>
-#include <grpcpp/ports_def.inc>
-#include <grpcpp/server_context.h>
 #include <grpcpp/support/async_stream.h>
 #include <grpcpp/support/async_unary_call.h>
 #include <grpcpp/support/client_callback.h>
+#include <grpcpp/client_context.h>
+#include <grpcpp/completion_queue.h>
 #include <grpcpp/support/message_allocator.h>
 #include <grpcpp/support/method_handler.h>
+#include <grpcpp/impl/proto_utils.h>
+#include <grpcpp/impl/rpc_method.h>
 #include <grpcpp/support/server_callback.h>
+#include <grpcpp/impl/server_callback_handlers.h>
+#include <grpcpp/server_context.h>
+#include <grpcpp/impl/service_type.h>
 #include <grpcpp/support/status.h>
 #include <grpcpp/support/stub_options.h>
 #include <grpcpp/support/sync_stream.h>
+#include <grpcpp/ports_def.inc>
 
-namespace meter
-{
-namespace v1
-{
+namespace meter {
+namespace v1 {
 
-class MeterService final
-{
-public:
-    static constexpr char const *service_full_name()
-    {
-        return "meter.v1.MeterService";
+class MeterService final {
+ public:
+  static constexpr char const* service_full_name() {
+    return "meter.v1.MeterService";
+  }
+  class StubInterface {
+   public:
+    virtual ~StubInterface() {}
+    virtual ::grpc::Status AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::meter::v1::AddMeterResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::AddMeterResponse>> AsyncAddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::AddMeterResponse>>(AsyncAddMeterRaw(context, request, cq));
     }
-    class StubInterface
-    {
-    public:
-        virtual ~StubInterface()
-        {
-        }
-        virtual ::grpc::Status AddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request,
-                                        ::meter::v1::AddMeterResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::AddMeterResponse>>
-        AsyncAddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::AddMeterResponse>>(AsyncAddMeterRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::AddMeterResponse>>
-        PrepareAsyncAddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::AddMeterResponse>>(
-                PrepareAsyncAddMeterRaw(context, request, cq));
-        }
-        virtual ::grpc::Status ListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                                   ::meter::v1::ListAvailableMetersResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAvailableMetersResponse>>
-        AsyncListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAvailableMetersResponse>>(
-                AsyncListAvailableMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAvailableMetersResponse>>
-        PrepareAsyncListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                        ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAvailableMetersResponse>>(
-                PrepareAsyncListAvailableMetersRaw(context, request, cq));
-        }
-        virtual ::grpc::Status ListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                                      ::meter::v1::ListAllAvailableMetersResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllAvailableMetersResponse>>
-        AsyncListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllAvailableMetersResponse>>(
-                AsyncListAllAvailableMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllAvailableMetersResponse>>
-        PrepareAsyncListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllAvailableMetersResponse>>(
-                PrepareAsyncListAllAvailableMetersRaw(context, request, cq));
-        }
-        virtual ::grpc::Status ListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                                 ::meter::v1::ListCreatedMetersResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListCreatedMetersResponse>>
-        AsyncListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListCreatedMetersResponse>>(
-                AsyncListCreatedMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListCreatedMetersResponse>>
-        PrepareAsyncListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                      ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListCreatedMetersResponse>>(
-                PrepareAsyncListCreatedMetersRaw(context, request, cq));
-        }
-        virtual ::grpc::Status ListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                         ::meter::v1::ListLinesResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListLinesResponse>>
-        AsyncListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListLinesResponse>>(
-                AsyncListLinesRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListLinesResponse>>
-        PrepareAsyncListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListLinesResponse>>(
-                PrepareAsyncListLinesRaw(context, request, cq));
-        }
-        virtual ::grpc::Status RemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request,
-                                           ::meter::v1::RemoveMeterResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::RemoveMeterResponse>>
-        AsyncRemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::RemoveMeterResponse>>(
-                AsyncRemoveMeterRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::RemoveMeterResponse>>
-        PrepareAsyncRemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::RemoveMeterResponse>>(
-                PrepareAsyncRemoveMeterRaw(context, request, cq));
-        }
-        virtual ::grpc::Status ListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                                    ::meter::v1::ListAllCreatedMetersResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllCreatedMetersResponse>>
-        AsyncListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllCreatedMetersResponse>>(
-                AsyncListAllCreatedMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllCreatedMetersResponse>>
-        PrepareAsyncListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllCreatedMetersResponse>>(
-                PrepareAsyncListAllCreatedMetersRaw(context, request, cq));
-        }
-        virtual ::grpc::Status GetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                                     ::meter::v1::GetMeasurementsPhasesResponse *response) = 0;
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::GetMeasurementsPhasesResponse>>
-        AsyncGetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                   ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::GetMeasurementsPhasesResponse>>(
-                AsyncGetMeasurementsPhasesRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::GetMeasurementsPhasesResponse>>
-        PrepareAsyncGetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                          ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReaderInterface<::meter::v1::GetMeasurementsPhasesResponse>>(
-                PrepareAsyncGetMeasurementsPhasesRaw(context, request, cq));
-        }
-        class async_interface
-        {
-        public:
-            virtual ~async_interface()
-            {
-            }
-            virtual void AddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest *request,
-                                  ::meter::v1::AddMeterResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void AddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest *request,
-                                  ::meter::v1::AddMeterResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void ListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest *request,
-                                             ::meter::v1::ListAvailableMetersResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void ListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest *request,
-                                             ::meter::v1::ListAvailableMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void ListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                                ::meter::v1::ListAllAvailableMetersResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void ListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                                ::meter::v1::ListAllAvailableMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void ListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest *request,
-                                           ::meter::v1::ListCreatedMetersResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void ListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest *request,
-                                           ::meter::v1::ListCreatedMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void ListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty *request, ::meter::v1::ListLinesResponse *response,
-                                   std::function<void(::grpc::Status)>) = 0;
-            virtual void ListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty *request, ::meter::v1::ListLinesResponse *response,
-                                   ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void RemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest *request,
-                                     ::meter::v1::RemoveMeterResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void RemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest *request,
-                                     ::meter::v1::RemoveMeterResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void ListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                              ::meter::v1::ListAllCreatedMetersResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void ListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                              ::meter::v1::ListAllCreatedMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-            virtual void GetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest *request,
-                                               ::meter::v1::GetMeasurementsPhasesResponse *response, std::function<void(::grpc::Status)>) = 0;
-            virtual void GetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest *request,
-                                               ::meter::v1::GetMeasurementsPhasesResponse *response, ::grpc::ClientUnaryReactor *reactor) = 0;
-        };
-        typedef class async_interface experimental_async_interface;
-        virtual class async_interface *async()
-        {
-            return nullptr;
-        }
-        class async_interface *experimental_async()
-        {
-            return async();
-        }
-
-    private:
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::AddMeterResponse> *
-        AsyncAddMeterRaw(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::AddMeterResponse> *
-        PrepareAsyncAddMeterRaw(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAvailableMetersResponse> *
-        AsyncListAvailableMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                    ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAvailableMetersResponse> *
-        PrepareAsyncListAvailableMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                           ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllAvailableMetersResponse> *
-        AsyncListAllAvailableMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllAvailableMetersResponse> *
-        PrepareAsyncListAllAvailableMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                              ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListCreatedMetersResponse> *
-        AsyncListCreatedMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                  ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListCreatedMetersResponse> *
-        PrepareAsyncListCreatedMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                         ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListLinesResponse> *
-        AsyncListLinesRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListLinesResponse> *
-        PrepareAsyncListLinesRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::RemoveMeterResponse> *
-        AsyncRemoveMeterRaw(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::RemoveMeterResponse> *
-        PrepareAsyncRemoveMeterRaw(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllCreatedMetersResponse> *
-        AsyncListAllCreatedMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::ListAllCreatedMetersResponse> *
-        PrepareAsyncListAllCreatedMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                            ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::GetMeasurementsPhasesResponse> *
-        AsyncGetMeasurementsPhasesRaw(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                      ::grpc::CompletionQueue *cq) = 0;
-        virtual ::grpc::ClientAsyncResponseReaderInterface<::meter::v1::GetMeasurementsPhasesResponse> *
-        PrepareAsyncGetMeasurementsPhasesRaw(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                             ::grpc::CompletionQueue *cq) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::AddMeterResponse>> PrepareAsyncAddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::AddMeterResponse>>(PrepareAsyncAddMeterRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::meter::v1::ListAvailableMetersResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAvailableMetersResponse>> AsyncListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAvailableMetersResponse>>(AsyncListAvailableMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAvailableMetersResponse>> PrepareAsyncListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAvailableMetersResponse>>(PrepareAsyncListAvailableMetersRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllAvailableMetersResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllAvailableMetersResponse>> AsyncListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllAvailableMetersResponse>>(AsyncListAllAvailableMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllAvailableMetersResponse>> PrepareAsyncListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllAvailableMetersResponse>>(PrepareAsyncListAllAvailableMetersRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::meter::v1::ListCreatedMetersResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListCreatedMetersResponse>> AsyncListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListCreatedMetersResponse>>(AsyncListCreatedMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListCreatedMetersResponse>> PrepareAsyncListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListCreatedMetersResponse>>(PrepareAsyncListCreatedMetersRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListLinesResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListLinesResponse>> AsyncListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListLinesResponse>>(AsyncListLinesRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListLinesResponse>> PrepareAsyncListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListLinesResponse>>(PrepareAsyncListLinesRaw(context, request, cq));
+    }
+    virtual ::grpc::Status RemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::meter::v1::RemoveMeterResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::RemoveMeterResponse>> AsyncRemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::RemoveMeterResponse>>(AsyncRemoveMeterRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::RemoveMeterResponse>> PrepareAsyncRemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::RemoveMeterResponse>>(PrepareAsyncRemoveMeterRaw(context, request, cq));
+    }
+    virtual ::grpc::Status ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllCreatedMetersResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllCreatedMetersResponse>> AsyncListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllCreatedMetersResponse>>(AsyncListAllCreatedMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllCreatedMetersResponse>> PrepareAsyncListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllCreatedMetersResponse>>(PrepareAsyncListAllCreatedMetersRaw(context, request, cq));
+    }
+    virtual ::grpc::Status GetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::meter::v1::GetMeasurementsPhasesResponse* response) = 0;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::GetMeasurementsPhasesResponse>> AsyncGetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::GetMeasurementsPhasesResponse>>(AsyncGetMeasurementsPhasesRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::GetMeasurementsPhasesResponse>> PrepareAsyncGetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::GetMeasurementsPhasesResponse>>(PrepareAsyncGetMeasurementsPhasesRaw(context, request, cq));
+    }
+    class async_interface {
+     public:
+      virtual ~async_interface() {}
+      virtual void AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest* request, ::meter::v1::AddMeterResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest* request, ::meter::v1::AddMeterResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListLinesResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListLinesResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void RemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest* request, ::meter::v1::RemoveMeterResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void RemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest* request, ::meter::v1::RemoveMeterResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
+      virtual void GetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest* request, ::meter::v1::GetMeasurementsPhasesResponse* response, std::function<void(::grpc::Status)>) = 0;
+      virtual void GetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest* request, ::meter::v1::GetMeasurementsPhasesResponse* response, ::grpc::ClientUnaryReactor* reactor) = 0;
     };
-    class Stub final : public StubInterface
-    {
-    public:
-        Stub(const std::shared_ptr<::grpc::ChannelInterface> &channel, const ::grpc::StubOptions &options = ::grpc::StubOptions());
-        ::grpc::Status AddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request,
-                                ::meter::v1::AddMeterResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::AddMeterResponse>>
-        AsyncAddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::AddMeterResponse>>(AsyncAddMeterRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::AddMeterResponse>>
-        PrepareAsyncAddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::AddMeterResponse>>(PrepareAsyncAddMeterRaw(context, request, cq));
-        }
-        ::grpc::Status ListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                           ::meter::v1::ListAvailableMetersResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAvailableMetersResponse>>
-        AsyncListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAvailableMetersResponse>>(
-                AsyncListAvailableMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAvailableMetersResponse>>
-        PrepareAsyncListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                        ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAvailableMetersResponse>>(
-                PrepareAsyncListAvailableMetersRaw(context, request, cq));
-        }
-        ::grpc::Status ListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                              ::meter::v1::ListAllAvailableMetersResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllAvailableMetersResponse>>
-        AsyncListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllAvailableMetersResponse>>(
-                AsyncListAllAvailableMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllAvailableMetersResponse>>
-        PrepareAsyncListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllAvailableMetersResponse>>(
-                PrepareAsyncListAllAvailableMetersRaw(context, request, cq));
-        }
-        ::grpc::Status ListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                         ::meter::v1::ListCreatedMetersResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListCreatedMetersResponse>>
-        AsyncListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListCreatedMetersResponse>>(
-                AsyncListCreatedMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListCreatedMetersResponse>>
-        PrepareAsyncListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                      ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListCreatedMetersResponse>>(
-                PrepareAsyncListCreatedMetersRaw(context, request, cq));
-        }
-        ::grpc::Status ListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                 ::meter::v1::ListLinesResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListLinesResponse>>
-        AsyncListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListLinesResponse>>(AsyncListLinesRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListLinesResponse>>
-        PrepareAsyncListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListLinesResponse>>(PrepareAsyncListLinesRaw(context, request, cq));
-        }
-        ::grpc::Status RemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request,
-                                   ::meter::v1::RemoveMeterResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::RemoveMeterResponse>>
-        AsyncRemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::RemoveMeterResponse>>(AsyncRemoveMeterRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::RemoveMeterResponse>>
-        PrepareAsyncRemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::RemoveMeterResponse>>(
-                PrepareAsyncRemoveMeterRaw(context, request, cq));
-        }
-        ::grpc::Status ListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                            ::meter::v1::ListAllCreatedMetersResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllCreatedMetersResponse>>
-        AsyncListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllCreatedMetersResponse>>(
-                AsyncListAllCreatedMetersRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllCreatedMetersResponse>>
-        PrepareAsyncListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::ListAllCreatedMetersResponse>>(
-                PrepareAsyncListAllCreatedMetersRaw(context, request, cq));
-        }
-        ::grpc::Status GetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                             ::meter::v1::GetMeasurementsPhasesResponse *response) override;
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::GetMeasurementsPhasesResponse>>
-        AsyncGetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                   ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::GetMeasurementsPhasesResponse>>(
-                AsyncGetMeasurementsPhasesRaw(context, request, cq));
-        }
-        std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::GetMeasurementsPhasesResponse>>
-        PrepareAsyncGetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                          ::grpc::CompletionQueue *cq)
-        {
-            return std::unique_ptr<::grpc::ClientAsyncResponseReader<::meter::v1::GetMeasurementsPhasesResponse>>(
-                PrepareAsyncGetMeasurementsPhasesRaw(context, request, cq));
-        }
-        class async final : public StubInterface::async_interface
-        {
-        public:
-            void AddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest *request, ::meter::v1::AddMeterResponse *response,
-                          std::function<void(::grpc::Status)>) override;
-            void AddMeter(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest *request, ::meter::v1::AddMeterResponse *response,
-                          ::grpc::ClientUnaryReactor *reactor) override;
-            void ListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest *request,
-                                     ::meter::v1::ListAvailableMetersResponse *response, std::function<void(::grpc::Status)>) override;
-            void ListAvailableMeters(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest *request,
-                                     ::meter::v1::ListAvailableMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) override;
-            void ListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                        ::meter::v1::ListAllAvailableMetersResponse *response, std::function<void(::grpc::Status)>) override;
-            void ListAllAvailableMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                        ::meter::v1::ListAllAvailableMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) override;
-            void ListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest *request,
-                                   ::meter::v1::ListCreatedMetersResponse *response, std::function<void(::grpc::Status)>) override;
-            void ListCreatedMeters(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest *request,
-                                   ::meter::v1::ListCreatedMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) override;
-            void ListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty *request, ::meter::v1::ListLinesResponse *response,
-                           std::function<void(::grpc::Status)>) override;
-            void ListLines(::grpc::ClientContext *context, const ::google::protobuf::Empty *request, ::meter::v1::ListLinesResponse *response,
-                           ::grpc::ClientUnaryReactor *reactor) override;
-            void RemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest *request,
-                             ::meter::v1::RemoveMeterResponse *response, std::function<void(::grpc::Status)>) override;
-            void RemoveMeter(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest *request,
-                             ::meter::v1::RemoveMeterResponse *response, ::grpc::ClientUnaryReactor *reactor) override;
-            void ListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                      ::meter::v1::ListAllCreatedMetersResponse *response, std::function<void(::grpc::Status)>) override;
-            void ListAllCreatedMeters(::grpc::ClientContext *context, const ::google::protobuf::Empty *request,
-                                      ::meter::v1::ListAllCreatedMetersResponse *response, ::grpc::ClientUnaryReactor *reactor) override;
-            void GetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest *request,
-                                       ::meter::v1::GetMeasurementsPhasesResponse *response, std::function<void(::grpc::Status)>) override;
-            void GetMeasurementsPhases(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest *request,
-                                       ::meter::v1::GetMeasurementsPhasesResponse *response, ::grpc::ClientUnaryReactor *reactor) override;
-
-        private:
-            friend class Stub;
-            explicit async(Stub *stub)
-                : stub_(stub)
-            {
-            }
-            Stub *stub()
-            {
-                return stub_;
-            }
-            Stub *stub_;
-        };
-        class async *async() override
-        {
-            return &async_stub_;
-        }
-
-    private:
-        std::shared_ptr<::grpc::ChannelInterface> channel_;
-        class async async_stub_
-        {
-            this
-        };
-        ::grpc::ClientAsyncResponseReader<::meter::v1::AddMeterResponse> *
-        AsyncAddMeterRaw(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::AddMeterResponse> *
-        PrepareAsyncAddMeterRaw(::grpc::ClientContext *context, const ::meter::v1::AddMeterRequest &request, ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListAvailableMetersResponse> *
-        AsyncListAvailableMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                    ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListAvailableMetersResponse> *
-        PrepareAsyncListAvailableMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListAvailableMetersRequest &request,
-                                           ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListAllAvailableMetersResponse> *
-        AsyncListAllAvailableMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                       ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListAllAvailableMetersResponse> *
-        PrepareAsyncListAllAvailableMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                              ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListCreatedMetersResponse> *
-        AsyncListCreatedMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                  ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListCreatedMetersResponse> *
-        PrepareAsyncListCreatedMetersRaw(::grpc::ClientContext *context, const ::meter::v1::ListCreatedMetersRequest &request,
-                                         ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListLinesResponse> *
-        AsyncListLinesRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListLinesResponse> *
-        PrepareAsyncListLinesRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::RemoveMeterResponse> *
-        AsyncRemoveMeterRaw(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request, ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::RemoveMeterResponse> *
-        PrepareAsyncRemoveMeterRaw(::grpc::ClientContext *context, const ::meter::v1::RemoveMeterRequest &request,
-                                   ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListAllCreatedMetersResponse> *
-        AsyncListAllCreatedMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request, ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::ListAllCreatedMetersResponse> *
-        PrepareAsyncListAllCreatedMetersRaw(::grpc::ClientContext *context, const ::google::protobuf::Empty &request,
-                                            ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::GetMeasurementsPhasesResponse> *
-        AsyncGetMeasurementsPhasesRaw(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                      ::grpc::CompletionQueue *cq) override;
-        ::grpc::ClientAsyncResponseReader<::meter::v1::GetMeasurementsPhasesResponse> *
-        PrepareAsyncGetMeasurementsPhasesRaw(::grpc::ClientContext *context, const ::meter::v1::GetMeasurementsPhasesRequest &request,
-                                             ::grpc::CompletionQueue *cq) override;
-        const ::grpc::internal::RpcMethod rpcmethod_AddMeter_;
-        const ::grpc::internal::RpcMethod rpcmethod_ListAvailableMeters_;
-        const ::grpc::internal::RpcMethod rpcmethod_ListAllAvailableMeters_;
-        const ::grpc::internal::RpcMethod rpcmethod_ListCreatedMeters_;
-        const ::grpc::internal::RpcMethod rpcmethod_ListLines_;
-        const ::grpc::internal::RpcMethod rpcmethod_RemoveMeter_;
-        const ::grpc::internal::RpcMethod rpcmethod_ListAllCreatedMeters_;
-        const ::grpc::internal::RpcMethod rpcmethod_GetMeasurementsPhases_;
+    typedef class async_interface experimental_async_interface;
+    virtual class async_interface* async() { return nullptr; }
+    class async_interface* experimental_async() { return async(); }
+   private:
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::AddMeterResponse>* AsyncAddMeterRaw(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::AddMeterResponse>* PrepareAsyncAddMeterRaw(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAvailableMetersResponse>* AsyncListAvailableMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAvailableMetersResponse>* PrepareAsyncListAvailableMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllAvailableMetersResponse>* AsyncListAllAvailableMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllAvailableMetersResponse>* PrepareAsyncListAllAvailableMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListCreatedMetersResponse>* AsyncListCreatedMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListCreatedMetersResponse>* PrepareAsyncListCreatedMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListLinesResponse>* AsyncListLinesRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListLinesResponse>* PrepareAsyncListLinesRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::RemoveMeterResponse>* AsyncRemoveMeterRaw(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::RemoveMeterResponse>* PrepareAsyncRemoveMeterRaw(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllCreatedMetersResponse>* AsyncListAllCreatedMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::ListAllCreatedMetersResponse>* PrepareAsyncListAllCreatedMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::GetMeasurementsPhasesResponse>* AsyncGetMeasurementsPhasesRaw(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) = 0;
+    virtual ::grpc::ClientAsyncResponseReaderInterface< ::meter::v1::GetMeasurementsPhasesResponse>* PrepareAsyncGetMeasurementsPhasesRaw(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) = 0;
+  };
+  class Stub final : public StubInterface {
+   public:
+    Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
+    ::grpc::Status AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::meter::v1::AddMeterResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::AddMeterResponse>> AsyncAddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::AddMeterResponse>>(AsyncAddMeterRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::AddMeterResponse>> PrepareAsyncAddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::AddMeterResponse>>(PrepareAsyncAddMeterRaw(context, request, cq));
+    }
+    ::grpc::Status ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::meter::v1::ListAvailableMetersResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>> AsyncListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>>(AsyncListAvailableMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>> PrepareAsyncListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>>(PrepareAsyncListAvailableMetersRaw(context, request, cq));
+    }
+    ::grpc::Status ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllAvailableMetersResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>> AsyncListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>>(AsyncListAllAvailableMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>> PrepareAsyncListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>>(PrepareAsyncListAllAvailableMetersRaw(context, request, cq));
+    }
+    ::grpc::Status ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::meter::v1::ListCreatedMetersResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>> AsyncListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>>(AsyncListCreatedMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>> PrepareAsyncListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>>(PrepareAsyncListCreatedMetersRaw(context, request, cq));
+    }
+    ::grpc::Status ListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListLinesResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListLinesResponse>> AsyncListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListLinesResponse>>(AsyncListLinesRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListLinesResponse>> PrepareAsyncListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListLinesResponse>>(PrepareAsyncListLinesRaw(context, request, cq));
+    }
+    ::grpc::Status RemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::meter::v1::RemoveMeterResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::RemoveMeterResponse>> AsyncRemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::RemoveMeterResponse>>(AsyncRemoveMeterRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::RemoveMeterResponse>> PrepareAsyncRemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::RemoveMeterResponse>>(PrepareAsyncRemoveMeterRaw(context, request, cq));
+    }
+    ::grpc::Status ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::meter::v1::ListAllCreatedMetersResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>> AsyncListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>>(AsyncListAllCreatedMetersRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>> PrepareAsyncListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>>(PrepareAsyncListAllCreatedMetersRaw(context, request, cq));
+    }
+    ::grpc::Status GetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::meter::v1::GetMeasurementsPhasesResponse* response) override;
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::GetMeasurementsPhasesResponse>> AsyncGetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::GetMeasurementsPhasesResponse>>(AsyncGetMeasurementsPhasesRaw(context, request, cq));
+    }
+    std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::GetMeasurementsPhasesResponse>> PrepareAsyncGetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) {
+      return std::unique_ptr< ::grpc::ClientAsyncResponseReader< ::meter::v1::GetMeasurementsPhasesResponse>>(PrepareAsyncGetMeasurementsPhasesRaw(context, request, cq));
+    }
+    class async final :
+      public StubInterface::async_interface {
+     public:
+      void AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest* request, ::meter::v1::AddMeterResponse* response, std::function<void(::grpc::Status)>) override;
+      void AddMeter(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest* request, ::meter::v1::AddMeterResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListAvailableMeters(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListAllAvailableMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListCreatedMeters(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListLinesResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListLines(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListLinesResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void RemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest* request, ::meter::v1::RemoveMeterResponse* response, std::function<void(::grpc::Status)>) override;
+      void RemoveMeter(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest* request, ::meter::v1::RemoveMeterResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response, std::function<void(::grpc::Status)>) override;
+      void ListAllCreatedMeters(::grpc::ClientContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+      void GetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest* request, ::meter::v1::GetMeasurementsPhasesResponse* response, std::function<void(::grpc::Status)>) override;
+      void GetMeasurementsPhases(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest* request, ::meter::v1::GetMeasurementsPhasesResponse* response, ::grpc::ClientUnaryReactor* reactor) override;
+     private:
+      friend class Stub;
+      explicit async(Stub* stub): stub_(stub) { }
+      Stub* stub() { return stub_; }
+      Stub* stub_;
     };
-    static std::unique_ptr<Stub> NewStub(const std::shared_ptr<::grpc::ChannelInterface> &channel,
-                                         const ::grpc::StubOptions &options = ::grpc::StubOptions());
+    class async* async() override { return &async_stub_; }
 
-    class Service : public ::grpc::Service
-    {
-    public:
-        Service();
-        virtual ~Service();
-        virtual ::grpc::Status AddMeter(::grpc::ServerContext *context, const ::meter::v1::AddMeterRequest *request,
-                                        ::meter::v1::AddMeterResponse *response);
-        virtual ::grpc::Status ListAvailableMeters(::grpc::ServerContext *context, const ::meter::v1::ListAvailableMetersRequest *request,
-                                                   ::meter::v1::ListAvailableMetersResponse *response);
-        virtual ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext *context, const ::google::protobuf::Empty *request,
-                                                      ::meter::v1::ListAllAvailableMetersResponse *response);
-        virtual ::grpc::Status ListCreatedMeters(::grpc::ServerContext *context, const ::meter::v1::ListCreatedMetersRequest *request,
-                                                 ::meter::v1::ListCreatedMetersResponse *response);
-        virtual ::grpc::Status ListLines(::grpc::ServerContext *context, const ::google::protobuf::Empty *request,
-                                         ::meter::v1::ListLinesResponse *response);
-        virtual ::grpc::Status RemoveMeter(::grpc::ServerContext *context, const ::meter::v1::RemoveMeterRequest *request,
-                                           ::meter::v1::RemoveMeterResponse *response);
-        virtual ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext *context, const ::google::protobuf::Empty *request,
-                                                    ::meter::v1::ListAllCreatedMetersResponse *response);
-        virtual ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext *context, const ::meter::v1::GetMeasurementsPhasesRequest *request,
-                                                     ::meter::v1::GetMeasurementsPhasesResponse *response);
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_AddMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
+   private:
+    std::shared_ptr< ::grpc::ChannelInterface> channel_;
+    class async async_stub_{this};
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::AddMeterResponse>* AsyncAddMeterRaw(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::AddMeterResponse>* PrepareAsyncAddMeterRaw(::grpc::ClientContext* context, const ::meter::v1::AddMeterRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>* AsyncListAvailableMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAvailableMetersResponse>* PrepareAsyncListAvailableMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListAvailableMetersRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>* AsyncListAllAvailableMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllAvailableMetersResponse>* PrepareAsyncListAllAvailableMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>* AsyncListCreatedMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListCreatedMetersResponse>* PrepareAsyncListCreatedMetersRaw(::grpc::ClientContext* context, const ::meter::v1::ListCreatedMetersRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListLinesResponse>* AsyncListLinesRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListLinesResponse>* PrepareAsyncListLinesRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::RemoveMeterResponse>* AsyncRemoveMeterRaw(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::RemoveMeterResponse>* PrepareAsyncRemoveMeterRaw(::grpc::ClientContext* context, const ::meter::v1::RemoveMeterRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>* AsyncListAllCreatedMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::ListAllCreatedMetersResponse>* PrepareAsyncListAllCreatedMetersRaw(::grpc::ClientContext* context, const ::google::protobuf::Empty& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::GetMeasurementsPhasesResponse>* AsyncGetMeasurementsPhasesRaw(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) override;
+    ::grpc::ClientAsyncResponseReader< ::meter::v1::GetMeasurementsPhasesResponse>* PrepareAsyncGetMeasurementsPhasesRaw(::grpc::ClientContext* context, const ::meter::v1::GetMeasurementsPhasesRequest& request, ::grpc::CompletionQueue* cq) override;
+    const ::grpc::internal::RpcMethod rpcmethod_AddMeter_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListAvailableMeters_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListAllAvailableMeters_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListCreatedMeters_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListLines_;
+    const ::grpc::internal::RpcMethod rpcmethod_RemoveMeter_;
+    const ::grpc::internal::RpcMethod rpcmethod_ListAllCreatedMeters_;
+    const ::grpc::internal::RpcMethod rpcmethod_GetMeasurementsPhases_;
+  };
+  static std::unique_ptr<Stub> NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options = ::grpc::StubOptions());
 
-    public:
-        WithAsyncMethod_AddMeter()
-        {
-            ::grpc::Service::MarkMethodAsync(0);
-        }
-        ~WithAsyncMethod_AddMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status AddMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                ::meter::v1::AddMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestAddMeter(::grpc::ServerContext *context, ::meter::v1::AddMeterRequest *request,
-                             ::grpc::ServerAsyncResponseWriter<::meter::v1::AddMeterResponse> *response, ::grpc::CompletionQueue *new_call_cq,
-                             ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_ListAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_ListAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodAsync(1);
-        }
-        ~WithAsyncMethod_ListAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAvailableMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                           ::meter::v1::ListAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListAvailableMeters(::grpc::ServerContext *context, ::meter::v1::ListAvailableMetersRequest *request,
-                                        ::grpc::ServerAsyncResponseWriter<::meter::v1::ListAvailableMetersResponse> *response,
-                                        ::grpc::CompletionQueue *new_call_cq, ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_ListAllAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_ListAllAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodAsync(2);
-        }
-        ~WithAsyncMethod_ListAllAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                              ::meter::v1::ListAllAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListAllAvailableMeters(::grpc::ServerContext *context, ::google::protobuf::Empty *request,
-                                           ::grpc::ServerAsyncResponseWriter<::meter::v1::ListAllAvailableMetersResponse> *response,
-                                           ::grpc::CompletionQueue *new_call_cq, ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_ListCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_ListCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodAsync(3);
-        }
-        ~WithAsyncMethod_ListCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListCreatedMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                         ::meter::v1::ListCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListCreatedMeters(::grpc::ServerContext *context, ::meter::v1::ListCreatedMetersRequest *request,
-                                      ::grpc::ServerAsyncResponseWriter<::meter::v1::ListCreatedMetersResponse> *response,
-                                      ::grpc::CompletionQueue *new_call_cq, ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_ListLines : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_ListLines()
-        {
-            ::grpc::Service::MarkMethodAsync(4);
-        }
-        ~WithAsyncMethod_ListLines() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListLines(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                 ::meter::v1::ListLinesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListLines(::grpc::ServerContext *context, ::google::protobuf::Empty *request,
-                              ::grpc::ServerAsyncResponseWriter<::meter::v1::ListLinesResponse> *response, ::grpc::CompletionQueue *new_call_cq,
-                              ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_RemoveMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_RemoveMeter()
-        {
-            ::grpc::Service::MarkMethodAsync(5);
-        }
-        ~WithAsyncMethod_RemoveMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status RemoveMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                   ::meter::v1::RemoveMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestRemoveMeter(::grpc::ServerContext *context, ::meter::v1::RemoveMeterRequest *request,
-                                ::grpc::ServerAsyncResponseWriter<::meter::v1::RemoveMeterResponse> *response, ::grpc::CompletionQueue *new_call_cq,
-                                ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_ListAllCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_ListAllCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodAsync(6);
-        }
-        ~WithAsyncMethod_ListAllCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                            ::meter::v1::ListAllCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListAllCreatedMeters(::grpc::ServerContext *context, ::google::protobuf::Empty *request,
-                                         ::grpc::ServerAsyncResponseWriter<::meter::v1::ListAllCreatedMetersResponse> *response,
-                                         ::grpc::CompletionQueue *new_call_cq, ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithAsyncMethod_GetMeasurementsPhases : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithAsyncMethod_GetMeasurementsPhases()
-        {
-            ::grpc::Service::MarkMethodAsync(7);
-        }
-        ~WithAsyncMethod_GetMeasurementsPhases() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext * /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                             ::meter::v1::GetMeasurementsPhasesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestGetMeasurementsPhases(::grpc::ServerContext *context, ::meter::v1::GetMeasurementsPhasesRequest *request,
-                                          ::grpc::ServerAsyncResponseWriter<::meter::v1::GetMeasurementsPhasesResponse> *response,
-                                          ::grpc::CompletionQueue *new_call_cq, ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    typedef WithAsyncMethod_AddMeter<
-        WithAsyncMethod_ListAvailableMeters<WithAsyncMethod_ListAllAvailableMeters<WithAsyncMethod_ListCreatedMeters<WithAsyncMethod_ListLines<
-            WithAsyncMethod_RemoveMeter<WithAsyncMethod_ListAllCreatedMeters<WithAsyncMethod_GetMeasurementsPhases<Service>>>>>>>>
-        AsyncService;
-    template <class BaseClass>
-    class WithCallbackMethod_AddMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_AddMeter()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                0, new ::grpc::internal::CallbackUnaryHandler<::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::meter::v1::AddMeterRequest *request,
-                              ::meter::v1::AddMeterResponse *response) { return this->AddMeter(context, request, response); }));
-        }
-        void SetMessageAllocatorFor_AddMeter(::grpc::MessageAllocator<::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(0);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse> *>(handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_AddMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status AddMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                ::meter::v1::AddMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *AddMeter(::grpc::CallbackServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                                     ::meter::v1::AddMeterResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_ListAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_ListAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                1, new ::grpc::internal::CallbackUnaryHandler<::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::meter::v1::ListAvailableMetersRequest *request,
-                              ::meter::v1::ListAvailableMetersResponse *response) { return this->ListAvailableMeters(context, request, response); }));
-        }
-        void SetMessageAllocatorFor_ListAvailableMeters(
-            ::grpc::MessageAllocator<::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(1);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse> *>(
-                handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_ListAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAvailableMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                           ::meter::v1::ListAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListAvailableMeters(::grpc::CallbackServerContext * /*context*/,
-                                                                const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                                                ::meter::v1::ListAvailableMetersResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_ListAllAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_ListAllAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                2, new ::grpc::internal::CallbackUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::google::protobuf::Empty *request,
-                              ::meter::v1::ListAllAvailableMetersResponse *response) {
-                           return this->ListAllAvailableMeters(context, request, response);
-                       }));
-        }
-        void SetMessageAllocatorFor_ListAllAvailableMeters(
-            ::grpc::MessageAllocator<::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(2);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse> *>(handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_ListAllAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                              ::meter::v1::ListAllAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListAllAvailableMeters(::grpc::CallbackServerContext * /*context*/,
-                                                                   const ::google::protobuf::Empty * /*request*/,
-                                                                   ::meter::v1::ListAllAvailableMetersResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_ListCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_ListCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                3, new ::grpc::internal::CallbackUnaryHandler<::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::meter::v1::ListCreatedMetersRequest *request,
-                              ::meter::v1::ListCreatedMetersResponse *response) { return this->ListCreatedMeters(context, request, response); }));
-        }
-        void SetMessageAllocatorFor_ListCreatedMeters(
-            ::grpc::MessageAllocator<::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(3);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse> *>(
-                handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_ListCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListCreatedMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                         ::meter::v1::ListCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListCreatedMeters(::grpc::CallbackServerContext * /*context*/,
-                                                              const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                                              ::meter::v1::ListCreatedMetersResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_ListLines : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_ListLines()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                4, new ::grpc::internal::CallbackUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListLinesResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::google::protobuf::Empty *request,
-                              ::meter::v1::ListLinesResponse *response) { return this->ListLines(context, request, response); }));
-        }
-        void SetMessageAllocatorFor_ListLines(::grpc::MessageAllocator<::google::protobuf::Empty, ::meter::v1::ListLinesResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(4);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListLinesResponse> *>(handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_ListLines() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListLines(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                 ::meter::v1::ListLinesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListLines(::grpc::CallbackServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                                      ::meter::v1::ListLinesResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_RemoveMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_RemoveMeter()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                5, new ::grpc::internal::CallbackUnaryHandler<::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::meter::v1::RemoveMeterRequest *request,
-                              ::meter::v1::RemoveMeterResponse *response) { return this->RemoveMeter(context, request, response); }));
-        }
-        void
-        SetMessageAllocatorFor_RemoveMeter(::grpc::MessageAllocator<::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(5);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse> *>(handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_RemoveMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status RemoveMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                   ::meter::v1::RemoveMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *RemoveMeter(::grpc::CallbackServerContext * /*context*/,
-                                                        const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                                        ::meter::v1::RemoveMeterResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_ListAllCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_ListAllCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                6,
-                new ::grpc::internal::CallbackUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>(
-                    [this](::grpc::CallbackServerContext *context, const ::google::protobuf::Empty *request,
-                           ::meter::v1::ListAllCreatedMetersResponse *response) { return this->ListAllCreatedMeters(context, request, response); }));
-        }
-        void SetMessageAllocatorFor_ListAllCreatedMeters(
-            ::grpc::MessageAllocator<::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(6);
-            static_cast<::grpc::internal::CallbackUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse> *>(handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_ListAllCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                            ::meter::v1::ListAllCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListAllCreatedMeters(::grpc::CallbackServerContext * /*context*/,
-                                                                 const ::google::protobuf::Empty * /*request*/,
-                                                                 ::meter::v1::ListAllCreatedMetersResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithCallbackMethod_GetMeasurementsPhases : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithCallbackMethod_GetMeasurementsPhases()
-        {
-            ::grpc::Service::MarkMethodCallback(
-                7, new ::grpc::internal::CallbackUnaryHandler<::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>(
-                       [this](::grpc::CallbackServerContext *context, const ::meter::v1::GetMeasurementsPhasesRequest *request,
-                              ::meter::v1::GetMeasurementsPhasesResponse *response) {
-                           return this->GetMeasurementsPhases(context, request, response);
-                       }));
-        }
-        void SetMessageAllocatorFor_GetMeasurementsPhases(
-            ::grpc::MessageAllocator<::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse> *allocator)
-        {
-            ::grpc::internal::MethodHandler *const handler = ::grpc::Service::GetHandler(7);
-            static_cast<
-                ::grpc::internal::CallbackUnaryHandler<::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse> *>(
-                handler)
-                ->SetMessageAllocator(allocator);
-        }
-        ~WithCallbackMethod_GetMeasurementsPhases() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext * /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                             ::meter::v1::GetMeasurementsPhasesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *GetMeasurementsPhases(::grpc::CallbackServerContext * /*context*/,
-                                                                  const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                                                  ::meter::v1::GetMeasurementsPhasesResponse * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    typedef WithCallbackMethod_AddMeter<WithCallbackMethod_ListAvailableMeters<
-        WithCallbackMethod_ListAllAvailableMeters<WithCallbackMethod_ListCreatedMeters<WithCallbackMethod_ListLines<
-            WithCallbackMethod_RemoveMeter<WithCallbackMethod_ListAllCreatedMeters<WithCallbackMethod_GetMeasurementsPhases<Service>>>>>>>>
-        CallbackService;
-    typedef CallbackService ExperimentalCallbackService;
-    template <class BaseClass>
-    class WithGenericMethod_AddMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_AddMeter()
-        {
-            ::grpc::Service::MarkMethodGeneric(0);
-        }
-        ~WithGenericMethod_AddMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status AddMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                ::meter::v1::AddMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_ListAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_ListAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodGeneric(1);
-        }
-        ~WithGenericMethod_ListAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAvailableMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                           ::meter::v1::ListAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_ListAllAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_ListAllAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodGeneric(2);
-        }
-        ~WithGenericMethod_ListAllAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                              ::meter::v1::ListAllAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_ListCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_ListCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodGeneric(3);
-        }
-        ~WithGenericMethod_ListCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListCreatedMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                         ::meter::v1::ListCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_ListLines : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_ListLines()
-        {
-            ::grpc::Service::MarkMethodGeneric(4);
-        }
-        ~WithGenericMethod_ListLines() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListLines(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                 ::meter::v1::ListLinesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_RemoveMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_RemoveMeter()
-        {
-            ::grpc::Service::MarkMethodGeneric(5);
-        }
-        ~WithGenericMethod_RemoveMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status RemoveMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                   ::meter::v1::RemoveMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_ListAllCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_ListAllCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodGeneric(6);
-        }
-        ~WithGenericMethod_ListAllCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                            ::meter::v1::ListAllCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithGenericMethod_GetMeasurementsPhases : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithGenericMethod_GetMeasurementsPhases()
-        {
-            ::grpc::Service::MarkMethodGeneric(7);
-        }
-        ~WithGenericMethod_GetMeasurementsPhases() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext * /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                             ::meter::v1::GetMeasurementsPhasesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_AddMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_AddMeter()
-        {
-            ::grpc::Service::MarkMethodRaw(0);
-        }
-        ~WithRawMethod_AddMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status AddMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                ::meter::v1::AddMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestAddMeter(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                             ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                             ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_ListAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_ListAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodRaw(1);
-        }
-        ~WithRawMethod_ListAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAvailableMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                           ::meter::v1::ListAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListAvailableMeters(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                                        ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                                        ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_ListAllAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_ListAllAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodRaw(2);
-        }
-        ~WithRawMethod_ListAllAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                              ::meter::v1::ListAllAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListAllAvailableMeters(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                                           ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                                           ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_ListCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_ListCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodRaw(3);
-        }
-        ~WithRawMethod_ListCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListCreatedMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                         ::meter::v1::ListCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListCreatedMeters(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                                      ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                                      ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_ListLines : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_ListLines()
-        {
-            ::grpc::Service::MarkMethodRaw(4);
-        }
-        ~WithRawMethod_ListLines() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListLines(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                 ::meter::v1::ListLinesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListLines(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                              ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                              ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_RemoveMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_RemoveMeter()
-        {
-            ::grpc::Service::MarkMethodRaw(5);
-        }
-        ~WithRawMethod_RemoveMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status RemoveMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                   ::meter::v1::RemoveMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestRemoveMeter(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                                ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                                ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_ListAllCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_ListAllCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodRaw(6);
-        }
-        ~WithRawMethod_ListAllCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                            ::meter::v1::ListAllCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestListAllCreatedMeters(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                                         ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                                         ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawMethod_GetMeasurementsPhases : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawMethod_GetMeasurementsPhases()
-        {
-            ::grpc::Service::MarkMethodRaw(7);
-        }
-        ~WithRawMethod_GetMeasurementsPhases() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext * /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                             ::meter::v1::GetMeasurementsPhasesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        void RequestGetMeasurementsPhases(::grpc::ServerContext *context, ::grpc::ByteBuffer *request,
-                                          ::grpc::ServerAsyncResponseWriter<::grpc::ByteBuffer> *response, ::grpc::CompletionQueue *new_call_cq,
-                                          ::grpc::ServerCompletionQueue *notification_cq, void *tag)
-        {
-            ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_AddMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_AddMeter()
-        {
-            ::grpc::Service::MarkMethodRawCallback(0,
-                                                   new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                                                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request,
-                                                              ::grpc::ByteBuffer *response) { return this->AddMeter(context, request, response); }));
-        }
-        ~WithRawCallbackMethod_AddMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status AddMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                ::meter::v1::AddMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *AddMeter(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                     ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_ListAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_ListAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodRawCallback(
-                1, new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request, ::grpc::ByteBuffer *response) {
-                           return this->ListAvailableMeters(context, request, response);
-                       }));
-        }
-        ~WithRawCallbackMethod_ListAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAvailableMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                           ::meter::v1::ListAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListAvailableMeters(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                                ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_ListAllAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_ListAllAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodRawCallback(
-                2, new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request, ::grpc::ByteBuffer *response) {
-                           return this->ListAllAvailableMeters(context, request, response);
-                       }));
-        }
-        ~WithRawCallbackMethod_ListAllAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                              ::meter::v1::ListAllAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListAllAvailableMeters(::grpc::CallbackServerContext * /*context*/,
-                                                                   const ::grpc::ByteBuffer * /*request*/, ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_ListCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_ListCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodRawCallback(
-                3, new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request, ::grpc::ByteBuffer *response) {
-                           return this->ListCreatedMeters(context, request, response);
-                       }));
-        }
-        ~WithRawCallbackMethod_ListCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListCreatedMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                         ::meter::v1::ListCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListCreatedMeters(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                              ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_ListLines : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_ListLines()
-        {
-            ::grpc::Service::MarkMethodRawCallback(4,
-                                                   new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                                                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request,
-                                                              ::grpc::ByteBuffer *response) { return this->ListLines(context, request, response); }));
-        }
-        ~WithRawCallbackMethod_ListLines() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListLines(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                 ::meter::v1::ListLinesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListLines(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                      ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_RemoveMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_RemoveMeter()
-        {
-            ::grpc::Service::MarkMethodRawCallback(
-                5, new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request, ::grpc::ByteBuffer *response) {
-                           return this->RemoveMeter(context, request, response);
-                       }));
-        }
-        ~WithRawCallbackMethod_RemoveMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status RemoveMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                   ::meter::v1::RemoveMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *RemoveMeter(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                        ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_ListAllCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_ListAllCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodRawCallback(
-                6, new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request, ::grpc::ByteBuffer *response) {
-                           return this->ListAllCreatedMeters(context, request, response);
-                       }));
-        }
-        ~WithRawCallbackMethod_ListAllCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                            ::meter::v1::ListAllCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *ListAllCreatedMeters(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                                 ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithRawCallbackMethod_GetMeasurementsPhases : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithRawCallbackMethod_GetMeasurementsPhases()
-        {
-            ::grpc::Service::MarkMethodRawCallback(
-                7, new ::grpc::internal::CallbackUnaryHandler<::grpc::ByteBuffer, ::grpc::ByteBuffer>(
-                       [this](::grpc::CallbackServerContext *context, const ::grpc::ByteBuffer *request, ::grpc::ByteBuffer *response) {
-                           return this->GetMeasurementsPhases(context, request, response);
-                       }));
-        }
-        ~WithRawCallbackMethod_GetMeasurementsPhases() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable synchronous version of this method
-        ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext * /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                             ::meter::v1::GetMeasurementsPhasesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        virtual ::grpc::ServerUnaryReactor *GetMeasurementsPhases(::grpc::CallbackServerContext * /*context*/, const ::grpc::ByteBuffer * /*request*/,
-                                                                  ::grpc::ByteBuffer * /*response*/)
-        {
-            return nullptr;
-        }
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_AddMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_AddMeter()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                0, new ::grpc::internal::StreamedUnaryHandler<::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse> *streamer) {
-                           return this->StreamedAddMeter(context, streamer);
-                       }));
-        }
-        ~WithStreamedUnaryMethod_AddMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status AddMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::AddMeterRequest * /*request*/,
-                                ::meter::v1::AddMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status
-        StreamedAddMeter(::grpc::ServerContext *context,
-                         ::grpc::ServerUnaryStreamer<::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse> *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_ListAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_ListAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                1,
-                new ::grpc::internal::StreamedUnaryHandler<::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>(
-                    [this](::grpc::ServerContext *context,
-                           ::grpc::ServerUnaryStreamer<::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse> *streamer) {
-                        return this->StreamedListAvailableMeters(context, streamer);
-                    }));
-        }
-        ~WithStreamedUnaryMethod_ListAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status ListAvailableMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListAvailableMetersRequest * /*request*/,
-                                           ::meter::v1::ListAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status
-        StreamedListAvailableMeters(::grpc::ServerContext *context,
-                                    ::grpc::ServerUnaryStreamer<::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>
-                                        *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_ListAllAvailableMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_ListAllAvailableMeters()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                2, new ::grpc::internal::StreamedUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse> *streamer) {
-                           return this->StreamedListAllAvailableMeters(context, streamer);
-                       }));
-        }
-        ~WithStreamedUnaryMethod_ListAllAvailableMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                              ::meter::v1::ListAllAvailableMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status StreamedListAllAvailableMeters(
-            ::grpc::ServerContext *context,
-            ::grpc::ServerUnaryStreamer<::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse> *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_ListCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_ListCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                3, new ::grpc::internal::StreamedUnaryHandler<::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse> *streamer) {
-                           return this->StreamedListCreatedMeters(context, streamer);
-                       }));
-        }
-        ~WithStreamedUnaryMethod_ListCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status ListCreatedMeters(::grpc::ServerContext * /*context*/, const ::meter::v1::ListCreatedMetersRequest * /*request*/,
-                                         ::meter::v1::ListCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status StreamedListCreatedMeters(
-            ::grpc::ServerContext *context,
-            ::grpc::ServerUnaryStreamer<::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse> *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_ListLines : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_ListLines()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                4, new ::grpc::internal::StreamedUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListLinesResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::google::protobuf::Empty, ::meter::v1::ListLinesResponse> *streamer) {
-                           return this->StreamedListLines(context, streamer);
-                       }));
-        }
-        ~WithStreamedUnaryMethod_ListLines() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status ListLines(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                 ::meter::v1::ListLinesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status
-        StreamedListLines(::grpc::ServerContext *context,
-                          ::grpc::ServerUnaryStreamer<::google::protobuf::Empty, ::meter::v1::ListLinesResponse> *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_RemoveMeter : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_RemoveMeter()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                5, new ::grpc::internal::StreamedUnaryHandler<::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse> *streamer) {
-                           return this->StreamedRemoveMeter(context, streamer);
-                       }));
-        }
-        ~WithStreamedUnaryMethod_RemoveMeter() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status RemoveMeter(::grpc::ServerContext * /*context*/, const ::meter::v1::RemoveMeterRequest * /*request*/,
-                                   ::meter::v1::RemoveMeterResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status StreamedRemoveMeter(
-            ::grpc::ServerContext *context,
-            ::grpc::ServerUnaryStreamer<::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse> *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_ListAllCreatedMeters : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_ListAllCreatedMeters()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                6, new ::grpc::internal::StreamedUnaryHandler<::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse> *streamer) {
-                           return this->StreamedListAllCreatedMeters(context, streamer);
-                       }));
-        }
-        ~WithStreamedUnaryMethod_ListAllCreatedMeters() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext * /*context*/, const ::google::protobuf::Empty * /*request*/,
-                                            ::meter::v1::ListAllCreatedMetersResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status StreamedListAllCreatedMeters(
-            ::grpc::ServerContext *context,
-            ::grpc::ServerUnaryStreamer<::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse> *server_unary_streamer) = 0;
-    };
-    template <class BaseClass>
-    class WithStreamedUnaryMethod_GetMeasurementsPhases : public BaseClass
-    {
-    private:
-        void BaseClassMustBeDerivedFromService(const Service * /*service*/)
-        {
-        }
-
-    public:
-        WithStreamedUnaryMethod_GetMeasurementsPhases()
-        {
-            ::grpc::Service::MarkMethodStreamed(
-                7, new ::grpc::internal::StreamedUnaryHandler<::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>(
-                       [this](::grpc::ServerContext *context,
-                              ::grpc::ServerUnaryStreamer<::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>
-                                  *streamer) { return this->StreamedGetMeasurementsPhases(context, streamer); }));
-        }
-        ~WithStreamedUnaryMethod_GetMeasurementsPhases() override
-        {
-            BaseClassMustBeDerivedFromService(this);
-        }
-        // disable regular version of this method
-        ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext * /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest * /*request*/,
-                                             ::meter::v1::GetMeasurementsPhasesResponse * /*response*/) override
-        {
-            abort();
-            return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
-        }
-        // replace default version of method with streamed unary
-        virtual ::grpc::Status StreamedGetMeasurementsPhases(
-            ::grpc::ServerContext *context,
-            ::grpc::ServerUnaryStreamer<::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>
-                *server_unary_streamer) = 0;
-    };
-    typedef WithStreamedUnaryMethod_AddMeter<WithStreamedUnaryMethod_ListAvailableMeters<WithStreamedUnaryMethod_ListAllAvailableMeters<
-        WithStreamedUnaryMethod_ListCreatedMeters<WithStreamedUnaryMethod_ListLines<WithStreamedUnaryMethod_RemoveMeter<
-            WithStreamedUnaryMethod_ListAllCreatedMeters<WithStreamedUnaryMethod_GetMeasurementsPhases<Service>>>>>>>>
-        StreamedUnaryService;
-    typedef Service SplitStreamedService;
-    typedef WithStreamedUnaryMethod_AddMeter<WithStreamedUnaryMethod_ListAvailableMeters<WithStreamedUnaryMethod_ListAllAvailableMeters<
-        WithStreamedUnaryMethod_ListCreatedMeters<WithStreamedUnaryMethod_ListLines<WithStreamedUnaryMethod_RemoveMeter<
-            WithStreamedUnaryMethod_ListAllCreatedMeters<WithStreamedUnaryMethod_GetMeasurementsPhases<Service>>>>>>>>
-        StreamedService;
+  class Service : public ::grpc::Service {
+   public:
+    Service();
+    virtual ~Service();
+    virtual ::grpc::Status AddMeter(::grpc::ServerContext* context, const ::meter::v1::AddMeterRequest* request, ::meter::v1::AddMeterResponse* response);
+    virtual ::grpc::Status ListAvailableMeters(::grpc::ServerContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response);
+    virtual ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response);
+    virtual ::grpc::Status ListCreatedMeters(::grpc::ServerContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response);
+    virtual ::grpc::Status ListLines(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListLinesResponse* response);
+    virtual ::grpc::Status RemoveMeter(::grpc::ServerContext* context, const ::meter::v1::RemoveMeterRequest* request, ::meter::v1::RemoveMeterResponse* response);
+    virtual ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response);
+    virtual ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* context, const ::meter::v1::GetMeasurementsPhasesRequest* request, ::meter::v1::GetMeasurementsPhasesResponse* response);
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_AddMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_AddMeter() {
+      ::grpc::Service::MarkMethodAsync(0);
+    }
+    ~WithAsyncMethod_AddMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AddMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestAddMeter(::grpc::ServerContext* context, ::meter::v1::AddMeterRequest* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::AddMeterResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListAvailableMeters() {
+      ::grpc::Service::MarkMethodAsync(1);
+    }
+    ~WithAsyncMethod_ListAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAvailableMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListAvailableMeters(::grpc::ServerContext* context, ::meter::v1::ListAvailableMetersRequest* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::ListAvailableMetersResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListAllAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListAllAvailableMeters() {
+      ::grpc::Service::MarkMethodAsync(2);
+    }
+    ~WithAsyncMethod_ListAllAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListAllAvailableMeters(::grpc::ServerContext* context, ::google::protobuf::Empty* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::ListAllAvailableMetersResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListCreatedMeters() {
+      ::grpc::Service::MarkMethodAsync(3);
+    }
+    ~WithAsyncMethod_ListCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListCreatedMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListCreatedMeters(::grpc::ServerContext* context, ::meter::v1::ListCreatedMetersRequest* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::ListCreatedMetersResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListLines : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListLines() {
+      ::grpc::Service::MarkMethodAsync(4);
+    }
+    ~WithAsyncMethod_ListLines() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListLines(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListLines(::grpc::ServerContext* context, ::google::protobuf::Empty* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::ListLinesResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_RemoveMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_RemoveMeter() {
+      ::grpc::Service::MarkMethodAsync(5);
+    }
+    ~WithAsyncMethod_RemoveMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RemoveMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestRemoveMeter(::grpc::ServerContext* context, ::meter::v1::RemoveMeterRequest* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::RemoveMeterResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_ListAllCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_ListAllCreatedMeters() {
+      ::grpc::Service::MarkMethodAsync(6);
+    }
+    ~WithAsyncMethod_ListAllCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListAllCreatedMeters(::grpc::ServerContext* context, ::google::protobuf::Empty* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::ListAllCreatedMetersResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithAsyncMethod_GetMeasurementsPhases : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithAsyncMethod_GetMeasurementsPhases() {
+      ::grpc::Service::MarkMethodAsync(7);
+    }
+    ~WithAsyncMethod_GetMeasurementsPhases() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetMeasurementsPhases(::grpc::ServerContext* context, ::meter::v1::GetMeasurementsPhasesRequest* request, ::grpc::ServerAsyncResponseWriter< ::meter::v1::GetMeasurementsPhasesResponse>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  typedef WithAsyncMethod_AddMeter<WithAsyncMethod_ListAvailableMeters<WithAsyncMethod_ListAllAvailableMeters<WithAsyncMethod_ListCreatedMeters<WithAsyncMethod_ListLines<WithAsyncMethod_RemoveMeter<WithAsyncMethod_ListAllCreatedMeters<WithAsyncMethod_GetMeasurementsPhases<Service > > > > > > > > AsyncService;
+  template <class BaseClass>
+  class WithCallbackMethod_AddMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_AddMeter() {
+      ::grpc::Service::MarkMethodCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::meter::v1::AddMeterRequest* request, ::meter::v1::AddMeterResponse* response) { return this->AddMeter(context, request, response); }));}
+    void SetMessageAllocatorFor_AddMeter(
+        ::grpc::MessageAllocator< ::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(0);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_AddMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AddMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* AddMeter(
+      ::grpc::CallbackServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListAvailableMeters() {
+      ::grpc::Service::MarkMethodCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::meter::v1::ListAvailableMetersRequest* request, ::meter::v1::ListAvailableMetersResponse* response) { return this->ListAvailableMeters(context, request, response); }));}
+    void SetMessageAllocatorFor_ListAvailableMeters(
+        ::grpc::MessageAllocator< ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(1);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAvailableMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListAvailableMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListAllAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListAllAvailableMeters() {
+      ::grpc::Service::MarkMethodCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllAvailableMetersResponse* response) { return this->ListAllAvailableMeters(context, request, response); }));}
+    void SetMessageAllocatorFor_ListAllAvailableMeters(
+        ::grpc::MessageAllocator< ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(2);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListAllAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListAllAvailableMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListCreatedMeters() {
+      ::grpc::Service::MarkMethodCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::meter::v1::ListCreatedMetersRequest* request, ::meter::v1::ListCreatedMetersResponse* response) { return this->ListCreatedMeters(context, request, response); }));}
+    void SetMessageAllocatorFor_ListCreatedMeters(
+        ::grpc::MessageAllocator< ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(3);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListCreatedMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListCreatedMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListLines : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListLines() {
+      ::grpc::Service::MarkMethodCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::meter::v1::ListLinesResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListLinesResponse* response) { return this->ListLines(context, request, response); }));}
+    void SetMessageAllocatorFor_ListLines(
+        ::grpc::MessageAllocator< ::google::protobuf::Empty, ::meter::v1::ListLinesResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(4);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::meter::v1::ListLinesResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListLines() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListLines(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListLines(
+      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_RemoveMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_RemoveMeter() {
+      ::grpc::Service::MarkMethodCallback(5,
+          new ::grpc::internal::CallbackUnaryHandler< ::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::meter::v1::RemoveMeterRequest* request, ::meter::v1::RemoveMeterResponse* response) { return this->RemoveMeter(context, request, response); }));}
+    void SetMessageAllocatorFor_RemoveMeter(
+        ::grpc::MessageAllocator< ::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(5);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_RemoveMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RemoveMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* RemoveMeter(
+      ::grpc::CallbackServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_ListAllCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_ListAllCreatedMeters() {
+      ::grpc::Service::MarkMethodCallback(6,
+          new ::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::google::protobuf::Empty* request, ::meter::v1::ListAllCreatedMetersResponse* response) { return this->ListAllCreatedMeters(context, request, response); }));}
+    void SetMessageAllocatorFor_ListAllCreatedMeters(
+        ::grpc::MessageAllocator< ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(6);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_ListAllCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListAllCreatedMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithCallbackMethod_GetMeasurementsPhases : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithCallbackMethod_GetMeasurementsPhases() {
+      ::grpc::Service::MarkMethodCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::meter::v1::GetMeasurementsPhasesRequest* request, ::meter::v1::GetMeasurementsPhasesResponse* response) { return this->GetMeasurementsPhases(context, request, response); }));}
+    void SetMessageAllocatorFor_GetMeasurementsPhases(
+        ::grpc::MessageAllocator< ::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>* allocator) {
+      ::grpc::internal::MethodHandler* const handler = ::grpc::Service::GetHandler(7);
+      static_cast<::grpc::internal::CallbackUnaryHandler< ::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>*>(handler)
+              ->SetMessageAllocator(allocator);
+    }
+    ~WithCallbackMethod_GetMeasurementsPhases() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetMeasurementsPhases(
+      ::grpc::CallbackServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/)  { return nullptr; }
+  };
+  typedef WithCallbackMethod_AddMeter<WithCallbackMethod_ListAvailableMeters<WithCallbackMethod_ListAllAvailableMeters<WithCallbackMethod_ListCreatedMeters<WithCallbackMethod_ListLines<WithCallbackMethod_RemoveMeter<WithCallbackMethod_ListAllCreatedMeters<WithCallbackMethod_GetMeasurementsPhases<Service > > > > > > > > CallbackService;
+  typedef CallbackService ExperimentalCallbackService;
+  template <class BaseClass>
+  class WithGenericMethod_AddMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_AddMeter() {
+      ::grpc::Service::MarkMethodGeneric(0);
+    }
+    ~WithGenericMethod_AddMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AddMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListAvailableMeters() {
+      ::grpc::Service::MarkMethodGeneric(1);
+    }
+    ~WithGenericMethod_ListAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAvailableMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListAllAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListAllAvailableMeters() {
+      ::grpc::Service::MarkMethodGeneric(2);
+    }
+    ~WithGenericMethod_ListAllAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListCreatedMeters() {
+      ::grpc::Service::MarkMethodGeneric(3);
+    }
+    ~WithGenericMethod_ListCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListCreatedMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListLines : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListLines() {
+      ::grpc::Service::MarkMethodGeneric(4);
+    }
+    ~WithGenericMethod_ListLines() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListLines(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_RemoveMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_RemoveMeter() {
+      ::grpc::Service::MarkMethodGeneric(5);
+    }
+    ~WithGenericMethod_RemoveMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RemoveMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_ListAllCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_ListAllCreatedMeters() {
+      ::grpc::Service::MarkMethodGeneric(6);
+    }
+    ~WithGenericMethod_ListAllCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithGenericMethod_GetMeasurementsPhases : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithGenericMethod_GetMeasurementsPhases() {
+      ::grpc::Service::MarkMethodGeneric(7);
+    }
+    ~WithGenericMethod_GetMeasurementsPhases() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_AddMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_AddMeter() {
+      ::grpc::Service::MarkMethodRaw(0);
+    }
+    ~WithRawMethod_AddMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AddMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestAddMeter(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(0, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListAvailableMeters() {
+      ::grpc::Service::MarkMethodRaw(1);
+    }
+    ~WithRawMethod_ListAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAvailableMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListAvailableMeters(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(1, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListAllAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListAllAvailableMeters() {
+      ::grpc::Service::MarkMethodRaw(2);
+    }
+    ~WithRawMethod_ListAllAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListAllAvailableMeters(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(2, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListCreatedMeters() {
+      ::grpc::Service::MarkMethodRaw(3);
+    }
+    ~WithRawMethod_ListCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListCreatedMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListCreatedMeters(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(3, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListLines : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListLines() {
+      ::grpc::Service::MarkMethodRaw(4);
+    }
+    ~WithRawMethod_ListLines() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListLines(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListLines(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(4, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_RemoveMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_RemoveMeter() {
+      ::grpc::Service::MarkMethodRaw(5);
+    }
+    ~WithRawMethod_RemoveMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RemoveMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestRemoveMeter(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(5, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_ListAllCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_ListAllCreatedMeters() {
+      ::grpc::Service::MarkMethodRaw(6);
+    }
+    ~WithRawMethod_ListAllCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestListAllCreatedMeters(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(6, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawMethod_GetMeasurementsPhases : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawMethod_GetMeasurementsPhases() {
+      ::grpc::Service::MarkMethodRaw(7);
+    }
+    ~WithRawMethod_GetMeasurementsPhases() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    void RequestGetMeasurementsPhases(::grpc::ServerContext* context, ::grpc::ByteBuffer* request, ::grpc::ServerAsyncResponseWriter< ::grpc::ByteBuffer>* response, ::grpc::CompletionQueue* new_call_cq, ::grpc::ServerCompletionQueue* notification_cq, void *tag) {
+      ::grpc::Service::RequestAsyncUnary(7, context, request, response, new_call_cq, notification_cq, tag);
+    }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_AddMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_AddMeter() {
+      ::grpc::Service::MarkMethodRawCallback(0,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->AddMeter(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_AddMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status AddMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* AddMeter(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListAvailableMeters() {
+      ::grpc::Service::MarkMethodRawCallback(1,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListAvailableMeters(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAvailableMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListAvailableMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListAllAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListAllAvailableMeters() {
+      ::grpc::Service::MarkMethodRawCallback(2,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListAllAvailableMeters(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListAllAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListAllAvailableMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListCreatedMeters() {
+      ::grpc::Service::MarkMethodRawCallback(3,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListCreatedMeters(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListCreatedMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListCreatedMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListLines : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListLines() {
+      ::grpc::Service::MarkMethodRawCallback(4,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListLines(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListLines() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListLines(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListLines(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_RemoveMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_RemoveMeter() {
+      ::grpc::Service::MarkMethodRawCallback(5,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->RemoveMeter(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_RemoveMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status RemoveMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* RemoveMeter(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_ListAllCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_ListAllCreatedMeters() {
+      ::grpc::Service::MarkMethodRawCallback(6,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->ListAllCreatedMeters(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_ListAllCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* ListAllCreatedMeters(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithRawCallbackMethod_GetMeasurementsPhases : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithRawCallbackMethod_GetMeasurementsPhases() {
+      ::grpc::Service::MarkMethodRawCallback(7,
+          new ::grpc::internal::CallbackUnaryHandler< ::grpc::ByteBuffer, ::grpc::ByteBuffer>(
+            [this](
+                   ::grpc::CallbackServerContext* context, const ::grpc::ByteBuffer* request, ::grpc::ByteBuffer* response) { return this->GetMeasurementsPhases(context, request, response); }));
+    }
+    ~WithRawCallbackMethod_GetMeasurementsPhases() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable synchronous version of this method
+    ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    virtual ::grpc::ServerUnaryReactor* GetMeasurementsPhases(
+      ::grpc::CallbackServerContext* /*context*/, const ::grpc::ByteBuffer* /*request*/, ::grpc::ByteBuffer* /*response*/)  { return nullptr; }
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_AddMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_AddMeter() {
+      ::grpc::Service::MarkMethodStreamed(0,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::meter::v1::AddMeterRequest, ::meter::v1::AddMeterResponse>* streamer) {
+                       return this->StreamedAddMeter(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_AddMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status AddMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::AddMeterRequest* /*request*/, ::meter::v1::AddMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedAddMeter(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::meter::v1::AddMeterRequest,::meter::v1::AddMeterResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListAvailableMeters() {
+      ::grpc::Service::MarkMethodStreamed(1,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::meter::v1::ListAvailableMetersRequest, ::meter::v1::ListAvailableMetersResponse>* streamer) {
+                       return this->StreamedListAvailableMeters(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListAvailableMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListAvailableMetersRequest* /*request*/, ::meter::v1::ListAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListAvailableMeters(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::meter::v1::ListAvailableMetersRequest,::meter::v1::ListAvailableMetersResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListAllAvailableMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListAllAvailableMeters() {
+      ::grpc::Service::MarkMethodStreamed(2,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::google::protobuf::Empty, ::meter::v1::ListAllAvailableMetersResponse>* streamer) {
+                       return this->StreamedListAllAvailableMeters(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListAllAvailableMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListAllAvailableMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllAvailableMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListAllAvailableMeters(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Empty,::meter::v1::ListAllAvailableMetersResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListCreatedMeters() {
+      ::grpc::Service::MarkMethodStreamed(3,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::meter::v1::ListCreatedMetersRequest, ::meter::v1::ListCreatedMetersResponse>* streamer) {
+                       return this->StreamedListCreatedMeters(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListCreatedMeters(::grpc::ServerContext* /*context*/, const ::meter::v1::ListCreatedMetersRequest* /*request*/, ::meter::v1::ListCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListCreatedMeters(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::meter::v1::ListCreatedMetersRequest,::meter::v1::ListCreatedMetersResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListLines : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListLines() {
+      ::grpc::Service::MarkMethodStreamed(4,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::google::protobuf::Empty, ::meter::v1::ListLinesResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::google::protobuf::Empty, ::meter::v1::ListLinesResponse>* streamer) {
+                       return this->StreamedListLines(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListLines() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListLines(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListLinesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListLines(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Empty,::meter::v1::ListLinesResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_RemoveMeter : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_RemoveMeter() {
+      ::grpc::Service::MarkMethodStreamed(5,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::meter::v1::RemoveMeterRequest, ::meter::v1::RemoveMeterResponse>* streamer) {
+                       return this->StreamedRemoveMeter(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_RemoveMeter() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status RemoveMeter(::grpc::ServerContext* /*context*/, const ::meter::v1::RemoveMeterRequest* /*request*/, ::meter::v1::RemoveMeterResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedRemoveMeter(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::meter::v1::RemoveMeterRequest,::meter::v1::RemoveMeterResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_ListAllCreatedMeters : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_ListAllCreatedMeters() {
+      ::grpc::Service::MarkMethodStreamed(6,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::google::protobuf::Empty, ::meter::v1::ListAllCreatedMetersResponse>* streamer) {
+                       return this->StreamedListAllCreatedMeters(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_ListAllCreatedMeters() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status ListAllCreatedMeters(::grpc::ServerContext* /*context*/, const ::google::protobuf::Empty* /*request*/, ::meter::v1::ListAllCreatedMetersResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedListAllCreatedMeters(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::google::protobuf::Empty,::meter::v1::ListAllCreatedMetersResponse>* server_unary_streamer) = 0;
+  };
+  template <class BaseClass>
+  class WithStreamedUnaryMethod_GetMeasurementsPhases : public BaseClass {
+   private:
+    void BaseClassMustBeDerivedFromService(const Service* /*service*/) {}
+   public:
+    WithStreamedUnaryMethod_GetMeasurementsPhases() {
+      ::grpc::Service::MarkMethodStreamed(7,
+        new ::grpc::internal::StreamedUnaryHandler<
+          ::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>(
+            [this](::grpc::ServerContext* context,
+                   ::grpc::ServerUnaryStreamer<
+                     ::meter::v1::GetMeasurementsPhasesRequest, ::meter::v1::GetMeasurementsPhasesResponse>* streamer) {
+                       return this->StreamedGetMeasurementsPhases(context,
+                         streamer);
+                  }));
+    }
+    ~WithStreamedUnaryMethod_GetMeasurementsPhases() override {
+      BaseClassMustBeDerivedFromService(this);
+    }
+    // disable regular version of this method
+    ::grpc::Status GetMeasurementsPhases(::grpc::ServerContext* /*context*/, const ::meter::v1::GetMeasurementsPhasesRequest* /*request*/, ::meter::v1::GetMeasurementsPhasesResponse* /*response*/) override {
+      abort();
+      return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+    }
+    // replace default version of method with streamed unary
+    virtual ::grpc::Status StreamedGetMeasurementsPhases(::grpc::ServerContext* context, ::grpc::ServerUnaryStreamer< ::meter::v1::GetMeasurementsPhasesRequest,::meter::v1::GetMeasurementsPhasesResponse>* server_unary_streamer) = 0;
+  };
+  typedef WithStreamedUnaryMethod_AddMeter<WithStreamedUnaryMethod_ListAvailableMeters<WithStreamedUnaryMethod_ListAllAvailableMeters<WithStreamedUnaryMethod_ListCreatedMeters<WithStreamedUnaryMethod_ListLines<WithStreamedUnaryMethod_RemoveMeter<WithStreamedUnaryMethod_ListAllCreatedMeters<WithStreamedUnaryMethod_GetMeasurementsPhases<Service > > > > > > > > StreamedUnaryService;
+  typedef Service SplitStreamedService;
+  typedef WithStreamedUnaryMethod_AddMeter<WithStreamedUnaryMethod_ListAvailableMeters<WithStreamedUnaryMethod_ListAllAvailableMeters<WithStreamedUnaryMethod_ListCreatedMeters<WithStreamedUnaryMethod_ListLines<WithStreamedUnaryMethod_RemoveMeter<WithStreamedUnaryMethod_ListAllCreatedMeters<WithStreamedUnaryMethod_GetMeasurementsPhases<Service > > > > > > > > StreamedService;
 };
 
-} // namespace v1
-} // namespace meter
+}  // namespace v1
+}  // namespace meter
+
 
 #include <grpcpp/ports_undef.inc>
-#endif // GRPC_meter_2eproto__INCLUDED
+#endif  // GRPC_meter_2eproto__INCLUDED

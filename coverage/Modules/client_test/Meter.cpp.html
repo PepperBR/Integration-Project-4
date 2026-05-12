@@ -20,7 +20,7 @@ Meter::Meter(int id, std::string line, std::string model, bool is_template)
 }</span>
 
 Meter::Meter(const Meter &amp;other, int new_id)
-<span style = "background-color:#fdd">    : ID(new_id)
+<span style = "background-color:#dfd">    : ID(new_id)
     , is_template(false)
     , name_line(other.name_line)
     , name_model(other.name_model)
@@ -28,17 +28,17 @@ Meter::Meter(const Meter &amp;other, int new_id)
 }</span>
 
 std::string Meter::getFullName() const
-<span style = "background-color:#fdd">{
+<span style = "background-color:#dfd">{
     return name_line + " " + name_model;
 }</span>
 
 bool Meter::getIsTemplate() const
-<span style = "background-color:#fdd">{
+<span style = "background-color:#dfd">{
     return is_template;
 }</span>
 
 int Meter::getID() const
-<span style = "background-color:#fdd">{
+<span style = "background-color:#dfd">{
     return ID;
 }</span>
 

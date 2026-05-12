@@ -27,5 +27,5 @@ public:
     std::string getNameLine() const;
     std::string getNameModel() const;
 
-    virtual std::unique_ptr<Meter> cloneMeter() const = 0;
+    virtual std::shared_ptr<Meter> cloneMeter(int unique_id) const = 0;
 };

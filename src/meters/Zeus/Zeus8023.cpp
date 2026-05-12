@@ -1,8 +1,7 @@
 #include "meters/Zeus/Zeus8023.h"
-#include "core/GlobalID.h"
 
 Zeus8023::Zeus8023()
-    : Zeus(GlobalID::generateID(), "8023"){};
+    : Zeus(3, "8023"){};
 
 Zeus8023::Zeus8023(const Zeus8023 &other, int new_id)
     : Zeus(other, new_id){};
@@ -14,7 +13,7 @@ std::vector<double> &Zeus8023::getPhaseValues()
     return TwoPhaseMeter::getPhaseValues();
 };
 
-std::unique_ptr<Meter> Zeus8023::cloneMeter() const
+std::shared_ptr<Meter> Zeus8023::cloneMeter(int unique_id) const
 {
-    return std::make_unique<Zeus8023>(*this, GlobalID::generateID());
+    return std::make_shared<Zeus8023>(*this, unique_id);
 }

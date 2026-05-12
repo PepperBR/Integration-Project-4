@@ -10,5 +10,5 @@ public:
     Cronos6021_A(const Cronos6021_A &other, int new_id);
     std::vector<double> &getPhaseValues() override;
 
-    std::unique_ptr<Meter> cloneMeter() const override;
+    std::shared_ptr<Meter> cloneMeter(int unique_id) const override;
 };

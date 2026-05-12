@@ -1,8 +1,7 @@
 #include "meters/Cronos/Cronos6001_A.h"
-#include "core/GlobalID.h"
 
 Cronos6001_A::Cronos6001_A()
-    : Cronos(GlobalID::generateID(), "6001 A"){};
+    : Cronos(11, "6001 A"){};
 
 Cronos6001_A::Cronos6001_A(const Cronos6001_A &other, int new_id)
     : Cronos(other, new_id){};
@@ -14,7 +13,7 @@ std::vector<double> &Cronos6001_A::getPhaseValues()
     return ThreePhaseMeter::getPhaseValues();
 };
 
-std::unique_ptr<Meter> Cronos6001_A::cloneMeter() const
+std::shared_ptr<Meter> Cronos6001_A::cloneMeter(int unique_id) const
 {
-    return std::make_unique<Cronos6001_A>(*this, GlobalID::generateID());
+    return std::make_shared<Cronos6001_A>(*this, unique_id);
 }

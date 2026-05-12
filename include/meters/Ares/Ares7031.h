@@ -10,5 +10,5 @@ public:
     ~Ares7031() override;
     std::vector<double> &getPhaseValues() override;
 
-    std::unique_ptr<Meter> cloneMeter() const override;
+    std::shared_ptr<Meter> cloneMeter(int unique_id) const override;
 };

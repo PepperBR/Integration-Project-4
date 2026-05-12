@@ -1,8 +1,7 @@
 #include "meters/Ares/Ares7021.h"
-#include "core/GlobalID.h"
 
 Ares7021::Ares7021()
-    : Ares(GlobalID::generateID(), "7021"){};
+    : Ares(12, "7021"){};
 
 Ares7021::Ares7021(const Ares7021 &other, int new_id)
     : Ares(other, new_id){};
@@ -14,7 +13,7 @@ std::vector<double> &Ares7021::getPhaseValues()
     return SinglePhaseMeter::getPhaseValues();
 };
 
-std::unique_ptr<Meter> Ares7021::cloneMeter() const
+std::shared_ptr<Meter> Ares7021::cloneMeter(int unique_id) const
 {
-    return std::make_unique<Ares7021>(*this, GlobalID::generateID());
+    return std::make_shared<Ares7021>(*this, unique_id);
 }

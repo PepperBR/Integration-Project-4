@@ -40,7 +40,7 @@ Catalog::Catalog()
     meter_list.emplace_back(std::make_unique<Ares8023_15>());
     meter_list.emplace_back(std::make_unique<Ares8023_200>());
 
-    number_of_meters = int(meter_list.size());
+    this->instance_id_counter = int(meter_list.size());
 };
 
 const std::shared_ptr<Meter> Catalog::addNewModel(const int &ID_template)
@@ -64,15 +64,17 @@ bool Catalog::removeModel(const int ID)
         if (meter_list->getID() == ID && !meter_list->getIsTemplate())
         {
             result = true;
-            return true;
+            return result;
         };
-        return false;
+        result = false;
+        return result;
     });
     return result;
 };
 
 std::vector<double> &Catalog::getMeasurementsPhases(const int ID)
 {
+    static std::vector<double> empty_vector = {};
     for (auto &meter : meter_list)
     {
         if (meter->getID() == ID && !meter->getIsTemplate())
@@ -80,9 +82,9 @@ std::vector<double> &Catalog::getMeasurementsPhases(const int ID)
             return meter->getPhaseValues();
         }
     }
-
-    throw std::runtime_error("Meter not found");
-};
+    empty_vector.clear();
+    return empty_vector;
+}
 
 void Catalog::sortList()
 {
@@ -101,8 +103,8 @@ std::shared_ptr<Meter> Catalog::factoryMeter(const int &ID_template)
     {
         if (meter_template->getID() == ID_template && meter_template->getIsTemplate())
         {
-            this->number_of_meters++;
-            return meter_template->cloneMeter();
+            auto unique_id = ++this->instance_id_counter;
+            return meter_template->cloneMeter(unique_id);
         }
     }
     return nullptr;

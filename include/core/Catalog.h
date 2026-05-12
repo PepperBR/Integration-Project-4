@@ -15,7 +15,7 @@ class Catalog
 private:
     MetersList meter_list;
     std::shared_ptr<Meter> Catalog::factoryMeter(const int &ID_template);
-    int number_of_meters;
+    int instance_id_counter;
     void sortList();
 
 public:
@@ -30,6 +30,6 @@ public:
 
     auto getAllTemplateMeters() -> MetersList;
     auto getAllCreatedMeters() -> MetersList;
-    auto getNumberOfMeters() -> const int &;
+
     Catalog();
 };

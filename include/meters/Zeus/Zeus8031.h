@@ -10,5 +10,5 @@ public:
     Zeus8031(const Zeus8031 &other, int new_id);
     std::vector<double> &getPhaseValues() override;
 
-    std::unique_ptr<Meter> cloneMeter() const override;
+    std::shared_ptr<Meter> cloneMeter(int unique_id) const override;
 };

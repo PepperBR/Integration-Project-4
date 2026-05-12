@@ -12,18 +12,18 @@
 #include "meters/Phase/ThreePhaseMeter.h"
 
 std::vector&lt;double&gt; &amp;ThreePhaseMeter::getPhaseValues()
-<span style = "background-color:#fdd">{</span>
+<span style = "background-color:#dfd">{</span>
     std::random_device rd;
-<span style = "background-color:#fdd">    std::mt19937 gen(rd());
+<span style = "background-color:#dfd">    std::mt19937 gen(rd());
     std::uniform_real_distribution&lt;&gt; dist(1, 220);</span>
 
-<span style = "background-color:#fdd">    phaseValues.clear();</span>
+<span style = "background-color:#dfd">    phaseValues.clear();</span>
 
-<span style = "background-color:#fdd">    phaseValues.push_back(dist(gen));
+<span style = "background-color:#dfd">    phaseValues.push_back(dist(gen));
     phaseValues.push_back(dist(gen));
     phaseValues.push_back(dist(gen));</span>
 
-<span style = "background-color:#fdd">    return phaseValues;
+<span style = "background-color:#dfd">    return phaseValues;
 };</span></pre>
         <hr />
         <table width="100%">
