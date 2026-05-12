@@ -16,20 +16,6 @@ default:
     - windows 
 
   before_script:
-  - |
-    $proc = Get-Process grpc -ErrorAction SilentlyContinue
-
-    if ($proc) {
-      $proc | Stop-Process -Force
-    }
-
-  - |
-    $cov = Get-Process OpenCppCoverage -ErrorAction SilentlyContinue
-
-    if ($cov) {
-      $cov | Stop-Process -Force
-    }
-    
   - $env:PATH += ";$CI_PROJECT_DIR/build/vcpkg_installed/x64-windows/bin"
 
   - $ErrorActionPreference = "Stop"
