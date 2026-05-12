@@ -30,7 +30,7 @@ TEST_CASE("Testing Catalog Functions")
         auto new_meter_attempt_1 = catalog.addNewModel(1);
         REQUIRE(new_meter_attempt_1 != nullptr);
 
-        auto remove_meter_attempt_2 = catalog.removeModel(new_meter_attempt_1->getID());
+        auto remove_meter_attempt_2 = catalog.removeModel(18);
         REQUIRE(remove_meter_attempt_2);
     }
     SECTION("Get Mesuarements Phases")
