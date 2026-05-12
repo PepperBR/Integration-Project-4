@@ -16,5 +16,5 @@ jobs:
 
       - name: Push to GitLab
         run: |
-          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/PepperBR/Integration-Project-4.git
+          git remote add gitlab https://oauth2:${{ secrets.GITLAB_TOKEN }}@gitlab.com/joaomarcelopimenta70/Project-Integration-4
           git push gitlab main --force
