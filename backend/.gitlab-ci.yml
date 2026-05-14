@@ -1,0 +1,97 @@
+# Backend Pipeline Stages
+stages:
+  - Lint
+  - build
+  - unit-test
+  - coverage
+  # - new deploy
+
+variables:
+  GIT_STRATEGY: fetch
+  GIT_CLEAN_FLAGS: -ffdx -e build/
+  
+# Jobs Configuration
+default:
+  tags:
+    - windows 
+
+  before_script:
+  - $env:PATH += ";$CI_PROJECT_DIR/build/vcpkg_installed/x64-windows/bin"
+
+  - $ErrorActionPreference = "Stop"
+
+# Cache Global
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+
+  paths:
+    - build/vcpkg_installed/
+
+# Stage : Code Lint 
+code-lint-job:
+  stage: Lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script: 
+    - $files = Get-ChildItem -Path "$CI_PROJECT_DIR/backend/src","$CI_PROJECT_DIR/backend/include" -Recurse | Where-Object { $_.Extension -match '\.(h|cpp)$' } | Select-Object -ExpandProperty FullName
+    - clang-format --style=file --dry-run -Werror  $files
+
+# Stage: Build
+build-job:
+  stage: build
+  script:
+    - cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$VCPKG_FOLDER/scripts/buildsystems/vcpkg.cmake"
+    - cmake --build build --config Release
+  artifacts:
+    name: "build-binaries-$CI_COMMIT_REF_SLUG"
+    paths:
+      - build/Release/
+      - build/tests/Release/
+      - build/src/ui/Release/
+
+      - build/vcpkg_installed/x64-windows/bin/
+    expire_in: 1 day
+
+# Stage: Test
+unit-test-job:
+  stage: unit-test
+  dependencies:
+    - build-job
+  script:
+    - build/tests/Release/client_test.exe
+
+    
+
+coverage-job:
+  stage: coverage
+  dependencies:
+    - build-job
+  script:
+    - python ./coverage/Coverage_Verifier.py # Ajustar o Path, o coverage_xml tá no ./coverage
+
+# Stage: New Deploy
+# dar deploy das coisas do backend numa pasta fixa no meu computador
+
+# # Stage: Deploy 
+# deploy-job:
+#   stage: deploy
+#   environment: production
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == 'main'
+#   script:
+#     - echo "Preparando artefatos..."
+#     - echo "Aplicação pronta para distribuição."
+#   needs:
+#     - build-job
+#     - unit-test-job
+#     - coverage-job
+#   artifacts:
+#     name: "Release-Package-$CI_COMMIT_SHORT_SHA"
+#     paths:
+#       - build/Release/grpc.exe
+#       - build/Release/*.dll
+
+#       - build/src/ui/Release/wxHelloWorld.exe
+#       - build/src/ui/Release/*.dll
+#     expire_in: 30 days

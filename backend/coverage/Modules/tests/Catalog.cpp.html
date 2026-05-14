@@ -1,0 +1,223 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>Catalog.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+    <body onload="prettyPrint()">
+        <h4></h4>
+        <pre class="prettyprint lang-cpp linenums">
+#include "core/Catalog.h"
+#include "meters/Apolo/Apolo6031.h"
+#include "meters/Ares/Ares7021.h"
+#include "meters/Ares/Ares7023.h"
+#include "meters/Ares/Ares7031.h"
+#include "meters/Ares/Ares8023.h"
+#include "meters/Ares/Ares8023_15.h"
+#include "meters/Ares/Ares8023_200.h"
+#include "meters/Cronos/Cronos6001_A.h"
+#include "meters/Cronos/Cronos6003.h"
+#include "meters/Cronos/Cronos6021_A.h"
+#include "meters/Cronos/Cronos6021_L.h"
+#include "meters/Cronos/Cronos7023.h"
+#include "meters/Cronos/Cronos7023_2_5.h"
+#include "meters/Cronos/Cronos7023_L.h"
+#include "meters/Zeus/Zeus8021.h"
+#include "meters/Zeus/Zeus8023.h"
+#include "meters/Zeus/Zeus8031.h"
+
+Catalog::Catalog()
+<span style = "background-color:#dfd">{
+    meter_list.emplace_back(std::make_unique&lt;Apolo6031&gt;());</span>
+
+<span style = "background-color:#dfd">    meter_list.emplace_back(std::make_unique&lt;Zeus8021&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Zeus8023&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Zeus8031&gt;());</span>
+
+<span style = "background-color:#dfd">    meter_list.emplace_back(std::make_unique&lt;Cronos7023&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Cronos7023_L&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Cronos7023_2_5&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Cronos6021_L&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Cronos6021_A&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Cronos6003&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Cronos6001_A&gt;());</span>
+
+<span style = "background-color:#dfd">    meter_list.emplace_back(std::make_unique&lt;Ares7021&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Ares8023&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Ares7023&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Ares7031&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Ares8023_15&gt;());
+    meter_list.emplace_back(std::make_unique&lt;Ares8023_200&gt;());</span>
+
+<span style = "background-color:#dfd">    this-&gt;instance_id_counter = int(meter_list.size());
+};</span>
+
+const std::shared_ptr&lt;Meter&gt; Catalog::addNewModel(const int &amp;ID_template)
+<span style = "background-color:#dfd">{
+    auto model = factoryMeter(ID_template);</span>
+
+<span style = "background-color:#dfd">    if (model == nullptr)</span>
+    {
+<span style = "background-color:#dfd">        return nullptr;</span>
+    }
+
+<span style = "background-color:#dfd">    meter_list.push_back(model);
+    sortList();
+    return model;
+};</span>
+
+bool Catalog::removeModel(const int ID)
+<span style = "background-color:#dfd">{
+    bool result = false;
+    meter_list.remove_if([ID, &amp;result](std::shared_ptr&lt;Meter&gt; &amp;meter_list) {
+        if (meter_list-&gt;getID() == ID &amp;&amp; !meter_list-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            result = true;
+            return result;</span>
+        };
+<span style = "background-color:#dfd">        result = false;
+        return result;
+    });
+    return result;
+};</span>
+
+std::array&lt;double, 3&gt; Catalog::getMeasurementsPhases(const int ID)
+<span style = "background-color:#dfd">{
+    for (auto &amp;meter : meter_list)</span>
+    {
+<span style = "background-color:#dfd">        if (meter-&gt;getID() == ID &amp;&amp; !meter-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            return meter-&gt;getPhaseValues(meter-&gt;getNumberOfPhases());</span>
+        }
+<span style = "background-color:#dfd">    }
+    return {0.0, 0.0, 0.0};
+}</span>
+
+void Catalog::sortList()
+<span style = "background-color:#dfd">{
+    meter_list.sort([](const std::shared_ptr&lt;Meter&gt; &amp;a, const std::shared_ptr&lt;Meter&gt; &amp;b) {
+        if (a-&gt;getIsTemplate() != b-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            return a-&gt;getIsTemplate() &gt; b-&gt;getIsTemplate();</span>
+        }
+<span style = "background-color:#dfd">        return a-&gt;getFullName() &lt; b-&gt;getFullName();
+    });
+}</span>
+
+std::shared_ptr&lt;Meter&gt; Catalog::factoryMeter(const int &amp;ID_template)
+<span style = "background-color:#dfd">{
+    for (const auto &amp;meter_template : meter_list)</span>
+    {
+<span style = "background-color:#dfd">        if (meter_template-&gt;getID() == ID_template &amp;&amp; meter_template-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            auto unique_id = ++this-&gt;instance_id_counter;
+            return meter_template-&gt;cloneMeter(unique_id);</span>
+        }
+<span style = "background-color:#dfd">    }
+    return nullptr;
+}</span>
+
+LineList Catalog::getLines() const
+<span style = "background-color:#dfd">{
+    std::set&lt;std::string&gt; lines;</span>
+
+<span style = "background-color:#dfd">    for (const auto &amp;meter : meter_list)</span>
+    {
+<span style = "background-color:#dfd">        lines.insert(meter-&gt;getNameLine());
+    }</span>
+
+<span style = "background-color:#dfd">    return lines;
+}</span>
+
+MetersList Catalog::getLineModelsCreated(const std::string &amp;name_line)
+<span style = "background-color:#dfd">{
+    MetersList list;</span>
+
+<span style = "background-color:#dfd">    for (auto &amp;model : meter_list)</span>
+    {
+<span style = "background-color:#dfd">        if (!model-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            if (model-&gt;getFullName().find(name_line) != std::string::npos)</span>
+            {
+<span style = "background-color:#dfd">                list.push_back(model);</span>
+            }
+        }
+<span style = "background-color:#dfd">    }</span>
+
+<span style = "background-color:#dfd">    return list;
+}</span>
+
+MetersList Catalog::getLineModelsTemplate(const std::string &amp;name_line)
+<span style = "background-color:#dfd">{
+    MetersList list;</span>
+
+<span style = "background-color:#dfd">    for (auto &amp;model : meter_list)</span>
+    {
+<span style = "background-color:#dfd">        if (model-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            if (model-&gt;getFullName().find(name_line) != std::string::npos)</span>
+            {
+<span style = "background-color:#dfd">                list.push_back(model);</span>
+            }
+        }
+<span style = "background-color:#dfd">    }</span>
+
+<span style = "background-color:#dfd">    return list;
+}</span>
+
+std::shared_ptr&lt;Meter&gt; Catalog::getMeterByID(const int id) const
+<span style = "background-color:#dfd">{
+    for (const auto &amp;meter : meter_list)</span>
+    {
+<span style = "background-color:#dfd">        if (meter-&gt;getID() == id &amp;&amp; !meter-&gt;getIsTemplate())</span>
+        {
+<span style = "background-color:#dfd">            return meter;</span>
+        }
+<span style = "background-color:#dfd">    }
+    return nullptr;
+}</span>
+
+MetersList Catalog::getAllTemplateMeters()
+<span style = "background-color:#dfd">{
+    MetersList available_meters;</span>
+
+<span style = "background-color:#dfd">    auto linhas = getLines();
+    for (const auto &amp;linha : linhas)</span>
+    {
+<span style = "background-color:#dfd">        MetersList models = getLineModelsTemplate(linha);</span>
+
+<span style = "background-color:#dfd">        available_meters.splice(available_meters.end(), models);
+    }
+    return available_meters;
+}</span>
+
+MetersList Catalog::getAllCreatedMeters()
+<span style = "background-color:#dfd">{
+    MetersList created_meters;</span>
+
+<span style = "background-color:#dfd">    auto linhas = getLines();
+    for (const auto &amp;linha : linhas)</span>
+    {
+<span style = "background-color:#dfd">        MetersList models = getLineModelsCreated(linha);</span>
+
+<span style = "background-color:#dfd">        created_meters.splice(created_meters.end(), models);
+    }
+    return created_meters;
+}</span></pre>
+        <hr />
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th align="center">
+                        <small>Generated by</small>
+                        <a href="https://github.com/OpenCppCoverage/OpenCppCoverage/releases">
+                            <strong>OpenCppCoverage (Version: 0.9.9.0)</strong>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </body>
+</html>
