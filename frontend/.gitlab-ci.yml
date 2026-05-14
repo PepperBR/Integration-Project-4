@@ -1,9 +1,38 @@
 # Frontend Pipeline Stages
 stages:
-  # - Lint
-  # - new deploy
+  - acquire-backend
+  - deploy
 
+variables:
+  PATH_DEPLOY_BACKEND:  C:\Program Files\Backend Project Integration 4\
+  
 # Pegar o executável do back da pasta fixa do computador
-# Lint Job no código do front
+acquire-backend-job:
+  stage: acquire-backend
+  script:
+    - echo "Adquirindo artefatos do backend..."
+    - Copy-Item -Path "$env:PATH_DEPLOY_BACKEND\backend.exe" -Destination "$CI_PROJECT_DIR/build/backend/backend.exe" -Force
+  artifacts:
+    name: "backend-artifacts-$CI_COMMIT_REF_SLUG"
+    paths:
+      - build/backend/backend.exe
+    expire_in: 14 days
 
-# New Deploy Job: disponibilizar o executável do front como artefato, ou seja, o executável do front vai ser gerado e disponibilizado para download no Gitlab 
+
+# Stage: Deploy 
+deploy-job:
+  stage: deploy
+  environment: production
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
+    - echo "Preparando artefatos..."
+    - echo "Aplicação pronta para distribuição."
+  needs:
+    - build/backend/backend.exe 
+  artifacts:
+    name: "Release-Package-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - build/backend/backend.exe
+      - build/frontend/frontend.exe
+    expire_in: 14 days

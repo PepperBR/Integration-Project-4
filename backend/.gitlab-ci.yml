@@ -4,26 +4,25 @@ stages:
   - build
   - unit-test
   - coverage
-  # - new deploy
+  - submit-backend-executable
 
 variables:
   GIT_STRATEGY: fetch
   GIT_CLEAN_FLAGS: -ffdx -e build/
+  PATH_DEPLOY_BACKEND:  C:\Program Files\Backend Project Integration 4\ 
+
   
 # Jobs Configuration
 default:
   tags:
     - windows 
-
   before_script:
-  - $env:PATH += ";$CI_PROJECT_DIR/build/vcpkg_installed/x64-windows/bin"
-
-  - $ErrorActionPreference = "Stop"
+    - $env:PATH += ";$CI_PROJECT_DIR/build/vcpkg_installed/x64-windows/bin"
+    - $ErrorActionPreference = "Stop"
 
 # Cache Global
 cache:
   key: "$CI_COMMIT_REF_SLUG"
-
   paths:
     - build/vcpkg_installed/
 
@@ -46,12 +45,12 @@ build-job:
   artifacts:
     name: "build-binaries-$CI_COMMIT_REF_SLUG"
     paths:
-      - build/Release/
-      - build/tests/Release/
-      - build/src/ui/Release/
+      - build/backend/Release/
+      - build/backend/tests/Release/
+      - build/frontend/src/Release/
 
       - build/vcpkg_installed/x64-windows/bin/
-    expire_in: 1 day
+    expire_in: 14 days
 
 # Stage: Test
 unit-test-job:
@@ -59,39 +58,26 @@ unit-test-job:
   dependencies:
     - build-job
   script:
-    - build/tests/Release/client_test.exe
-
-    
+    - build/backend/tests/Release/client_test.exe
 
 coverage-job:
   stage: coverage
   dependencies:
     - build-job
   script:
-    - python ./coverage/Coverage_Verifier.py # Ajustar o Path, o coverage_xml tá no ./coverage
+    - python ./backend/coverage/Coverage_Verifier.py # Ajustar o Path, o coverage_xml tá no ./coverage
 
-# Stage: New Deploy
-# dar deploy das coisas do backend numa pasta fixa no meu computador
-
-# # Stage: Deploy 
-# deploy-job:
-#   stage: deploy
-#   environment: production
-#   rules:
-#     - if: $CI_COMMIT_BRANCH == 'main'
-#   script:
-#     - echo "Preparando artefatos..."
-#     - echo "Aplicação pronta para distribuição."
-#   needs:
-#     - build-job
-#     - unit-test-job
-#     - coverage-job
-#   artifacts:
-#     name: "Release-Package-$CI_COMMIT_SHORT_SHA"
-#     paths:
-#       - build/Release/grpc.exe
-#       - build/Release/*.dll
-
-#       - build/src/ui/Release/wxHelloWorld.exe
-#       - build/src/ui/Release/*.dll
-#     expire_in: 30 days
+# Stage: Deploy
+submit-backend-executable-job:
+  stage: submit-backend-executable
+  environment: production
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+  script:
+    - echo "Movendo arquivos para pasta fixa..."
+    - New-Item -Path "$env:PATH_DEPLOY_BACKEND" -ItemType Directory -Force
+    - Move-Item -Path "$CI_PROJECT_DIR/build/backend/Release/backend.exe" -Destination "$env:PATH_DEPLOY_BACKEND" -Force
+  needs:
+    - build-job
+    - unit-test-job
+    - coverage-job
