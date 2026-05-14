@@ -19,6 +19,8 @@ acquire-backend-job:
     expire_in: 14 days
 
 
+
+
 # Stage: Deploy (Um único executável para o front, que inclui o back e todas as dependências de ambos)
 deploy-job:
   stage: deploy
