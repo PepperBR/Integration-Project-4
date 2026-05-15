@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.16)
 
 project(tests)
 
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
 add_executable(${PROJECT_NAME})
 
 find_package(Catch2 CONFIG REQUIRED)
@@ -9,7 +11,8 @@ find_package(Catch2 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE 
         Catch2::Catch2WithMain
-        grpc_lib
+        backend_lib            
+        proto-objects
 )
 
 target_sources(${PROJECT_NAME} 
@@ -21,11 +24,11 @@ target_sources(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} 
     PRIVATE 
-        grpc_lib
+        backend_lib
 )
 
 target_include_directories(${PROJECT_NAME} 
     PRIVATE 
-        ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/generated
+        ${CMAKE_SOURCE_DIR}/../include
+        ${CMAKE_SOURCE_DIR}/../../generated
 )

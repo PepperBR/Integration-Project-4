@@ -40,7 +40,7 @@ code-lint-job:
 build-job:
   stage: build
   script:
-    - cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="$VCPKG_FOLDER/scripts/buildsystems/vcpkg.cmake"
+    -  cmake -B build -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="C:/Users/joaom/Desktop/vcpkg/scripts/buildsystems/vcpkg.cmake" -DCMAKE_MSVC_RUNTIME_LIBRARY="MultiThreaded"
     - cmake --build build --config Release
   artifacts:
     name: "build-binaries-$CI_COMMIT_REF_SLUG"
@@ -65,7 +65,8 @@ coverage-job:
   dependencies:
     - build-job
   script:
-    - python ./backend/coverage/Coverage_Verifier.py # Ajustar o Path, o coverage_xml tá no ./coverage
+    - cd .\backend\coverage
+    - python .\Coverage_Verifier.py
 
 # Stage: Deploy
 submit-backend-executable-job:
