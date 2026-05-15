@@ -4,37 +4,47 @@ stages:
   - deploy
 
 variables:
-  PATH_DEPLOY_BACKEND:  C:\Program Files\Backend Project Integration 4\
+  PATH_SOURCE_BACKEND: "C:\\Program Files\\Backend Project Integration 4"
+  PATH_DEPLOY_FRONTEND: "C:\\Program Files\\Project Integration 4"
   
-# Pegar o executável do back da pasta fixa do computador
+default:
+  tags:
+    - windows
+  before_script:
+    - $ErrorActionPreference = "Stop"
+
 acquire-backend-job:
   stage: acquire-backend
   script:
-    - echo "Adquirindo artefatos do backend..."
-    - Copy-Item -Path "$env:PATH_DEPLOY_BACKEND\backend.exe" -Destination "$CI_PROJECT_DIR/build/backend/backend.exe" -Force
+    - echo "Adquirindo artefatos compartilhados da pasta fixa..."
+    - New-Item -Path "$CI_PROJECT_DIR\build\backend\Release" -ItemType Directory -Force
+    - New-Item -Path "$CI_PROJECT_DIR\build\frontend\Release" -ItemType Directory -Force
+
+    - Copy-Item -Path "$env:PATH_SOURCE_BACKEND\Projeto GRPC.exe" -Destination "$CI_PROJECT_DIR\build\backend\Release\" -Force
+    - Copy-Item -Path "$env:PATH_SOURCE_BACKEND\Projeto GRPC_lib.lib" -Destination "$CI_PROJECT_DIR/build\backend\Release\" -Force
+    - Copy-Item -Path "$env:PATH_SOURCE_BACKEND\Display.exe" -Destination "$CI_PROJECT_DIR\build\frontend\Release\" -Force
+    - Copy-Item -Path "$env:PATH_SOURCE_BACKEND\Display_lib.lib" -Destination "$CI_PROJECT_DIR\build\frontend\Release\" -Force
   artifacts:
     name: "backend-artifacts-$CI_COMMIT_REF_SLUG"
     paths:
-      - build/backend/backend.exe
-    expire_in: 14 days
+      - build/backend/Release/Projeto GRPC
+      - build/backend/Release/Projeto GRPC_lib.lib
+      - build/frontend/Release/Display.exe
+      - build/frontend/Release/Display_lib.lib
+    expire_in: 2 days
 
-
-
-
-# Stage: Deploy (Um único executável para o front, que inclui o back e todas as dependências de ambos)
 deploy-job:
   stage: deploy
   environment: production
   rules:
     - if: $CI_COMMIT_BRANCH == 'main'
+  dependencies:
+    - acquire-backend-job
   script:
-    - echo "Preparando artefatos..."
-    - echo "Aplicação pronta para distribuição."
-  needs:
-    - build/backend/backend.exe 
+    - echo "Criando pacote auto-extraível (.exe)..."
+    - & "C:\Program Files\7-Zip\7z.exe" a -sfx Projeto_Completo.exe .\build\backend\Release\Projeto GRPC .\build\frontend\Release\Display.exe
   artifacts:
     name: "Release-Package-$CI_COMMIT_SHORT_SHA"
     paths:
-      - build/backend/backend.exe
-      - build/frontend/frontend.exe
-    expire_in: 14 days
+      - ./Projeto_Completo.exe
+    expire_in: 5 days
